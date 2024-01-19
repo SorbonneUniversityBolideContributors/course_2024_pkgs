@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<robot name="bolide.urdf" xmlns:xacro="http://ros.org/wiki/xacro">
+  <link name="base_link">
+    <visual>
+      <origin xyz="0.119 0 0.04" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.44 0.195 0.131"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0.119 0 0.04" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.44 0.195 0.131"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <link name="RpLidarA2">
+    <visual>
+      <origin xyz="0 0 -0.011" rpy="0 0 0"/>
+      <geometry>
+        <cylinder radius="0.038" length="0.04"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0 0 -0.011" rpy="0 0 0"/>
+      <geometry>
+        <cylinder radius="0.038" length="0.04"/>
+      </geometry>
+    </collision>
+  </link>
+  
+  <joint name="base_link_RpLidarA2_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="RpLidarA2"/>
+    <origin xyz="0.2 0 0.079" rpy="0 0 0"/>
+  </joint>
+</robot>
