@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-
 __author__ = "Raphael KHORASSANI"
 __status__ = ""
 __version__ = ""
@@ -18,7 +17,37 @@ class CmdVelVisualisation :
 		elif mode == 2 :
 			self.init_compteur()
 			rospy.Subscriber("cmd_vel", SpeedDirection, self.callback_compteur)
+		elif mode == 3 : 
+			self.init_written()
+			rospy.Subscriber("cmd_vel", SpeedDirection, self.callback_written)
 		rospy.spin()
+
+	def init_written(self) :
+		w = 500
+		h = (w*2) // 2
+		im = np.zeros([h,w,3], dtype = np.uint8)
+
+		jauge_w = int(w * 0.7)
+		xi_jauge = (w-jauge_w)//2
+		im[xi_jauge : xi_jauge + jauge_w, int(h*0.35), int(h*0.45)] = [150]*3
+		# im = cv2.putText(im, )
+
+	
+	def callback_written(self, data):
+		vitesse = data.speed
+		
+		i = int(vitesse)
+		j = int((vitesse - i) * self.decimals)
+		angle = np.pi * (1 + (i * self.decimals + j)/(self.maxi*self.decimals))
+		x = int(s*r * 0.85 * np.cos(angle) + s//2)
+		y = int(s*r * 0.85 * np.sin(angle) + s)
+		im = self.im.copy()
+		im = cv2.arrowedLine(im,(s//2,s),(x,y), [255]*3,2 )
+		im = cv2.circle(im, (s//2, s), int(s*r*0.3), (0,0,255), cv2.FILLED)
+		im = im[s//2:s, 0:s]
+		cv2.imshow("Compteur Vitesse", im)
+		cv2.waitKey(1)
+
 
 	def callback(self, data) :	
 		cmd_vel = data.speed
