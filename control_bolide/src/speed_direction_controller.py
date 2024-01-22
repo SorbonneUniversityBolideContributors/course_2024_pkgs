@@ -6,6 +6,7 @@ __status__ = "Development"
 
 import rospy
 from control_bolide.msg import SpeedDirection
+from std_msgs.msg import Bool
 from rpi_hardware_pwm import HardwarePWM
 import time
 
@@ -37,7 +38,11 @@ class ControllerListener:
 
         # Node initialisation
         rospy.init_node('speed_direction_listener')
-        rospy.Subscriber("cmd_vel", SpeedDirection, self.callback)
+        rospy.Subscriber("cmd_vel", SpeedDirection, self.callback) # Subscribe to cmd_vel for velocities and directions command
+        rospy.Subscriber("emergency_break", Bool, self.emergency_break_callback) # Subscribe to emergency_break for emergency break command
+
+        # Emergency break boolean
+        self.emergency_break = False
 
         # Initialize watchdog timer
         self.watchdog_timer = rospy.Timer(rospy.Duration(0.5), self.watchdog_callback)
@@ -48,13 +53,12 @@ class ControllerListener:
 
         rospy.spin()
 
-    def inverse_prop(self):
-        time.sleep(0.2)
-        self.pwm_prop.change_duty_cycle(self.BRAKE)
-        time.sleep(0.2)
-        self.pwm_prop.change_duty_cycle(self.NEUTRAL)
-
     def callback(self, data):
+        # if emergency break is activated, don't do anything
+        if self.emergency_break:
+            return
+
+        # get speed and direction from the message
         speed = data.speed
         direction = data.direction
 
@@ -66,7 +70,7 @@ class ControllerListener:
         if direction <-1: direction = -1
         elif direction > 1: direction = 1
 
-        # part to change
+        # change the states of the State machine
         if speed == 0:
             if self.breaking:
                 self.sm.neutral_after_break()
@@ -81,6 +85,7 @@ class ControllerListener:
             self.breaking = True
             self.sm.break_()
 
+        # change the direction of the robot
         if direction < 0:
             self.pwm_dir.change_duty_cycle(self.CENTER+direction*self.left_range)
         else:
@@ -89,12 +94,47 @@ class ControllerListener:
         # Update the last command time
         self.last_command_time = rospy.get_time()
 
+    # callback for the emergency break command
+    def emergency_break_callback(self, data):
+        # if the emergency break is activated, stop the robot
+        if data.data:
+            self.emergency_break = True
+            if self.sm.state in ["Backward", "Neutral_After_Break"]:
+                # if the robot is moving backward, just go neutral
+                # sending a break command when going backward will make it move backward faster
+                self.pwm_prop.change_duty_cycle(self.NEUTRAL)
+            else:
+                # else, send a break command
+                self.pwm_prop.change_duty_cycle(self.BRAKE)
+        else:
+            self.emergency_break = False
+
     def watchdog_callback(self, event):
         # If it's been more than 0.5 seconds since the last command, stop the robot
+        # This is to prevent the robot from moving if the controller or computer crashes or disconnects
         if rospy.get_time() - self.last_command_time > 0.5:
             self.pwm_prop.change_duty_cycle(self.NEUTRAL)
 
+# State machine class
 class StateMachine:
+    """
+    State machine for the robot
+
+    States:
+    - Forward: Moving forward
+    - Backward: Moving backward
+    - Neutral_After_Forward: Stopped moving after moving forward
+    - Neutral_After_Break: Stopped moving after breaking or moving backward
+    - Break: Break applied
+
+    Transitions:
+    - Forward: Neutral_After_Forward, Break, Neutral_After_Break, Forward
+    - Backward: Neutral_After_Break, Backward
+    - Neutral_After_Forward: Forward, Neutral_After_Forward
+    - Neutral_After_Break: Backward, Break, Neutral_After_Break
+    - Break: Forward, Neutral_After_Forward, Break
+    """
+
     def __init__(self, controller: ControllerListener):
         self.controller = controller
         self.state = "Neutral_After_Forward"

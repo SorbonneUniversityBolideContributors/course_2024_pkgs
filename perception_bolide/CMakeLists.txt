@@ -173,6 +173,7 @@ catkin_install_python(PROGRAMS
   src_publisher/cam_publisher.py
   src_vizu/lidar_vizu.py
   src_process/lidar_process.py
+  src_process/camera_info.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 

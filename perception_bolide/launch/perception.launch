@@ -2,6 +2,6 @@
     <!-- Include main_publisher.launch -->
     <include file="$(find perception_bolide)/launch/main_publisher.launch"/>
 
-    <!-- Node for lidar_process.py -->
-    <node pkg="perception_bolide" type="lidar_process.py" name="lidar_process" output="screen" />
+    <!-- Include process.launch -->
+    <include file="$(find perception_bolide)/launch/process.launch"/>
 </launch>
