@@ -50,11 +50,8 @@ class Nav_LIDAR():
             if cmd_vel>1: cmd_vel = 1
             if ( 0 < cmd_vel < 0.2): cmd_vel = 0.2
             if cmd_vel<-1:cmd_vel = -1
+            if (self.space_pressed == True): cmd_vel = 2
             cmd_dir = - self.Kd*(droite-gauche) / cmd_vel
-            if (self.space_pressed == True):
-                cmd_vel = 2
-                cmd_dir = 0
-
             if cmd_dir>1: cmd_dir = 1
             if cmd_dir<-1:cmd_dir = -1
 
@@ -98,4 +95,3 @@ if __name__ == '__main__' :
         s.shutdown()
         sys.exit()
  
-
