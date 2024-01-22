@@ -57,6 +57,8 @@ class MainWindow(QMainWindow):
         self.msg_alert = Bool()
         self.msg_alert.data = True
 
+        self.thresholds_color = {"red" : [[0,0,0],[0, 0, 0]], "green" : [[0,0,0],[0, 0, 0]]}
+
         self.connect_calibration()
         self.ui.redAutoThresholdPushButton.clicked.connect(lambda : self.auto_calibration(color = "red"))
         self.ui.greenAutoThresholdPushButton.clicked.connect(lambda : self.auto_calibration(color = "green"))
@@ -73,17 +75,18 @@ class MainWindow(QMainWindow):
 
     def auto_calibration(self, color = "no_one") :
         rospy.set_param("/color_to_calibrate", color)
-
+        self.color_to_set = color
         self.subscriber_calibration = rospy.Subscriber("/is_auto_calibration_done", Bool, self.set_thresholds)
 
         commande = "rosrun perception_bolide calibrate_color.py"
         subprocess.Popen(commande, shell = True)
 
-    def set_thresholds(self, value) :
-        try : 
+    def set_thresholds(self, value = True) :
+        if self.color_to_set == "red" :
             red_thresholds = rospy.get_param("/red_threshold")
-            Rmin, Gmin, Bmin = red_thresholds[0]
-            Rmax, Gmax, Bmax = red_thresholds[1]
+
+            Bmin, Gmin, Rmin = red_thresholds[0]
+            Bmax, Gmax, Rmax = red_thresholds[1]
 
             self.ui.redMinBThresholdSpinBox.setValue(Bmin)
             self.ui.redMinGThresholdSpinBox.setValue(Gmin)
@@ -91,9 +94,10 @@ class MainWindow(QMainWindow):
             self.ui.redMaxBThresholdSpinBox.setValue(Bmax)
             self.ui.redMaxGThresholdSpinBox.setValue(Gmax)
             self.ui.redMaxRThresholdSpinBox.setValue(Rmax)
-        except : pass
 
-        try : 
+            self.set_red_threshold()
+
+        elif self.color_to_set == "green" : 
             green_thresholds = rospy.get_param("/green_threshold")
             Rmin, Gmin, Bmin = green_thresholds[0]
             Rmax, Gmax, Bmax = green_thresholds[1]
@@ -104,10 +108,12 @@ class MainWindow(QMainWindow):
             self.ui.greenMaxBThresholdSpinBox.setValue(Bmax)
             self.ui.greenMaxGThresholdSpinBox.setValue(Gmax)
             self.ui.greenMaxRThresholdSpinBox.setValue(Rmax)
-        except : pass
 
-        self.subscriber_calibration.unregister()
-        rospy.spin()
+            self.set_green_threshold()
+
+        if value == True : 
+            self.subscriber_calibration.unregister()
+            rospy.spin()
 
 
     def connect_calibration(self):
@@ -138,6 +144,7 @@ class MainWindow(QMainWindow):
             self.ui.redMaxBThresholdSpinBox.value()
         )
 
+        self.thresholds_color["red"] = [[Bmin,Gmin,Rmin],[Bmax, Gmax, Rmax]]
         rospy.set_param("/red_threshold", [[Bmin,Gmin,Rmin],[Bmax, Gmax, Rmax]])
         self.changement_alert.publish(self.msg_alert)
 
@@ -155,6 +162,7 @@ class MainWindow(QMainWindow):
             self.ui.greenMaxBThresholdSpinBox.value()
         )
 
+        self.thresholds_color["green"] = [[Bmin,Gmin,Rmin],[Bmax, Gmax, Rmax]]
         rospy.set_param("/green_threshold", [[Bmin,Gmin,Rmin],[Bmax, Gmax, Rmax]])
         self.changement_alert.publish(self.msg_alert)
 
@@ -200,6 +208,13 @@ class MainWindow(QMainWindow):
             for p in to_load["values"] :
                 self.values[p]["default"] = to_load["values"][p]
 
+        if "thresholds" in to_load :
+            self.thresholds_color = to_load["thresholds"]
+            for color in ["red", "green"]:
+                rospy.set_param(f"/{color}_threshold", self.thresholds_color["red"])
+                self.color_to_set = color
+                self.set_thresholds(value = False)
+
         self.set_parameters()
 
 
@@ -215,9 +230,11 @@ class MainWindow(QMainWindow):
         checkbox_defaults = {key: value["default"] for key, value in self.checkbox.items()}
         values_defaults = {key: value["default"] for key, value in self.values.items()}
 
+
         to_save = {
             "checkbox"  : checkbox_defaults,
             "values"    : values_defaults,
+            "thresholds": self.thresholds_color,
         }
 
 

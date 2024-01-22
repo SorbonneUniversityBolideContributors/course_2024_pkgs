@@ -50,9 +50,10 @@ class DetectColor:
         max_threshold[max_threshold < 0] = 0
         max_threshold[max_threshold > 255] = 255
 
-        rospy.loginfo(self.color)
+
         param_name = "/red_threshold" if self.color == "red" else "/green_threshold"
-            
+        rospy.loginfo(param_name)
+
         rospy.set_param(param_name, [min_threshold.astype(np.uint8).tolist(), max_threshold.astype(np.uint8).tolist()])
 
         rospy.set_param("/color_to_calibrate", "no_one")
