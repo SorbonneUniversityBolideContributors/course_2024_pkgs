@@ -1,4 +1,6 @@
 <launch>
     <!-- Node for lidar_process.py -->
     <node pkg="perception_bolide" type="lidar_process.py" name="lidar_process" output="screen" />
+    <!-- Node for camera_info.py -->
+    <node pkg="perception_bolide" type="camera_info.py" name="camera_info" output="screen" />
 </launch>
