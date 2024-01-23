@@ -45,7 +45,7 @@ class MainWindow(QMainWindow):
             "/gain_direction"           : {"object" : self.ui.gainDirectionSpinBox, "default" : 0.8},
         }
 
-        self.calibration = {
+        self.calibrate = {
             "red" : {
                 "Rmin"  : {"object" : self.ui.redMinRThresholdSpinBox, "default" : 150},
                 "Gmin"  : {"object" : self.ui.redMinGThresholdSpinBox, "default" : 0},
@@ -66,6 +66,8 @@ class MainWindow(QMainWindow):
 
         self.connect_sliders_and_double_spin_boxes()
 
+        self.changement_alert = rospy.Publisher('/param_change_alert', Bool, queue_size = 10)
+
         self.connect()
         self.set_parameters()
         self.get_params_names()
@@ -73,13 +75,9 @@ class MainWindow(QMainWindow):
         self.ui.loadParamPushButton.clicked.connect(self.load_parameters)
         self.ui.saveParamPushButton.clicked.connect(self.save_parameters)
 
-        self.changement_alert = rospy.Publisher('/param_change_alert', Bool, queue_size = 10)
         self.msg_alert = Bool()
         self.msg_alert.data = True
 
-        self.thresholds_color = {"red" : [[0,0,0],[0, 0, 0]], "green" : [[0,0,0],[0, 0, 0]]}
-
-        #self.connect_calibration()
         self.ui.redAutoThresholdPushButton.clicked.connect(lambda : self.auto_calibration(color = "red"))
         self.ui.greenAutoThresholdPushButton.clicked.connect(lambda : self.auto_calibration(color = "green"))
 
@@ -92,9 +90,9 @@ class MainWindow(QMainWindow):
         for name,info in self.checkbox.items() :
             info["object"].toggled.connect(lambda value, key=name: self.change_param(bool(value),key=key))
 
-        for color in self.calibrate.items():
+        for color in self.calibrate:
             for name, info in self.calibrate[color].items() :
-                info["object"].valueChanged.connect(lambda value, color, key=name: self.set_color_threshold(value,color,key=key))
+                info["object"].valueChanged.connect(lambda value, color=color, key=name: self.set_color_threshold(value,color,key=key))
 
 
 
@@ -102,15 +100,15 @@ class MainWindow(QMainWindow):
         rospy.set_param("/color_to_calibrate", color)
         self.color_to_set = color
         # self.subscriber_calibration = rospy.Subscriber("/is_auto_calibration_done", Bool, self.set_thresholds)
-        self.subscriber_calibration = rospy.Subscriber("/is_auto_calibration_done", Bool, self.set_color_thresholds)
+        self.subscriber_calibration = rospy.Subscriber("/is_auto_calibration_done", Bool, self.update_spinboxes_calibration)
 
         commande = "rosrun perception_bolide calibrate_color.py"
         subprocess.Popen(commande, shell = True)
 
     def update_spinboxes_calibration(self, value = True) :
         color = self.color_to_set
-        c = EasyDict(self.calibration[color])
-        thresholds = rospy.get_param(f"{color}_threshold")
+        c = EasyDict(self.calibrate[color])
+        thresholds = rospy.get_param(f"/{color}_threshold")
 
         c.Bmin.default, c.Gmin.default, c.Rmin.default = thresholds[0]
         c.Bmax.default, c.Gmax.default, c.Rmax.default = thresholds[1]
@@ -123,61 +121,11 @@ class MainWindow(QMainWindow):
             rospy.spin()
 
     def set_color_threshold(self, value, color, key = "no key"):
-        c = EasyDict(self.calibration[color])
-        c[key] = value
-        rospy.set_param(f"/{color}_threshold", [[c.Bmin,c.Gmin,c.Rmin],[c.Bmax, c.Gmax, c.Rmax]])
+        self.calibrate[color][key]["default"] = value
+        c = EasyDict(self.calibrate[color])
+        rospy.set_param(f"/{color}_threshold",[[c.Bmin.default,c.Gmin.default,c.Rmin.default],[c.Bmax.default, c.Gmax.default, c.Rmax.default]])
         self.changement_alert.publish(self.msg_alert)
 
-
-    def connect_calibration(self):
-        self.ui.redMaxBThresholdSpinBox.valueChanged.connect(self.set_red_threshold)
-        self.ui.redMaxGThresholdSpinBox.valueChanged.connect(self.set_red_threshold)
-        self.ui.redMaxRThresholdSpinBox.valueChanged.connect(self.set_red_threshold)
-        self.ui.greenMaxBThresholdSpinBox.valueChanged.connect(self.set_green_threshold)
-        self.ui.greenMaxGThresholdSpinBox.valueChanged.connect(self.set_green_threshold)
-        self.ui.greenMaxRThresholdSpinBox.valueChanged.connect(self.set_green_threshold)
-        self.ui.redMinBThresholdSpinBox.valueChanged.connect(self.set_red_threshold)
-        self.ui.redMinGThresholdSpinBox.valueChanged.connect(self.set_red_threshold)
-        self.ui.redMinRThresholdSpinBox.valueChanged.connect(self.set_red_threshold)
-        self.ui.greenMinBThresholdSpinBox.valueChanged.connect(self.set_green_threshold)
-        self.ui.greenMinGThresholdSpinBox.valueChanged.connect(self.set_green_threshold)
-        self.ui.greenMinRThresholdSpinBox.valueChanged.connect(self.set_green_threshold)
-
-
-    def set_red_threshold(self):
-        Rmin, Gmin, Bmin = (
-            self.ui.redMinRThresholdSpinBox.value(),
-            self.ui.redMinBThresholdSpinBox.value(),
-            self.ui.redMinBThresholdSpinBox.value()
-        )
-
-        Rmax, Gmax, Bmax = (
-            self.ui.redMaxRThresholdSpinBox.value(),
-            self.ui.redMaxBThresholdSpinBox.value(),
-            self.ui.redMaxBThresholdSpinBox.value()
-        )
-
-        self.thresholds_color["red"] = [[Bmin,Gmin,Rmin],[Bmax, Gmax, Rmax]]
-        rospy.set_param("/red_threshold", [[Bmin,Gmin,Rmin],[Bmax, Gmax, Rmax]])
-        self.changement_alert.publish(self.msg_alert)
-
-
-    def set_green_threshold(self):
-        Rmin, Gmin, Bmin = (
-            self.ui.greenMinRThresholdSpinBox.value(),
-            self.ui.greenMinBThresholdSpinBox.value(),
-            self.ui.greenMinBThresholdSpinBox.value()
-        )
-
-        Rmax, Gmax, Bmax = (
-            self.ui.greenMaxRThresholdSpinBox.value(),
-            self.ui.greenMaxBThresholdSpinBox.value(),
-            self.ui.greenMaxBThresholdSpinBox.value()
-        )
-
-        self.thresholds_color["green"] = [[Bmin,Gmin,Rmin],[Bmax, Gmax, Rmax]]
-        rospy.set_param("/green_threshold", [[Bmin,Gmin,Rmin],[Bmax, Gmax, Rmax]])
-        self.changement_alert.publish(self.msg_alert)
 
     def connect_sliders_and_double_spin_boxes(self) :
         self.ui.lidarDisplayLimSlider.valueChanged.connect(lambda value: self.ui.lidarDisplayLimSpinBox.setValue(value /1000))

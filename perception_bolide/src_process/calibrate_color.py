@@ -62,7 +62,7 @@ class DetectColor:
 
         msg = Bool()
         msg.data = True
-        print(self.pub)
+
         self.pub.publish(msg)
 
         rospy.signal_shutdown("noeud fermé")
