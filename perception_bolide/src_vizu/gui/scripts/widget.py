@@ -8,6 +8,7 @@ import cv2
 import numpy as np
 import rospy
 import subprocess
+from easydict import EasyDict
 
 from ui_files.qtapp import Ui_MainWindow    # Correspond à la fenêtre principale du GUI
 from std_msgs.msg import Bool
@@ -44,6 +45,25 @@ class MainWindow(QMainWindow):
             "/gain_direction"           : {"object" : self.ui.gainDirectionSpinBox, "default" : 0.8},
         }
 
+        self.calibration = {
+            "red" : {
+                "Rmin"  : {"object" : self.ui.redMinRThresholdSpinBox, "default" : 150},
+                "Gmin"  : {"object" : self.ui.redMinGThresholdSpinBox, "default" : 0},
+                "Bmin"  : {"object" : self.ui.redMinBThresholdSpinBox, "default" : 0},
+                "Rmax"  : {"object" : self.ui.redMaxRThresholdSpinBox, "default" : 255},
+                "Gmax"  : {"object" : self.ui.redMaxGThresholdSpinBox, "default" : 100},
+                "Bmax"  : {"object" : self.ui.redMaxBThresholdSpinBox, "default" : 100},
+            },
+            "green" : {
+                "Rmin"  : {"object" : self.ui.greenMinRThresholdSpinBox, "default" : 0},
+                "Gmin"  : {"object" : self.ui.greenMinGThresholdSpinBox, "default" : 150},
+                "Bmin"  : {"object" : self.ui.greenMinBThresholdSpinBox, "default" : 0},
+                "Rmax"  : {"object" : self.ui.greenMaxRThresholdSpinBox, "default" : 100},
+                "Gmax"  : {"object" : self.ui.greenMaxGThresholdSpinBox, "default" : 255},
+                "Bmax"  : {"object" : self.ui.greenMaxBThresholdSpinBox, "default" : 100},
+            }
+        }
+
         self.connect_sliders_and_double_spin_boxes()
 
         self.connect()
@@ -59,7 +79,7 @@ class MainWindow(QMainWindow):
 
         self.thresholds_color = {"red" : [[0,0,0],[0, 0, 0]], "green" : [[0,0,0],[0, 0, 0]]}
 
-        self.connect_calibration()
+        #self.connect_calibration()
         self.ui.redAutoThresholdPushButton.clicked.connect(lambda : self.auto_calibration(color = "red"))
         self.ui.greenAutoThresholdPushButton.clicked.connect(lambda : self.auto_calibration(color = "green"))
 
@@ -72,48 +92,41 @@ class MainWindow(QMainWindow):
         for name,info in self.checkbox.items() :
             info["object"].toggled.connect(lambda value, key=name: self.change_param(bool(value),key=key))
 
+        for color in self.calibrate.items():
+            for name, info in self.calibrate[color].items() :
+                info["object"].valueChanged.connect(lambda value, color, key=name: self.set_color_threshold(value,color,key=key))
+
+
 
     def auto_calibration(self, color = "no_one") :
         rospy.set_param("/color_to_calibrate", color)
         self.color_to_set = color
-        self.subscriber_calibration = rospy.Subscriber("/is_auto_calibration_done", Bool, self.set_thresholds)
+        # self.subscriber_calibration = rospy.Subscriber("/is_auto_calibration_done", Bool, self.set_thresholds)
+        self.subscriber_calibration = rospy.Subscriber("/is_auto_calibration_done", Bool, self.set_color_thresholds)
 
         commande = "rosrun perception_bolide calibrate_color.py"
         subprocess.Popen(commande, shell = True)
 
-    def set_thresholds(self, value = True) :
-        if self.color_to_set == "red" :
-            red_thresholds = rospy.get_param("/red_threshold")
+    def update_spinboxes_calibration(self, value = True) :
+        color = self.color_to_set
+        c = EasyDict(self.calibration[color])
+        thresholds = rospy.get_param(f"{color}_threshold")
 
-            Bmin, Gmin, Rmin = red_thresholds[0]
-            Bmax, Gmax, Rmax = red_thresholds[1]
-
-            self.ui.redMinBThresholdSpinBox.setValue(Bmin)
-            self.ui.redMinGThresholdSpinBox.setValue(Gmin)
-            self.ui.redMinRThresholdSpinBox.setValue(Rmin)
-            self.ui.redMaxBThresholdSpinBox.setValue(Bmax)
-            self.ui.redMaxGThresholdSpinBox.setValue(Gmax)
-            self.ui.redMaxRThresholdSpinBox.setValue(Rmax)
-
-            self.set_red_threshold()
-
-        elif self.color_to_set == "green" : 
-            green_thresholds = rospy.get_param("/green_threshold")
-            Rmin, Gmin, Bmin = green_thresholds[0]
-            Rmax, Gmax, Bmax = green_thresholds[1]
-
-            self.ui.greenMinBThresholdSpinBox.setValue(Bmin)
-            self.ui.greenMinGThresholdSpinBox.setValue(Gmin)
-            self.ui.greenMinRThresholdSpinBox.setValue(Rmin)   
-            self.ui.greenMaxBThresholdSpinBox.setValue(Bmax)
-            self.ui.greenMaxGThresholdSpinBox.setValue(Gmax)
-            self.ui.greenMaxRThresholdSpinBox.setValue(Rmax)
-
-            self.set_green_threshold()
+        c.Bmin.default, c.Gmin.default, c.Rmin.default = thresholds[0]
+        c.Bmax.default, c.Gmax.default, c.Rmax.default = thresholds[1]
+        
+        for name, info in c.items() :
+            info["object"].setValue(info["default"])
 
         if value == True : 
             self.subscriber_calibration.unregister()
             rospy.spin()
+
+    def set_color_threshold(self, value, color, key = "no key"):
+        c = EasyDict(self.calibration[color])
+        c[key] = value
+        rospy.set_param(f"/{color}_threshold", [[c.Bmin,c.Gmin,c.Rmin],[c.Bmax, c.Gmax, c.Rmax]])
+        self.changement_alert.publish(self.msg_alert)
 
 
     def connect_calibration(self):
