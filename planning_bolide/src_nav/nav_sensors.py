@@ -2,7 +2,7 @@
 
 __author__ = "Eliot CHRISTON"
 __status__ = "Development"
-__version__ = "1.0.0"
+__version__ = "1.2.0"
 
 #%% IMPORTS
 import rospy
@@ -12,7 +12,7 @@ from sensor_msgs.msg import LaserScan
 from std_msgs.msg import Bool
 from perception_bolide.msg import MultipleRange
 from perception_bolide.msg import CameraInfo
-from nav_module.nav_functions import nav_3_dials, backward_with_color_turn
+from nav_module.nav_functions import nav_3_dials, backward_with_color_turn, get_dials_ranges
 
 
 #%% CLASS
@@ -26,7 +26,7 @@ class NavSensors():
 
         # Subscribe to the sensor data
         rospy.Subscriber("lidar_data", LaserScan, self.callback_lidar)
-        rospy.Subscriber("camera_info", CameraInfo, self.callback_camera)
+        rospy.Subscriber("camera_info", CameraInfo, self.callback_camera_info)
         rospy.Subscriber("rear_range_data", MultipleRange, self.callback_multiple_range)
 
         rospy.Subscriber("param_change_alert", Bool, self.get_params)
@@ -51,9 +51,9 @@ class NavSensors():
         self.cmd_vel = SpeedDirection()
 
         # Parameters
-        self.min_front_distance = 0.2 # The minimum distance in front of the robot
-        self.min_rear_distance = 0.1 # The minimum distance behind the robot
-        self.far_enough_front_distance = 0.5 # The distance in front of the robot to consider it is far enough to go forward
+        self.threshold_front_too_close = 0.2 # The minimum distance in front of the robot
+        self.threshold_rear_too_close = 0.1 # The minimum distance behind the robot
+        self.threshold_front_far_enough = 0.5 # The distance in front of the robot to consider it is far enough to go forward
         self.Kv = 0.5 # The speed coefficient
         self.Kd = 0.5 # The direction coefficient
         self.Ka = 0.5 # The argmax coefficient
@@ -61,14 +61,18 @@ class NavSensors():
 
         self.get_params()
 
-
 # PARAMS UPDATE ===============================================================
     def get_params(self, value = True):
         """Update the parameters when the parameter change alert is received."""
         self.Kd = rospy.get_param("/gain_direction", default = 0.8)
         self.Kv = rospy.get_param("/gain_vitesse", default = 0.33)
         self.Ka = rospy.get_param("/gain_direction_arg_max", default = 0.2)
+
         self.green_is_left = rospy.get_param("/green_is_left", default = True)
+
+        self.threshold_front_too_close = rospy.get_param("/threshold_front_too_close", default = 0.2)
+        self.threshold_rear_too_close = rospy.get_param("/threshold_rear_too_close", default = 0.1)
+        self.threshold_front_far_enough = rospy.get_param("/threshold_front_far_enough", default = 0.5)
 
 # PROTOCOLS ===================================================================
     def protocol_through_neutral(self):
@@ -76,32 +80,57 @@ class NavSensors():
         self.pub.publish(SpeedDirection(0, 0))
         rospy.sleep(0.05)
     
-    def protocol_inverse_prop(self):
-        """Protocol to go to backward from forward."""
+    def protocol_break(self):
+        """Protocol to break."""
         self.pub.publish(SpeedDirection(2, 0))
         rospy.sleep(0.1)
+
+    def protocol_inverse_prop(self):
+        """Protocol to go to backward from forward."""
+        self.protocol_break()
         self.protocol_through_neutral()
     
     def apply_protocol(self):
         """Apply the protocol to go to the next state."""
-        if self.previous_state == "foward" and self.current_state == "backward":
-            self.protocol_inverse_prop()
-        elif self.previous_state == "backward" and self.current_state == "forward":
-            self.protocol_through_neutral()
-        elif self.previous_state == "stop" and self.current_state == "backward":
-            self.protocol_through_neutral()
+        transitions = {
+            ("foward"  , "backward"): self.protocol_inverse_prop,
+            ("foward"  , "stop")    : None,
+            ("backward", "foward")  : self.protocol_through_neutral,
+            ("backward", "stop")    : None,
+            ("stop"    , "foward")  : None,
+            ("stop"    , "backward"): self.protocol_through_neutral,
+        }
+        protocol = transitions[(self.previous_state, self.current_state)]
+        if protocol is not None:
+            protocol()
+
 # CALLBACKS ===================================================================
     def callback_lidar(self, data):
         self.lidar_data = data
+        self.nav_step()
     
-    def callback_camera(self, data):
+    def callback_camera_info(self, data):
         self.camera_info = data
+        self.nav_step() # be careful, this is a fast callback
     
     def callback_multiple_range(self, data):
         self.rear_range_data = data
-    
-    def set_cmd_vel(self):
-        self.pub.publish(SpeedDirection(self.speed, self.direction))
+        self.nav_step()
+
+# PUBLISHERS ==================================================================
+    def publish_cmd_vel(self):
+        self.pub.publish(self.cmd_vel)
+
+# CONDITIONS ==================================================================
+    def update_conditions(self):
+        """Update the conditions of the robot."""
+        _, front_ranges, _ = get_dials_ranges(self.lidar_data, n_dials=3, proportion=[1, 0.5, 1])
+        current_front_distance = np.min(front_ranges)
+        self.front_too_close = current_front_distance < self.threshold_front_too_close
+        self.front_far_enough = current_front_distance > self.threshold_front_far_enough
+
+        current_rear_distance = np.min([self.rear_range_data.IR_rear_left, self.rear_range_data.IR_rear_right])
+        self.rear_too_close = current_rear_distance < self.threshold_rear_too_close
     
 # STATES ======================================================================
     def foward_state(self):
@@ -114,8 +143,8 @@ class NavSensors():
 
     def stop_state(self):
         """Update the speed and direction when the robot is stopped."""
-        # TODO
-        pass
+        speed = 0 if self.previous_state == "backward" else 2
+        self.cmd_vel = SpeedDirection(speed, 0)
 
     def next_state(self):
         """Update the current state of the robot.
@@ -152,13 +181,24 @@ class NavSensors():
 
 # MAIN LOOP ===================================================================
     def nav_step(self):
+        """Main loop step of the navigation."""
+
+        self.update_conditions()
 
         self.previous_state = self.current_state
         self.next_state()
 
-        # 
         if self.previous_state != self.current_state:
             self.apply_protocol()
+        
+        state_actions = {
+            "foward"  : self.foward_state,
+            "backward": self.backward_state,
+            "stop"    : self.stop_state,
+        }
+        state_actions[self.current_state]()
+        
+        self.publish_cmd_vel()
         
 
 #%% MAIN
