@@ -12,6 +12,7 @@ import rospy
 
 from sensor_msgs.msg import Image as SensorImage
 from std_msgs.msg import Bool
+import time
 
 class DetectColor:
     def __init__(self) :
@@ -64,7 +65,7 @@ class DetectColor:
         msg.data = True
 
         self.pub.publish(msg)
-
+        
         rospy.signal_shutdown("noeud fermé")
 
 rospy.init_node("node_test", anonymous = True)
