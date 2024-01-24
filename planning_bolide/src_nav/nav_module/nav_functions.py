@@ -70,7 +70,8 @@ def nav_3_dials(lidar_data:LaserScan, Kspeed:float, Kdir:float, Karg:float) -> S
     """Return the speed and direction of the robot based on 3 dials range data."""
 
     # Get the ranges of the dials
-    range_left, _, range_center, _, range_right = get_dials_ranges(lidar_data, n_dials=5, proportion=[7, 1, 2, 1, 7])
+    range_left, range_right = get_dials_ranges(lidar_data, n_dials=2)
+    _, range_center, _ = get_dials_ranges(lidar_data, n_dials=3, proportion=[1, 0.5, 1])
 
     # Compute the mean distance of each dial
     dist_left = np.mean(range_left)
