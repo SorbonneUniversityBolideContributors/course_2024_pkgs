@@ -19,19 +19,22 @@ class DetectColor:
 
         self.pub = rospy.Publisher("/is_auto_calibration_done", Bool, queue_size = 10)
 
+        self.listener_init()
+
+    def listener_init(self) :
+        rospy.Subscriber("/do_an_auto_calibration", Bool, self.listener) 
+        rospy.spin()
+
+    def listener(self, value = True):
         self.color = rospy.get_param("/color_to_calibrate", default = "no_one")
-
-        self.listener()
-
-    def listener(self):
         if self.color != "no_one" :
             self.subscriber = rospy.Subscriber("raw_image_data", SensorImage, self.callback_image)
-        else : 
-            rospy.signal_shutdown("Pas de couleur définie")
-        rospy.spin()
+            # rospy.spin()
+        print("aa")
 
     def callback_image(self, image_data) :
 
+        print("bb")
         h,w = image_data.height, image_data.width
         im = np.frombuffer(image_data.data, dtype = np.uint8)
         im = np.reshape(im, (h,w,3))
@@ -66,7 +69,7 @@ class DetectColor:
 
         self.pub.publish(msg)
         
-        rospy.signal_shutdown("noeud fermé")
+        self.subscriber.unregister()
 
 rospy.init_node("node_test", anonymous = True)
 detect_color = DetectColor()

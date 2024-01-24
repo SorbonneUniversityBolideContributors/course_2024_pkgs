@@ -82,6 +82,7 @@ class MainWindow(QMainWindow):
         self.msg_alert = Bool()
         self.msg_alert.data = True
 
+        self.init_calibration = rospy.Publisher("/do_an_auto_calibration", Bool, queue_size = 10)
         self.ui.redAutoThresholdPushButton.clicked.connect(lambda : self.auto_calibration(color = "red"))
         self.ui.greenAutoThresholdPushButton.clicked.connect(lambda : self.auto_calibration(color = "green"))
 
@@ -103,27 +104,22 @@ class MainWindow(QMainWindow):
     def auto_calibration(self, color = "no_one") :
         rospy.set_param("/color_to_calibrate", color)
         self.color_to_set = color
-        # self.subscriber_calibration = rospy.Subscriber("/is_auto_calibration_done", Bool, self.set_thresholds)
         self.subscriber_calibration = rospy.Subscriber("/is_auto_calibration_done", Bool, self.update_spinboxes_calibration)
-
-        commande = "rosrun perception_bolide calibrate_color.py"
-        subprocess.Popen(commande, shell = True)
-
+        self.init_calibration.publish(self.msg_alert)
+        
     def update_spinboxes_calibration(self, value = True) :
         color = self.color_to_set
         thresholds = rospy.get_param(f"/{color}_threshold")
-        print(thresholds)
-        """
+
         self.calibrate[color]["Bmin"]["default"], self.calibrate[color]["Gmin"]["default"], self.calibrate[color]["Rmin"]["default"] = thresholds[0]
         self.calibrate[color]["Bmax"]["default"], self.calibrate[color]["Gmax"]["default"], self.calibrate[color]["Rmax"]["default"] = thresholds[1]
         
         for name, info in self.calibrate[color].items() :
-            self.calibrate[color][info["object"]].setValue(info["default"])
+            self.calibrate[color][name]["object"].setValue(info["default"])
 
         if value == True : 
             self.subscriber_calibration.unregister()
-            rospy.spin()
-        """
+
     def set_color_threshold(self, value, color, key = "no key"):
         self.calibrate[color][key]["default"] = value
         c = EasyDict(self.calibrate[color])
