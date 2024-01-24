@@ -12,7 +12,7 @@ from sensor_msgs.msg import LaserScan
 from std_msgs.msg import Bool
 from perception_bolide.msg import MultipleRange
 from perception_bolide.msg import CameraInfo
-from nav_lidar import nav_3_dials
+from nav_functions import nav_3_dials, backward_with_color_turn
 
 
 #%% CLASS
@@ -47,8 +47,7 @@ class NavSensors():
 
         # current values
         self.current_state = "foward"
-        self.speed = 0.
-        self.direction = 0.
+        self.cmd_vel = SpeedDirection()
 
         # Parameters
         self.min_front_distance = 0.2 # The minimum distance in front of the robot
@@ -57,6 +56,7 @@ class NavSensors():
         self.Kv = 0.5 # The speed coefficient
         self.Kd = 0.5 # The direction coefficient
         self.Ka = 0.5 # The argmax coefficient
+        self.green_is_left = True # True if the green side is on the left of the robot
 
         self.get_params()
 
@@ -67,6 +67,7 @@ class NavSensors():
         self.Kd = rospy.get_param("/gain_direction", default = 0.8)
         self.Kv = rospy.get_param("/gain_vitesse", default = 0.33)
         self.Ka = rospy.get_param("/gain_direction_arg_max", default = 0.2)
+        self.green_is_left = rospy.get_param("/green_is_left", default = True)
 
 # CALLBACKS ===================================================================
     def callback_lidar(self, data):
@@ -84,12 +85,11 @@ class NavSensors():
 # STATES ======================================================================
     def foward_state(self):
         """Update the speed and direction when the robot is going forward."""
-        self.speed, self.direction = nav_3_dials(self.lidar_data, self.Kv, self.Kd, self.Ka)
+        self.cmd_vel = nav_3_dials(self.lidar_data, self.Kv, self.Kd, self.Ka)
 
     def backward_state(self):
         """Update the speed and direction when the robot is going backward."""
-        # TODO
-        pass
+        self.cmd_vel = backward_with_color_turn(self.camera_info, self.green_is_left)
 
     def stop_state(self):
         """Update the speed and direction when the robot is stopped."""
