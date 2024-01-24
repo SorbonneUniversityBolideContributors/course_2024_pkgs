@@ -111,8 +111,8 @@ class MainWindow(QMainWindow):
         color = self.color_to_set
         thresholds = rospy.get_param(f"/{color}_threshold")
 
-        self.calibrate.Bmin.default, self.calibrate.Gmin.default, self.calibrate.Rmin.default = thresholds[0]
-        self.calibrate.Bmax.default, self.calibrate.Gmax.default, self.calibrate.Rmax.default = thresholds[1]
+        self.calibrate[color]["Bmin"]["default"], self.calibrate[color]["Gmin"]["default"], self.calibrate[color]["Rmin"]["default"] = thresholds[0]
+        self.calibrate[color]["Bmax"]["default"], self.calibrate[color]["Gmax"]["default"], self.calibrate[color]["Rmax"]["default"] = thresholds[1]
         
         for name, info in c.items() :
             info["object"].setValue(info["default"])
