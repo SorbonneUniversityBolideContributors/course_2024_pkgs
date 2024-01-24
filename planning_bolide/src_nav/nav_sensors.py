@@ -34,7 +34,7 @@ class NavSensors():
         # init the publisher
         self.pub = rospy.Publisher("cmd_vel", SpeedDirection, queue_size=10)
 
-        # Initialize the stored attributes
+        # Initialize the stored data
         self.lidar_data = LaserScan()
         self.camera_info = CameraInfo()
         self.rear_range_data = MultipleRange()
@@ -45,7 +45,8 @@ class NavSensors():
         self.rear_too_close = False
         self.front_far_enough = True
 
-        # current values
+        # stored values
+        self.previous_state = "foward"
         self.current_state = "foward"
         self.cmd_vel = SpeedDirection()
 
@@ -69,6 +70,26 @@ class NavSensors():
         self.Ka = rospy.get_param("/gain_direction_arg_max", default = 0.2)
         self.green_is_left = rospy.get_param("/green_is_left", default = True)
 
+# PROTOCOLS ===================================================================
+    def protocol_through_neutral(self):
+        """Protocol to go through the neutral point."""
+        self.pub.publish(SpeedDirection(0, 0))
+        rospy.sleep(0.05)
+    
+    def protocol_inverse_prop(self):
+        """Protocol to go to backward from forward."""
+        self.pub.publish(SpeedDirection(2, 0))
+        rospy.sleep(0.1)
+        self.protocol_through_neutral()
+    
+    def apply_protocol(self):
+        """Apply the protocol to go to the next state."""
+        if self.previous_state == "foward" and self.current_state == "backward":
+            self.protocol_inverse_prop()
+        elif self.previous_state == "backward" and self.current_state == "forward":
+            self.protocol_through_neutral()
+        elif self.previous_state == "stop" and self.current_state == "backward":
+            self.protocol_through_neutral()
 # CALLBACKS ===================================================================
     def callback_lidar(self, data):
         self.lidar_data = data
@@ -127,6 +148,17 @@ class NavSensors():
                 self.current_state = "backward"
             else: # self.rear_too_close and self.front_too_close
                 self.current_state = "stop"
+
+
+# MAIN LOOP ===================================================================
+    def nav_step(self):
+
+        self.previous_state = self.current_state
+        self.next_state()
+
+        # 
+        if self.previous_state != self.current_state:
+            self.apply_protocol()
         
 
 #%% MAIN
