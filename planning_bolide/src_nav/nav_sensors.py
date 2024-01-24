@@ -12,7 +12,7 @@ from sensor_msgs.msg import LaserScan
 from std_msgs.msg import Bool
 from perception_bolide.msg import MultipleRange
 from perception_bolide.msg import CameraInfo
-from planning_bolide.src_nav.nav_functions import nav_3_dials, backward_with_color_turn
+import nav_functions as nf
 
 
 #%% CLASS
@@ -85,11 +85,11 @@ class NavSensors():
 # STATES ======================================================================
     def foward_state(self):
         """Update the speed and direction when the robot is going forward."""
-        self.cmd_vel = nav_3_dials(self.lidar_data, self.Kv, self.Kd, self.Ka)
+        self.cmd_vel = nf.nav_3_dials(self.lidar_data, self.Kv, self.Kd, self.Ka)
 
     def backward_state(self):
         """Update the speed and direction when the robot is going backward."""
-        self.cmd_vel = backward_with_color_turn(self.camera_info, self.green_is_left)
+        self.cmd_vel = nf.backward_with_color_turn(self.camera_info, self.green_is_left)
 
     def stop_state(self):
         """Update the speed and direction when the robot is stopped."""
