@@ -54,54 +54,28 @@ class NavLidar():
 
         i2 = 2 * len(Lidar_data)//3
 
-        methode = 3
-
         rospy.Subscriber("/param_change_alert", Bool, self.get_gain)
 
         self.get_gain()
 
-        if methode == 1 : 
-            gauche = np.average(Lidar_data[0:70])
-            centre = np.average(Lidar_data[80:100])
-            droite = np.average(Lidar_data[110:180])
+        gauche = np.average(Lidar_data[0:70])
+        centre = np.average(Lidar_data[80:100])
+        droite = np.average(Lidar_data[110:180])
 
-            cmd_vel,cmd_dir = nav_3_dials(gauche, centre, droite, self.Kv, self.Kd)
+        arg = (np.argmax(Lidar_data) - 90)/90
+        
+        rospy.loginfo(f"gauche : {gauche}, centre : {centre}, droite : {droite}")
 
-        if methode == 2 :
+        cmd_vel = self.Kv*centre
 
-            cmd_dir = 0
-            centre = np.average(Lidar_data[85:95])
-            gauche = np.median(Lidar_data[50:90])
-            droite = np.median(Lidar_data[90:130])
-
-            #cmd_dir = - max((200 - gauche)/200, 0) + max((200 - droite)/200,0)
-            arg = ((np.argmax(Lidar_data) - 90)/90) **2
-            cmd_dir = max(-1,min(arg, 1)) * self.Kd
-            cmd_vel = min((centre**0.5 /2), 1) * self.Kv
-
-        if methode == 3 : 
-            gauche = np.average(Lidar_data[0:70])
-            centre = np.average(Lidar_data[80:100])
-            droite = np.average(Lidar_data[110:180])
-
-            arg = (np.argmax(Lidar_data) - 90)/90
-            Ka = 0.2
-            
-            print("gauche : ",gauche, "centre : ",centre, "droite : ",droite)
-
-
-
-            cmd_vel = self.Kv*centre
-
-            if cmd_vel>1: cmd_vel = 1
-            if ( 0 < cmd_vel < 0.2): cmd_vel = 0.2
-            if cmd_vel<-1:cmd_vel = -1
-            
-            cmd_dir = - self.Kd*(droite-gauche) / cmd_vel + arg * Ka
-            
-            if cmd_dir>1: cmd_dir = 1
-            if cmd_dir<-1:cmd_dir = -1
-
+        if cmd_vel>1: cmd_vel = 1
+        if ( 0 < cmd_vel < 0.2): cmd_vel = 0.2
+        if cmd_vel<-1:cmd_vel = -1
+        
+        cmd_dir = - self.Kd*(droite-gauche) / cmd_vel + arg * self.Ka
+        
+        if cmd_dir>1: cmd_dir = 1
+        if cmd_dir<-1:cmd_dir = -1
 
         return cmd_vel,cmd_dir
     
@@ -114,6 +88,7 @@ class NavLidar():
     def get_gain(self, value = True):
         self.Kd = rospy.get_param("/gain_direction", default = 0.8)
         self.Kv = rospy.get_param("/gain_vitesse", default = 0.33)
+        self.Ka = rospy.get_param("/gain_direction_arg_max", default = 0.2)
 
 
 def listener(s:NavLidar):

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>324</width>
-    <height>631</height>
+    <height>686</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -28,7 +28,7 @@
         </sizepolicy>
        </property>
        <property name="currentIndex">
-        <number>0</number>
+        <number>1</number>
        </property>
        <widget class="QWidget" name="tab">
         <attribute name="title">
@@ -38,7 +38,7 @@
          <item row="1" column="0">
           <widget class="QToolBox" name="toolBox">
            <property name="currentIndex">
-            <number>1</number>
+            <number>0</number>
            </property>
            <widget class="QWidget" name="page">
             <property name="geometry">
@@ -46,7 +46,7 @@
               <x>0</x>
               <y>0</y>
               <width>270</width>
-              <height>320</height>
+              <height>375</height>
              </rect>
             </property>
             <attribute name="label">
@@ -267,7 +267,7 @@
               <x>0</x>
               <y>0</y>
               <width>270</width>
-              <height>327</height>
+              <height>329</height>
              </rect>
             </property>
             <attribute name="label">
@@ -295,7 +295,7 @@
                 <property name="orientation">
                  <enum>Qt::Vertical</enum>
                 </property>
-                <widget class="QWidget" name="">
+                <widget class="QWidget" name="layoutWidget">
                  <layout class="QHBoxLayout" name="horizontalLayout_2">
                   <item>
                    <widget class="QLabel" name="label_17">
@@ -313,7 +313,7 @@
                   </item>
                  </layout>
                 </widget>
-                <widget class="QWidget" name="">
+                <widget class="QWidget" name="layoutWidget">
                  <layout class="QGridLayout" name="gridLayout_7">
                   <item row="0" column="1">
                    <widget class="QLabel" name="label_18">
@@ -409,7 +409,7 @@
                   </item>
                  </layout>
                 </widget>
-                <widget class="QWidget" name="">
+                <widget class="QWidget" name="layoutWidget">
                  <layout class="QHBoxLayout" name="horizontalLayout">
                   <item>
                    <widget class="QLabel" name="label_23">
@@ -548,24 +548,44 @@
               <x>0</x>
               <y>0</y>
               <width>270</width>
-              <height>354</height>
+              <height>375</height>
              </rect>
             </property>
             <attribute name="label">
-             <string>Empty</string>
+             <string>Gains</string>
             </attribute>
             <layout class="QVBoxLayout" name="verticalLayout_5">
              <item>
               <layout class="QGridLayout" name="gridLayout_6">
-               <item row="0" column="0">
-                <widget class="QLabel" name="label_14">
-                 <property name="text">
-                  <string>Kv</string>
+               <item row="0" column="1">
+                <widget class="QSlider" name="gainVitesseSlider">
+                 <property name="maximum">
+                  <number>100</number>
+                 </property>
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
                  </property>
                 </widget>
                </item>
-               <item row="0" column="1">
-                <widget class="QSlider" name="gainVitesseSlider">
+               <item row="1" column="0">
+                <widget class="QLabel" name="label_15">
+                 <property name="text">
+                  <string>Kd</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="2">
+                <widget class="QDoubleSpinBox" name="gainDirectionSpinBox">
+                 <property name="maximum">
+                  <double>1.000000000000000</double>
+                 </property>
+                 <property name="singleStep">
+                  <double>0.010000000000000</double>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="1">
+                <widget class="QSlider" name="gainDirectionSlider">
                  <property name="maximum">
                   <number>100</number>
                  </property>
@@ -584,15 +604,22 @@
                  </property>
                 </widget>
                </item>
-               <item row="1" column="0">
-                <widget class="QLabel" name="label_15">
+               <item row="0" column="0">
+                <widget class="QLabel" name="label_14">
                  <property name="text">
-                  <string>Kd</string>
+                  <string>Kv</string>
                  </property>
                 </widget>
                </item>
-               <item row="1" column="1">
-                <widget class="QSlider" name="gainDirectionSlider">
+               <item row="2" column="0">
+                <widget class="QLabel" name="label_32">
+                 <property name="text">
+                  <string>Ka</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="2" column="1">
+                <widget class="QSlider" name="gainDirectionArgMaxSlider">
                  <property name="maximum">
                   <number>100</number>
                  </property>
@@ -601,8 +628,8 @@
                  </property>
                 </widget>
                </item>
-               <item row="1" column="2">
-                <widget class="QDoubleSpinBox" name="gainDirectionSpinBox">
+               <item row="2" column="2">
+                <widget class="QDoubleSpinBox" name="gainDirectionArgMaxSpinBox">
                  <property name="maximum">
                   <double>1.000000000000000</double>
                  </property>
@@ -622,6 +649,90 @@
                 <size>
                  <width>20</width>
                  <height>255</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+            </layout>
+           </widget>
+           <widget class="QWidget" name="page_4">
+            <attribute name="label">
+             <string>Thresholds</string>
+            </attribute>
+            <layout class="QVBoxLayout" name="verticalLayout_8">
+             <item>
+              <layout class="QGridLayout" name="gridLayout_9">
+               <item row="0" column="0">
+                <widget class="QLabel" name="label_29">
+                 <property name="text">
+                  <string>FDM</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="1">
+                <widget class="QSlider" name="FDMSlider">
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="2">
+                <widget class="QDoubleSpinBox" name="FDMSpinBox"/>
+               </item>
+               <item row="1" column="0">
+                <widget class="QLabel" name="label_30">
+                 <property name="text">
+                  <string>FD</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="1">
+                <widget class="QSlider" name="FDSlider">
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="2">
+                <widget class="QDoubleSpinBox" name="FDSpinBox"/>
+               </item>
+               <item row="2" column="0">
+                <widget class="QLabel" name="label_31">
+                 <property name="text">
+                  <string>BDM</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item row="2" column="1">
+                <widget class="QSlider" name="BDMSlider">
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
+                 </property>
+                </widget>
+               </item>
+               <item row="2" column="2">
+                <widget class="QDoubleSpinBox" name="BDMSpinBox"/>
+               </item>
+              </layout>
+             </item>
+             <item>
+              <spacer name="verticalSpacer_2">
+               <property name="orientation">
+                <enum>Qt::Vertical</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>20</width>
+                 <height>240</height>
                 </size>
                </property>
               </spacer>
@@ -648,7 +759,7 @@
               <x>0</x>
               <y>0</y>
               <width>270</width>
-              <height>354</height>
+              <height>409</height>
              </rect>
             </property>
             <attribute name="label">

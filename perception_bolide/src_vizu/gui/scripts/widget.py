@@ -38,11 +38,15 @@ class MainWindow(QMainWindow):
             "/spatial_filter_range"     : {"object" : self.ui.spatialFilterSlider,      "default" : 5},
             "/lidar_min_angle_deg"      : {"object" : self.ui.lidarMinAngleSlider,      "default" : -90},
             "/lidar_max_angle_deg"      : {"object" : self.ui.lidarMaxAngleSlider,      "default" : 90},
-            "/lidar_rmax"               : {"object" : self.ui.lidarDisplayLimSpinBox,    "default" : 10},
+            "/lidar_rmax"               : {"object" : self.ui.lidarDisplayLimSpinBox,   "default" : 10},
             "/simulation_max_speed"     : {"object" : self.ui.simulationMaxSpeedSlider, "default" : 28},
             "/simulation_max_angle"     : {"object" : self.ui.simulationMaxAngleSlider, "default" : 25},
-            "/gain_vitesse"             : {"object" : self.ui.gainVitesseSpinBox, "default" : 0.33},
-            "/gain_direction"           : {"object" : self.ui.gainDirectionSpinBox, "default" : 0.8},
+            "/gain_vitesse"             : {"object" : self.ui.gainVitesseSpinBox,       "default" : 0.33},
+            "/gain_direction"           : {"object" : self.ui.gainDirectionSpinBox,     "default" : 0.8},
+            "/gain_direcition_arg_max"  : {"object" : self.ui.gainDirectionArgMaxSpinBox,"default" : 0.8},
+            "/seuil_FDM"                : {"object" : self.ui.FDMSpinBox,                "default" : 0.8},
+            "/seuil_FD"                 : {"object" : self.ui.FDSpinBox,                 "default" : 0.2},
+            "/seuil_BDM"                : {"object" : self.ui.BDMSpinBox,                "default" : 0.2},
         }
 
         self.calibrate = {
@@ -137,6 +141,18 @@ class MainWindow(QMainWindow):
         self.ui.gainDirectionSlider.valueChanged.connect(lambda value: self.ui.gainDirectionSpinBox.setValue(value /100))
         self.ui.gainDirectionSpinBox.valueChanged.connect(lambda value: self.ui.gainDirectionSlider.setValue(int(value *100)))
 
+        self.ui.gainDirectionArgMaxSlider.valueChanged.connect(lambda value: self.ui.gainDirectionArgMaxSpinBox.setValue(value /100))
+        self.ui.gainDirectionArgMaxSpinBox.valueChanged.connect(lambda value: self.ui.gainDirectionArgMaxSlider.setValue(int(value *100)))
+
+        self.ui.FDMSlider.valueChanged.connect(lambda value: self.ui.FDMSpinBox.setValue(value /100))
+        self.ui.FDMSpinBox.valueChanged.connect(lambda value: self.ui.FDMSlider.setValue(int(value *100)))
+
+        self.ui.FDSlider.valueChanged.connect(lambda value: self.ui.FDSpinBox.setValue(value /100))
+        self.ui.FDSpinBox.valueChanged.connect(lambda value: self.ui.FDSlider.setValue(int(value *100)))
+
+        self.ui.BDMSlider.valueChanged.connect(lambda value: self.ui.BDMSpinBox.setValue(value /100))
+        self.ui.BDMSpinBox.valueChanged.connect(lambda value: self.ui.BDMSlider.setValue(int(value *100)))
+
     def set_parameters(self):
         for name,info in self.values.items() :
             rospy.set_param(name, info["default"])
@@ -149,7 +165,14 @@ class MainWindow(QMainWindow):
     def change_param(self, value, key = None):
         if key in self.checkbox :
             self.checkbox[key]["default"] = value
+
         if key in self.values :
+
+            # Début de code pour empêcher d'avoir un seuil inférieur à l'autre
+            # if key in ["/seuil_FD", "/seuil_FDM"] :
+            #     if self.checkbox["/seuil_FD"]["default"] - self.checkbox["/seuil_FDM"] > - 0.05 :
+            #         self.checkbox["/seuil_FD"]["default"] =
+
             self.values[key]["default"] = value
 
         rospy.set_param(key, value)
