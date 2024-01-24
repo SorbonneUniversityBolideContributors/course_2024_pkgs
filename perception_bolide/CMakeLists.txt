@@ -53,6 +53,7 @@ add_message_files(
   FILES
   CameraInfo.msg
   MultipleRange.msg
+  ForkSpeed.msg
 )
 
 ## Generate services in the 'srv' folder
