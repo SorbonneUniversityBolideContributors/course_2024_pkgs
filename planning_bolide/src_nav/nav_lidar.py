@@ -54,7 +54,7 @@ class NavLidar():
 
         i2 = 2 * len(Lidar_data)//3
 
-        methode = 1
+        methode = 3
 
         rospy.Subscriber("/param_change_alert", Bool, self.get_gain)
 
