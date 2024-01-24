@@ -64,8 +64,6 @@ class MainWindow(QMainWindow):
             }
         }
 
-        self.calibrate = EasyDict(self.calibrate)
-
         self.connect_sliders_and_double_spin_boxes()
 
         self.changement_alert = rospy.Publisher('/param_change_alert', Bool, queue_size = 10)
@@ -110,17 +108,18 @@ class MainWindow(QMainWindow):
     def update_spinboxes_calibration(self, value = True) :
         color = self.color_to_set
         thresholds = rospy.get_param(f"/{color}_threshold")
-
+        print(thresholds)
+        """
         self.calibrate[color]["Bmin"]["default"], self.calibrate[color]["Gmin"]["default"], self.calibrate[color]["Rmin"]["default"] = thresholds[0]
         self.calibrate[color]["Bmax"]["default"], self.calibrate[color]["Gmax"]["default"], self.calibrate[color]["Rmax"]["default"] = thresholds[1]
         
-        for name, info in c.items() :
-            info["object"].setValue(info["default"])
+        for name, info in self.calibrate[color].items() :
+            self.calibrate[color][info["object"]].setValue(info["default"])
 
         if value == True : 
             self.subscriber_calibration.unregister()
             rospy.spin()
-
+        """
     def set_color_threshold(self, value, color, key = "no key"):
         self.calibrate[color][key]["default"] = value
         c = EasyDict(self.calibrate[color])
@@ -170,13 +169,14 @@ class MainWindow(QMainWindow):
             for p in to_load["values"] :
                 self.values[p]["default"] = to_load["values"][p]
 
+        """
         if "thresholds" in to_load :
             self.thresholds_color = to_load["thresholds"]
             for color in ["red", "green"]:
                 rospy.set_param(f"/{color}_threshold", self.thresholds_color["red"])
                 self.color_to_set = color
                 self.set_thresholds(value = False)
-
+        """
         self.set_parameters()
 
 
@@ -196,8 +196,9 @@ class MainWindow(QMainWindow):
         to_save = {
             "checkbox"  : checkbox_defaults,
             "values"    : values_defaults,
-            "thresholds": self.thresholds_color,
+
         }
+    #"thresholds": self.thresholds_color,
 
 
 
