@@ -10,7 +10,7 @@ import rospy
 import sys
 from control_bolide.msg import SpeedDirection
 from sensor_msgs.msg import LaserScan
-import nav_functions as nf
+from nav_module.nav_functions import nav_3_dials
 
 #%% CLASS
 class NavLidar():
@@ -20,7 +20,7 @@ class NavLidar():
         self.cmd = SpeedDirection()
     
     def get_scan(self, msg:LaserScan):
-        self.cmd = nf.nav_3_dials(msg, self.Kv, self.Kd, self.Ka)
+        self.cmd = nav_3_dials(msg, self.Kv, self.Kd, self.Ka)
         self.pub.publish(self.cmd)
 
     def get_gain(self, value = True):
