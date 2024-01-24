@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = "Raphael KHORASSANI"
-__status__ = ""
-__version__ = ""
-__annotations__ = ""
+__author__ = "Eliot CHRISTON"
+__status__ = "Development"
+__version__ = "2.0.0"
+__annotations__ = "Based on Raphael K.'s work"
 
 import numpy as np
 import cv2
