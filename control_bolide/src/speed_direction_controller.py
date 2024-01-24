@@ -20,9 +20,6 @@ class ControllerListener:
         self.REVERSEMAXSPEED = 6.5
         self.BRAKE = 5
 
-        # Current speed
-        self.breaking = False
-
         # Values for the direction
         self.CENTER = 6.95
         self.LEFT = 5.5
@@ -39,7 +36,10 @@ class ControllerListener:
         # Node initialisation
         rospy.init_node('speed_direction_listener')
         rospy.Subscriber("cmd_vel", SpeedDirection, self.callback) # Subscribe to cmd_vel for velocities and directions command
-        rospy.Subscriber("emergency_break", Bool, self.emergency_break_callback) # Subscribe to emergency_break for emergency break command
+        rospy.Subscriber("emergency_brake", Bool, self.emergency_brake_callback) # Subscribe to emergency_brake for emergency brake command
+
+        # emergency brake boolean
+        self.emergency_brake = False
 
         # Initialize watchdog timer
         self.watchdog_timer = rospy.Timer(rospy.Duration(0.5), self.watchdog_callback)
@@ -51,15 +51,15 @@ class ControllerListener:
         rospy.spin()
 
     def callback(self, data):
-        # if emergency break is activated, don't do anything
-        if self.emergency_break:
+        # if emergency brake is activated, don't do anything
+        if self.emergency_brake:
             return
 
         # get speed and direction from the message
         speed = data.speed
         direction = data.direction
 
-        # crop speed between -1 and 1 (except if speed == 2 it's used for breaking)
+        # crop speed between -1 and 1 (except if speed == 2 it's used for braking)
         if speed != 2:
             if speed < -1: speed = -1
             elif speed > 1: speed = 1
@@ -69,8 +69,8 @@ class ControllerListener:
 
         # change the states of the State machine
         if speed == 0:
-            if self.sm.state == "Break":
-                self.sm.neutral_after_break()
+            if self.sm.state in ["Backward", "Brake", "Neutral_After_Brake"]:
+                self.sm.neutral_after_brake()
             else:
                 self.sm.neutral_after_forward()
         elif 1 >= speed > 0:
@@ -78,7 +78,7 @@ class ControllerListener:
         elif speed < 0:
             self.sm.backward(speed)
         elif speed == 2:
-            self.sm.break_()
+            self.sm.brake_()
 
         # change the direction of the robot
         if direction < 0:
@@ -89,27 +89,33 @@ class ControllerListener:
         # Update the last command time
         self.last_command_time = rospy.get_time()
 
-    # callback for the emergency break command
-    def emergency_break_callback(self, data):
-        # if the emergency break is activated, stop the robot
+    # callback for the emergency brake command
+    def emergency_brake_callback(self, data):
+        # if the emergency brake is activated, stop the robot
         if data.data:
-            self.emergency_break = True
-            if self.sm.state in ["Backward", "Neutral_After_Break"]:
-                # if the robot is moving backward, just go neutral
-                # sending a break command when going backward will make it move backward faster
-                self.pwm_prop.change_duty_cycle(self.NEUTRAL)
+            rospy.logwarn("Activating emergency brake")
+            self.emergency_brake = True
+            if self.sm.state in ["Forward", "Brake"]:
+                # if the robot is moving forward, brake
+                self.sm.brake_()
+            elif self.sm.state in ["Neutral_After_Forward"]:
+                self.sm.neutral_after_forward()
             else:
-                # else, send a break command
-                self.pwm_prop.change_duty_cycle(self.BRAKE)
+                # else, just go neutral
+                # sending a brake command when going backward or when neutral will make it move backward
+                # can raise a warning message but doesn't affect the control
+                self.sm.neutral_after_brake()
         else:
-            self.emergency_break = False
+            rospy.logwarn("Deactivating emergency brake")
+            self.emergency_brake = False
 
     def watchdog_callback(self, event):
         # If it's been more than 0.5 seconds since the last command, stop the robot
         # This is to prevent the robot from moving if the controller or computer crashes or disconnects
-        if (rospy.get_time() - self.last_command_time > 0.5) and not self.emergency_break:
-            if self.sm.state == "Break":
-                self.sm.neutral_after_break()
+        if ((rospy.get_time() - self.last_command_time) > 0.5) and (not self.emergency_brake):
+            # Ensure that the transition is possible
+            if self.sm.state in ["Backward", "Brake", "Neutral_After_Brake"]:
+                self.sm.neutral_after_brake()
             else:
                 self.sm.neutral_after_forward()
 
@@ -122,15 +128,15 @@ class StateMachine:
     - Forward: Moving forward
     - Backward: Moving backward
     - Neutral_After_Forward: Stopped moving after moving forward
-    - Neutral_After_Break: Stopped moving after breaking or moving backward
-    - Break: Break applied
+    - Neutral_After_Brake: Stopped moving after braking or moving backward
+    - Brake: Brake applied
 
     Transitions:
-    - Forward: Neutral_After_Forward, Break, Neutral_After_Break, Forward
-    - Backward: Neutral_After_Break, Backward
+    - Forward: Neutral_After_Forward, Brake, Neutral_After_Brake, Forward
+    - Backward: Neutral_After_Brake, Backward
     - Neutral_After_Forward: Forward, Neutral_After_Forward
-    - Neutral_After_Break: Backward, Break, Neutral_After_Break
-    - Break: Forward, Neutral_After_Forward, Break
+    - Neutral_After_Brake: Backward, Brake, Neutral_After_Brake
+    - Brake: Forward, Neutral_After_Forward, Brake
     """
 
     def __init__(self, controller: ControllerListener):
@@ -138,14 +144,14 @@ class StateMachine:
         self.state = "Neutral_After_Forward"
 
     def forward(self, speed):
-        if self.state in ["Neutral_After_Forward", "Break", "Neutral_After_Break", "Forward"]:
+        if self.state in ["Neutral_After_Forward", "Brake", "Neutral_After_Brake", "Forward"]:
             if self.state != "Forward": rospy.loginfo("Moving forward"); self.state = "Forward"
             self.controller.pwm_prop.change_duty_cycle(self.controller.MINSPEED + speed*(self.controller.MAXSPEED-self.controller.MINSPEED))
         else:
             rospy.logwarn(f"Can't transition to Forward from {self.state}")
 
     def backward(self, speed):
-        if self.state in ["Neutral_After_Break","Backward"]:
+        if self.state in ["Neutral_After_Brake","Backward"]:
             if self.state != "Backward": rospy.loginfo("Moving backward"); self.state = "Backward"
             self.controller.pwm_prop.change_duty_cycle(self.controller.REVERSEMINSPEED + speed*(self.controller.REVERSEMINSPEED-self.controller.REVERSEMAXSPEED))
         else:
@@ -158,19 +164,19 @@ class StateMachine:
         else:
             rospy.logwarn(f"Can't transition to Neutral_After_Forward from {self.state}")
 
-    def neutral_after_break(self):
-        if self.state in ["Backward", "Break", "Neutral_After_Break"]:
-            if self.state != "Neutral_After_Break": rospy.loginfo("Stopped moving after breaking or moving backward"); self.state = "Neutral_After_Break"
+    def neutral_after_brake(self):
+        if self.state in ["Backward", "Brake", "Neutral_After_Brake"]:
+            if self.state != "Neutral_After_Brake": rospy.loginfo("Stopped moving after braking or moving backward"); self.state = "Neutral_After_Brake"
             self.controller.pwm_prop.change_duty_cycle(self.controller.NEUTRAL)  
         else:
-            rospy.logwarn(f"Can't transition to Neutral_After_Break from {self.state}")
+            rospy.logwarn(f"Can't transition to Neutral_After_Brake from {self.state}")
 
-    def break_(self):
-        if self.state in ["Forward", "Neutral_After_Forward", "Break"]:
-            if self.state != "Break": rospy.loginfo("Break applied"); self.state = "Break"
+    def brake_(self):
+        if self.state in ["Forward", "Neutral_After_Forward", "Brake"]:
+            if self.state != "Brake": rospy.loginfo("Brake applied"); self.state = "Brake"
             self.controller.pwm_prop.change_duty_cycle(self.controller.BRAKE)
         else:
-            rospy.logwarn(f"Can't transition to Break from {self.state}")
+            rospy.logwarn(f"Can't transition to Brake from {self.state}")
 
 if __name__ == '__main__':
     try:
