@@ -64,6 +64,8 @@ class MainWindow(QMainWindow):
             }
         }
 
+        self.calibrate = EasyDict(self.calibrate)
+
         self.connect_sliders_and_double_spin_boxes()
 
         self.changement_alert = rospy.Publisher('/param_change_alert', Bool, queue_size = 10)
@@ -107,11 +109,10 @@ class MainWindow(QMainWindow):
 
     def update_spinboxes_calibration(self, value = True) :
         color = self.color_to_set
-        c = EasyDict(self.calibrate[color])
         thresholds = rospy.get_param(f"/{color}_threshold")
 
-        c.Bmin.default, c.Gmin.default, c.Rmin.default = thresholds[0]
-        c.Bmax.default, c.Gmax.default, c.Rmax.default = thresholds[1]
+        self.calibrate.Bmin.default, self.calibrate.Gmin.default, self.calibrate.Rmin.default = thresholds[0]
+        self.calibrate.Bmax.default, self.calibrate.Gmax.default, self.calibrate.Rmax.default = thresholds[1]
         
         for name, info in c.items() :
             info["object"].setValue(info["default"])

@@ -33,7 +33,7 @@ class DetectColor:
 
         h,w = image_data.height, image_data.width
         im = np.frombuffer(image_data.data, dtype = np.uint8)
-        im = np.reshape(im, (h,w,4))
+        im = np.reshape(im, (h,w,3))
 
         H,W,c = im.shape
         wH = int(H * 0.2)
@@ -41,7 +41,7 @@ class DetectColor:
 
         zone_of_interest = im[(W - wW)//2 : (W-wW)//2 + wW, (H - wH)//2 : (H - wH)//2 + wH]
 
-        values = np.median(zone_of_interest, axis = (0,1))[:3]
+        values = np.median(zone_of_interest, axis = (0,1))
         min_threshold = values - 50
         max_threshold = values + 50
 
