@@ -16,6 +16,7 @@ from nav_module.nav_functions import nav_3_dials
 class NavLidar():
     def __init__(self):
         print("NavLidar init")
+        self.get_gain()
         self.pub = rospy.Publisher("cmd_vel",SpeedDirection,queue_size=1)
         self.cmd = SpeedDirection()
     
