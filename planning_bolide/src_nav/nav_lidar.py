@@ -10,7 +10,7 @@ import rospy
 import sys
 from control_bolide.msg import SpeedDirection
 from sensor_msgs.msg import LaserScan
-from nav_functions import nav_3_dials
+from planning_bolide.src_nav.nav_functions import nav_3_dials
 
 
 #%% CLASS

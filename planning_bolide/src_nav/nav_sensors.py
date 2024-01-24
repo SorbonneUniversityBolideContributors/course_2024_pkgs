@@ -12,7 +12,7 @@ from sensor_msgs.msg import LaserScan
 from std_msgs.msg import Bool
 from perception_bolide.msg import MultipleRange
 from perception_bolide.msg import CameraInfo
-from nav_functions import nav_3_dials, backward_with_color_turn
+from planning_bolide.src_nav.nav_functions import nav_3_dials, backward_with_color_turn
 
 
 #%% CLASS
