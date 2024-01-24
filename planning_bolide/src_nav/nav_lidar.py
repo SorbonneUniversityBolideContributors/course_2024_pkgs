@@ -6,23 +6,12 @@ import sys
 from control_bolide.msg import SpeedDirection
 from sensor_msgs.msg import LaserScan
 from std_msgs.msg import Bool
-from pynput.keyboard import Key, Listener
 
 class Nav_LIDAR():
     def __init__(self):
         self.pub = rospy.Publisher("cmd_vel",SpeedDirection,queue_size=1)
         self.cmd = SpeedDirection()
-        self.space_pressed = False
-        self.listener = Listener(on_press=self.on_press, on_release=self.on_release)
-        self.listener.start()
 
-    def on_press(self, key):
-        if key == Key.space:
-            self.space_pressed = True
-
-    def on_release(self, key):
-        if key == Key.space:
-            self.space_pressed = False
 
     def Nav(self, Lidar_data, methode = 1):
 
@@ -50,8 +39,8 @@ class Nav_LIDAR():
             if cmd_vel>1: cmd_vel = 1
             if ( 0 < cmd_vel < 0.2): cmd_vel = 0.2
             if cmd_vel<-1:cmd_vel = -1
-            if (self.space_pressed == True): cmd_vel = 2
             cmd_dir = - self.Kd*(droite-gauche) / cmd_vel
+           
             if cmd_dir>1: cmd_dir = 1
             if cmd_dir<-1:cmd_dir = -1
 
@@ -74,6 +63,7 @@ class Nav_LIDAR():
         self.cmd.speed,self.cmd.direction = self.Nav(Lidar_data)
         self.pub.publish(self.cmd)
 
+
     def get_gain(self, value = True):
         self.Kd = rospy.get_param("/gain_direction", default = 0.8)
         self.Kv = rospy.get_param("/gain_vitesse", default = 0.33)
@@ -90,8 +80,6 @@ if __name__ == '__main__' :
 
     try : 
         listener(s)
-
-    except (rospy.ROSInterruptException, KeyboardInterrupt) : 
-        s.shutdown()
-        sys.exit()
+    except (rospy.ROSInterruptException, KeyboardInterrupt) : sys.quit()
  
+
