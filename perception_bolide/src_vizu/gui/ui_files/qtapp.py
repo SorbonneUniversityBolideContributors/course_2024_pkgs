@@ -207,7 +207,7 @@ class Ui_MainWindow(object):
         self.toolBox.addItem(self.page, u"LiDAR")
         self.page_2 = QWidget()
         self.page_2.setObjectName(u"page_2")
-        self.page_2.setGeometry(QRect(0, 0, 270, 329))
+        self.page_2.setGeometry(QRect(0, 0, 270, 375))
         self.verticalLayout_6 = QVBoxLayout(self.page_2)
         self.verticalLayout_6.setObjectName(u"verticalLayout_6")
         self.enableCameraCheckBox = QCheckBox(self.page_2)
@@ -489,67 +489,101 @@ class Ui_MainWindow(object):
         self.toolBox_3.addItem(self.page_5, u"Gains")
         self.page_4 = QWidget()
         self.page_4.setObjectName(u"page_4")
-        self.verticalLayout_8 = QVBoxLayout(self.page_4)
-        self.verticalLayout_8.setObjectName(u"verticalLayout_8")
-        self.gridLayout_9 = QGridLayout()
-        self.gridLayout_9.setObjectName(u"gridLayout_9")
-        self.label_29 = QLabel(self.page_4)
+        self.gridLayout_11 = QGridLayout(self.page_4)
+        self.gridLayout_11.setObjectName(u"gridLayout_11")
+        self.verticalSpacer_2 = QSpacerItem(20, 174, QSizePolicy.Minimum, QSizePolicy.Expanding)
+
+        self.gridLayout_11.addItem(self.verticalSpacer_2, 2, 0, 1, 1)
+
+        self.splitter_12 = QSplitter(self.page_4)
+        self.splitter_12.setObjectName(u"splitter_12")
+        self.splitter_12.setOrientation(Qt.Vertical)
+        self.label_29 = QLabel(self.splitter_12)
         self.label_29.setObjectName(u"label_29")
-        self.label_29.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
-
-        self.gridLayout_9.addWidget(self.label_29, 0, 0, 1, 1)
-
-        self.FDMSlider = QSlider(self.page_4)
-        self.FDMSlider.setObjectName(u"FDMSlider")
-        self.FDMSlider.setOrientation(Qt.Horizontal)
-
-        self.gridLayout_9.addWidget(self.FDMSlider, 0, 1, 1, 1)
-
-        self.FDMSpinBox = QDoubleSpinBox(self.page_4)
-        self.FDMSpinBox.setObjectName(u"FDMSpinBox")
-
-        self.gridLayout_9.addWidget(self.FDMSpinBox, 0, 2, 1, 1)
-
-        self.label_30 = QLabel(self.page_4)
+        self.splitter_12.addWidget(self.label_29)
+        self.layoutWidget_3 = QWidget(self.splitter_12)
+        self.layoutWidget_3.setObjectName(u"layoutWidget_3")
+        self.gridLayout_9 = QGridLayout(self.layoutWidget_3)
+        self.gridLayout_9.setObjectName(u"gridLayout_9")
+        self.gridLayout_9.setContentsMargins(0, 0, 0, 0)
+        self.label_30 = QLabel(self.layoutWidget_3)
         self.label_30.setObjectName(u"label_30")
         self.label_30.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
 
-        self.gridLayout_9.addWidget(self.label_30, 1, 0, 1, 1)
+        self.gridLayout_9.addWidget(self.label_30, 0, 0, 1, 1)
 
-        self.FDSlider = QSlider(self.page_4)
-        self.FDSlider.setObjectName(u"FDSlider")
-        self.FDSlider.setOrientation(Qt.Horizontal)
+        self.FrontTooCloseSlider = QSlider(self.layoutWidget_3)
+        self.FrontTooCloseSlider.setObjectName(u"FrontTooCloseSlider")
+        self.FrontTooCloseSlider.setMaximum(50)
+        self.FrontTooCloseSlider.setOrientation(Qt.Horizontal)
 
-        self.gridLayout_9.addWidget(self.FDSlider, 1, 1, 1, 1)
+        self.gridLayout_9.addWidget(self.FrontTooCloseSlider, 0, 1, 1, 1)
 
-        self.FDSpinBox = QDoubleSpinBox(self.page_4)
-        self.FDSpinBox.setObjectName(u"FDSpinBox")
+        self.FrontTooCloseSpinBox = QDoubleSpinBox(self.layoutWidget_3)
+        self.FrontTooCloseSpinBox.setObjectName(u"FrontTooCloseSpinBox")
+        self.FrontTooCloseSpinBox.setMaximum(0.500000000000000)
+        self.FrontTooCloseSpinBox.setSingleStep(0.010000000000000)
 
-        self.gridLayout_9.addWidget(self.FDSpinBox, 1, 2, 1, 1)
+        self.gridLayout_9.addWidget(self.FrontTooCloseSpinBox, 0, 2, 1, 1)
 
-        self.label_31 = QLabel(self.page_4)
+        self.label_31 = QLabel(self.layoutWidget_3)
         self.label_31.setObjectName(u"label_31")
         self.label_31.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
 
-        self.gridLayout_9.addWidget(self.label_31, 2, 0, 1, 1)
+        self.gridLayout_9.addWidget(self.label_31, 1, 0, 1, 1)
 
-        self.BDMSlider = QSlider(self.page_4)
-        self.BDMSlider.setObjectName(u"BDMSlider")
-        self.BDMSlider.setOrientation(Qt.Horizontal)
+        self.FrontFarEnoughSlider = QSlider(self.layoutWidget_3)
+        self.FrontFarEnoughSlider.setObjectName(u"FrontFarEnoughSlider")
+        self.FrontFarEnoughSlider.setMinimum(0)
+        self.FrontFarEnoughSlider.setMaximum(80)
+        self.FrontFarEnoughSlider.setOrientation(Qt.Horizontal)
 
-        self.gridLayout_9.addWidget(self.BDMSlider, 2, 1, 1, 1)
+        self.gridLayout_9.addWidget(self.FrontFarEnoughSlider, 1, 1, 1, 1)
 
-        self.BDMSpinBox = QDoubleSpinBox(self.page_4)
-        self.BDMSpinBox.setObjectName(u"BDMSpinBox")
+        self.FrontFarEnoughSpinBox = QDoubleSpinBox(self.layoutWidget_3)
+        self.FrontFarEnoughSpinBox.setObjectName(u"FrontFarEnoughSpinBox")
+        self.FrontFarEnoughSpinBox.setMaximum(0.800000000000000)
+        self.FrontFarEnoughSpinBox.setSingleStep(0.010000000000000)
 
-        self.gridLayout_9.addWidget(self.BDMSpinBox, 2, 2, 1, 1)
+        self.gridLayout_9.addWidget(self.FrontFarEnoughSpinBox, 1, 2, 1, 1)
 
+        self.splitter_12.addWidget(self.layoutWidget_3)
+        self.label_33 = QLabel(self.splitter_12)
+        self.label_33.setObjectName(u"label_33")
+        self.splitter_12.addWidget(self.label_33)
+        self.layoutWidget_4 = QWidget(self.splitter_12)
+        self.layoutWidget_4.setObjectName(u"layoutWidget_4")
+        self.gridLayout_10 = QGridLayout(self.layoutWidget_4)
+        self.gridLayout_10.setObjectName(u"gridLayout_10")
+        self.gridLayout_10.setContentsMargins(0, 0, 0, 0)
+        self.label_34 = QLabel(self.layoutWidget_4)
+        self.label_34.setObjectName(u"label_34")
+        self.label_34.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
 
-        self.verticalLayout_8.addLayout(self.gridLayout_9)
+        self.gridLayout_10.addWidget(self.label_34, 0, 0, 1, 1)
 
-        self.verticalSpacer_2 = QSpacerItem(20, 240, QSizePolicy.Minimum, QSizePolicy.Expanding)
+        self.RearTooCloseSlider = QSlider(self.layoutWidget_4)
+        self.RearTooCloseSlider.setObjectName(u"RearTooCloseSlider")
+        self.RearTooCloseSlider.setMaximum(50)
+        self.RearTooCloseSlider.setOrientation(Qt.Horizontal)
 
-        self.verticalLayout_8.addItem(self.verticalSpacer_2)
+        self.gridLayout_10.addWidget(self.RearTooCloseSlider, 0, 1, 1, 1)
+
+        self.RearTooCloseSpinBox = QDoubleSpinBox(self.layoutWidget_4)
+        self.RearTooCloseSpinBox.setObjectName(u"RearTooCloseSpinBox")
+        self.RearTooCloseSpinBox.setMaximum(0.500000000000000)
+        self.RearTooCloseSpinBox.setSingleStep(0.010000000000000)
+
+        self.gridLayout_10.addWidget(self.RearTooCloseSpinBox, 0, 2, 1, 1)
+
+        self.splitter_12.addWidget(self.layoutWidget_4)
+
+        self.gridLayout_11.addWidget(self.splitter_12, 1, 0, 1, 1)
+
+        self.GreenIsLeftCheckBox = QCheckBox(self.page_4)
+        self.GreenIsLeftCheckBox.setObjectName(u"GreenIsLeftCheckBox")
+
+        self.gridLayout_11.addWidget(self.GreenIsLeftCheckBox, 0, 0, 1, 1)
 
         self.toolBox_3.addItem(self.page_4, u"Thresholds")
 
@@ -691,8 +725,8 @@ class Ui_MainWindow(object):
         self.spinBox_5.valueChanged.connect(self.simulationMaxAngleSlider.setValue)
 
         self.tabWidget.setCurrentIndex(1)
-        self.toolBox.setCurrentIndex(0)
-        self.toolBox_3.setCurrentIndex(0)
+        self.toolBox.setCurrentIndex(1)
+        self.toolBox_3.setCurrentIndex(1)
         self.toolBox_2.setCurrentIndex(0)
 
 
@@ -734,9 +768,12 @@ class Ui_MainWindow(object):
         self.label_14.setText(QCoreApplication.translate("MainWindow", u"Kv", None))
         self.label_32.setText(QCoreApplication.translate("MainWindow", u"Ka", None))
         self.toolBox_3.setItemText(self.toolBox_3.indexOf(self.page_5), QCoreApplication.translate("MainWindow", u"Gains", None))
-        self.label_29.setText(QCoreApplication.translate("MainWindow", u"FDM", None))
-        self.label_30.setText(QCoreApplication.translate("MainWindow", u"FD", None))
-        self.label_31.setText(QCoreApplication.translate("MainWindow", u"BDM", None))
+        self.label_29.setText(QCoreApplication.translate("MainWindow", u"Front", None))
+        self.label_30.setText(QCoreApplication.translate("MainWindow", u"too close", None))
+        self.label_31.setText(QCoreApplication.translate("MainWindow", u"far enough", None))
+        self.label_33.setText(QCoreApplication.translate("MainWindow", u"Rear", None))
+        self.label_34.setText(QCoreApplication.translate("MainWindow", u"too close", None))
+        self.GreenIsLeftCheckBox.setText(QCoreApplication.translate("MainWindow", u"Green is left ?", None))
         self.toolBox_3.setItemText(self.toolBox_3.indexOf(self.page_4), QCoreApplication.translate("MainWindow", u"Thresholds", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_2), QCoreApplication.translate("MainWindow", u"Planning", None))
         self.label_10.setText(QCoreApplication.translate("MainWindow", u"Max", None))
@@ -749,3 +786,10 @@ class Ui_MainWindow(object):
         self.label_7.setText(QCoreApplication.translate("MainWindow", u"Load ", None))
         self.loadParamPushButton.setText(QCoreApplication.translate("MainWindow", u"Load", None))
     # retranslateUi
+
+Error: uiapp.ui: Warning: The name 'layoutWidget' (QWidget) is already in use, defaulting to 'layoutWidget1'.
+uiapp.ui: Warning: The name 'layoutWidget' (QWidget) is already in use, defaulting to 'layoutWidget2'.
+uiapp.ui: Warning: The name 'layoutWidget' (QWidget) is already in use, defaulting to 'layoutWidget3'.
+uiapp.ui: Warning: The name 'layoutWidget' (QWidget) is already in use, defaulting to 'layoutWidget4'.
+
+while executing '/Users/travail/anaconda3/lib/python3.11/site-packages/PySide6/Qt/libexec/uic -g python uiapp.ui'

@@ -30,7 +30,9 @@ class MainWindow(QMainWindow):
         self.checkbox = {
             "/temporal_filter_bool"     : {"object" : self.ui.temporalFilterCheckBox,   "default" : False},
             "/spatial_filter_bool"      : {"object" : self.ui.spatialFilterCheckBox,    "default" : False},
-            "/enable_camera_bool"       : {"object" : self.ui.enableCameraCheckBox,     "default" : True}
+            "/enable_camera_bool"       : {"object" : self.ui.enableCameraCheckBox,     "default" : True},
+            "/green_is_left"            : {"object" : self.ui.GreenIsLeftCheckBox,     "default" : True},
+
         }
 
         self.values={
@@ -44,9 +46,9 @@ class MainWindow(QMainWindow):
             "/gain_vitesse"             : {"object" : self.ui.gainVitesseSpinBox,       "default" : 0.33},
             "/gain_direction"           : {"object" : self.ui.gainDirectionSpinBox,     "default" : 0.8},
             "/gain_direcition_arg_max"  : {"object" : self.ui.gainDirectionArgMaxSpinBox,"default" : 0.8},
-            "/seuil_FDM"                : {"object" : self.ui.FDMSpinBox,                "default" : 0.8},
-            "/seuil_FD"                 : {"object" : self.ui.FDSpinBox,                 "default" : 0.2},
-            "/seuil_BDM"                : {"object" : self.ui.BDMSpinBox,                "default" : 0.2},
+            "/threshold_front_too_close"    : {"object" : self.ui.FrontTooCloseSpinBox,     "default" : 0.1},
+            "/threshold_front_far_enough"   : {"object" : self.ui.FrontFarEnoughSpinBox,    "default" : 0.5},
+            "/threshold_rear_too_close"     : {"object" : self.ui.RearTooCloseSpinBox,      "default" : 0.2},
         }
 
         self.calibrate = {
