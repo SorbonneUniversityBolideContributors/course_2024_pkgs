@@ -21,7 +21,8 @@ class DetectColor:
 
         self.color = rospy.get_param("/color_to_calibrate", default = "no_one")
 
-        self.listener()
+        rospy.Subscriber("/do_an_auto_calibration", Bool, self.listener) 
+        rospy.spin()
 
     def listener(self):
         if self.color != "no_one" :

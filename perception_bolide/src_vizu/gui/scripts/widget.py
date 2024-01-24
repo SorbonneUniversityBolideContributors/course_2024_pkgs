@@ -82,6 +82,7 @@ class MainWindow(QMainWindow):
         self.msg_alert = Bool()
         self.msg_alert.data = True
 
+        self.init_calibration = rospy.Publisher("/do_an_auto_calibration", Bool, queue_size = 10)
         self.ui.redAutoThresholdPushButton.clicked.connect(lambda : self.auto_calibration(color = "red"))
         self.ui.greenAutoThresholdPushButton.clicked.connect(lambda : self.auto_calibration(color = "green"))
 
@@ -105,9 +106,10 @@ class MainWindow(QMainWindow):
         self.color_to_set = color
         # self.subscriber_calibration = rospy.Subscriber("/is_auto_calibration_done", Bool, self.set_thresholds)
         self.subscriber_calibration = rospy.Subscriber("/is_auto_calibration_done", Bool, self.update_spinboxes_calibration)
-
-        commande = "rosrun perception_bolide calibrate_color.py"
-        subprocess.Popen(commande, shell = True)
+        self.init_calibration.publish(self.msg_alert)
+        
+        # commande = "rosrun perception_bolide calibrate_color.py"
+        # subprocess.Popen(commande, shell = True)
 
     def update_spinboxes_calibration(self, value = True) :
         color = self.color_to_set
@@ -124,6 +126,7 @@ class MainWindow(QMainWindow):
             self.subscriber_calibration.unregister()
             rospy.spin()
         """
+
     def set_color_threshold(self, value, color, key = "no key"):
         self.calibrate[color][key]["default"] = value
         c = EasyDict(self.calibrate[color])
