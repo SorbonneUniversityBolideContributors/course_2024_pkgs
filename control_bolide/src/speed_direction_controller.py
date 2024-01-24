@@ -41,9 +41,6 @@ class ControllerListener:
         rospy.Subscriber("cmd_vel", SpeedDirection, self.callback) # Subscribe to cmd_vel for velocities and directions command
         rospy.Subscriber("emergency_break", Bool, self.emergency_break_callback) # Subscribe to emergency_break for emergency break command
 
-        # Emergency break boolean
-        self.emergency_break = False
-
         # Initialize watchdog timer
         self.watchdog_timer = rospy.Timer(rospy.Duration(0.5), self.watchdog_callback)
         self.last_command_time = rospy.get_time()
@@ -72,17 +69,15 @@ class ControllerListener:
 
         # change the states of the State machine
         if speed == 0:
-            if self.breaking:
+            if self.sm.state == "Break":
                 self.sm.neutral_after_break()
             else:
                 self.sm.neutral_after_forward()
         elif 1 >= speed > 0:
-            self.breaking = False
             self.sm.forward(speed)
         elif speed < 0:
             self.sm.backward(speed)
         elif speed == 2:
-            self.breaking = True
             self.sm.break_()
 
         # change the direction of the robot
@@ -112,8 +107,11 @@ class ControllerListener:
     def watchdog_callback(self, event):
         # If it's been more than 0.5 seconds since the last command, stop the robot
         # This is to prevent the robot from moving if the controller or computer crashes or disconnects
-        if rospy.get_time() - self.last_command_time > 0.5:
-            self.pwm_prop.change_duty_cycle(self.NEUTRAL)
+        if (rospy.get_time() - self.last_command_time > 0.5) and not self.emergency_break:
+            if self.sm.state == "Break":
+                self.sm.neutral_after_break()
+            else:
+                self.sm.neutral_after_forward()
 
 # State machine class
 class StateMachine:
