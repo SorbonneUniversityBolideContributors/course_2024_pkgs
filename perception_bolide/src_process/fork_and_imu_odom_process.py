@@ -72,7 +72,7 @@ class odom_optical_fork:
         self.pub.publish(self.Odom)
         
     def get_fork(self,msg:ForkSpeed):
-        self.fork = msg.speed.data
+        self.fork = msg.speed/4
 
     def get_dir(self,msg:Imu):
         self.theta_pos = msg.orientation.z
@@ -87,7 +87,7 @@ def listener(s:odom_optical_fork):
     rospy.spin()   
 
 if __name__ == '__main__' :
-    rospy.init_node('fork_odom_process')
+    rospy.init_node('fork_and_imu_odom_process')
     s = odom_optical_fork()
     try : 
         listener(s)
