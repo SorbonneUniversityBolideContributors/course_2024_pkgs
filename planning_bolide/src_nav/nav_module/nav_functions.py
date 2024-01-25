@@ -64,7 +64,7 @@ def crop_cmd_vel(
 
     return SpeedDirection(speed, direction)
 
-def nav_3_dials(lidar_data:LaserScan, Kspeed:float, Kdir:float, Karg:float) -> SpeedDirection:
+def nav_3_dials(lidar_data:LaserScan, Kspeed:float, Kdir:float, Karg:float, Mode:int) -> SpeedDirection:
     """Return the speed and direction of the robot based on 3 dials range data."""
 
     # Get the ranges of the dials
@@ -85,6 +85,42 @@ def nav_3_dials(lidar_data:LaserScan, Kspeed:float, Kdir:float, Karg:float) -> S
 
     # Compute the direction command
     dir_cmd = - Kdir * (dist_right - dist_left) / speed_cmd + Karg * arg
+
+    cmd_vel = SpeedDirection(speed_cmd, dir_cmd)
+
+    # Crop the commands
+    return crop_cmd_vel(cmd_vel, speed_lim={"min":0.2, "max":1})
+
+def nav_n_dials_with_biases(lidar_data:LaserScan, Kspeed:float, Kdir:float, Karg:float, Mode:int) -> SpeedDirection:
+    """Return the speed and direction of the robot based on 3 dials range data."""
+
+    # Get the ranges of the dials
+    range_left, range_right = get_dials_ranges(lidar_data, n_dials=2)
+    _, range_center, _ = get_dials_ranges(lidar_data, n_dials=3, proportion=[1, 0.5, 1])
+
+    # Compute the mean distance of each dial
+    dist_left = np.mean(range_left)
+    dist_center = np.mean(range_center)
+    dist_right = np.mean(range_right)
+
+    # Argmax step
+    mid_i = len(lidar_data.ranges)//2
+    arg = (np.argmax(lidar_data.ranges) - mid_i)/mid_i
+
+    # Compute the speed command
+    speed_cmd = Kspeed * dist_center
+
+    # Compute the direction command
+
+    # First method
+    # dir_cmd = - Kdir * (dist_right - dist_left) / speed_cmd + Karg * arg
+
+    # Second method that should be better
+    dir_cmd = (- Kdir * (dist_right - dist_left) / speed_cmd+ Karg * arg) / ((Kdir + Karg)* 2)
+
+    # Proposition of third method
+    # dir_cmd = - dist_right/dist_left - 1 if dist_right > dist_left else dist_left/dist_right - 1
+    # dir_cmd = (Kdir * dir_cmd / speed_cmd + Karg * arg) / ((Kdir + Karg) * 2)
 
     cmd_vel = SpeedDirection(speed_cmd, dir_cmd)
 
