@@ -31,8 +31,6 @@ def get_dials_ranges(lidar_data:LaserScan, n_dials:int=3, proportion:list=None) 
     dials_indices = np.insert(dials_indices, 0, 0)
     dials_indices = np.append(dials_indices, len(lidar_data.ranges))
 
-    print("dials_indices:", dials_indices)
-
     # get the ranges of the dials
     dials = []
     for i in range(n_dials):

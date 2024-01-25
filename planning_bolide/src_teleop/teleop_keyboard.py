@@ -37,7 +37,7 @@ class KeyboardController:
             Key.down: 'DOWN',
             Key.left: 'LEFT',
             Key.right: 'RIGHT',
-            Key.space: 'BREAK',
+            Key.space: 'BRAKE',
             'z': 'UP',
             'q': 'LEFT',
             's': 'DOWN',
@@ -84,7 +84,7 @@ class KeyboardController:
             self.current_direction = -1.0 * coeff
         elif action == 'RIGHT':
             self.current_direction = 1.0 * coeff
-        elif action == 'BREAK':
+        elif action == 'BRAKE':
             self.current_speed = 2.0 * coeff
         else:
             rospy.logwarn(f"Unknown action: {action}")
