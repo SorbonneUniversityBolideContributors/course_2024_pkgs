@@ -164,14 +164,14 @@ class MainWindow(QMainWindow):
         self.ui.gainDirectionArgMaxSlider.valueChanged.connect(lambda value: self.ui.gainDirectionArgMaxSpinBox.setValue(value /100))
         self.ui.gainDirectionArgMaxSpinBox.valueChanged.connect(lambda value: self.ui.gainDirectionArgMaxSlider.setValue(int(value *100)))
 
-        self.ui.FDMSlider.valueChanged.connect(lambda value: self.ui.FDMSpinBox.setValue(value /100))
-        self.ui.FDMSpinBox.valueChanged.connect(lambda value: self.ui.FDMSlider.setValue(int(value *100)))
+        self.ui.FrontFarEnoughSlider.valueChanged.connect(lambda value: self.ui.FrontFarEnoughSpinBox.setValue(value /100))
+        self.ui.FrontFarEnoughSpinBox.valueChanged.connect(lambda value: self.ui.FrontFarEnoughSlider.setValue(int(value *100)))
 
-        self.ui.FDSlider.valueChanged.connect(lambda value: self.ui.FDSpinBox.setValue(value /100))
-        self.ui.FDSpinBox.valueChanged.connect(lambda value: self.ui.FDSlider.setValue(int(value *100)))
+        self.ui.FrontTooCloseSlider.valueChanged.connect(lambda value: self.ui.FrontTooCloseSpinBox.setValue(value /100))
+        self.ui.FrontTooCloseSpinBox.valueChanged.connect(lambda value: self.ui.FrontTooCloseSlider.setValue(int(value *100)))
 
-        self.ui.BDMSlider.valueChanged.connect(lambda value: self.ui.BDMSpinBox.setValue(value /100))
-        self.ui.BDMSpinBox.valueChanged.connect(lambda value: self.ui.BDMSlider.setValue(int(value *100)))
+        self.ui.RearTooCloseSlider.valueChanged.connect(lambda value: self.ui.RearTooCloseSpinBox.setValue(value /100))
+        self.ui.RearTooCloseSpinBox.valueChanged.connect(lambda value: self.ui.RearTooCloseSlider.setValue(int(value *100)))
 
     def set_parameters(self):
         for name,info in self.values.items() :
