@@ -64,7 +64,7 @@ def crop_cmd_vel(
     return SpeedDirection(speed, direction)
 
 
-def nav_3_dials_spaced(lidar_data:LaserScan, Kspeed:float, Kdir:float, Karg:float, Mode:int) -> SpeedDirection:
+def nav_3_dials_spaced(lidar_data:LaserScan, Kspeed:float, Kdir:float, Karg:float, Mode:int, **args) -> SpeedDirection:
     """Return the speed and direction of the robot based on 3 dials range data."""
 
     # Get the ranges of the dials
@@ -92,7 +92,7 @@ def nav_3_dials_spaced(lidar_data:LaserScan, Kspeed:float, Kdir:float, Karg:floa
 
 
 
-def nav_3_dials(lidar_data:LaserScan, Kspeed:float, Kdir:float, Karg:float, Mode:str, FrontRatio: float = 0.2 ) -> SpeedDirection:
+def nav_3_dials(lidar_data:LaserScan, Kspeed:float, Kdir:float, Karg:float, Mode:str, FrontRatio: float = 0.2, **args) -> SpeedDirection:
     """Return the speed and direction of the robot based on 3 dials range data."""
 
     # Get the ranges of the dials
@@ -129,7 +129,7 @@ def nav_3_dials(lidar_data:LaserScan, Kspeed:float, Kdir:float, Karg:float, Mode
     return crop_cmd_vel(cmd_vel, speed_lim={"min":0.2, "max":1})
 
 
-def nav_n_dials(lidar_data:LaserScan, Kspeed:float, Kdir:float, Karg:float, n_dials:int, Mode:str, FrontRatio:float = 0.2) -> SpeedDirection:
+def nav_n_dials(lidar_data:LaserScan, Kspeed:float, Kdir:float, Karg:float, n_dials:int, Mode:str, FrontRatio:float = 0.2, **args) -> SpeedDirection:
     """Return the speed and direction of the robot based on 3 dials range data."""
 
     # Get the ranges of the dials
@@ -168,7 +168,7 @@ def nav_n_dials(lidar_data:LaserScan, Kspeed:float, Kdir:float, Karg:float, n_di
     return crop_cmd_vel(cmd_vel, speed_lim={"min":0.2, "max":1})
 
 
-def backward_with_color_turn(camera_info:CameraInfo, green_is_left:bool, backward_speed:float=-1.0, turn_magnitude:float=0.8) -> SpeedDirection:
+def backward_with_color_turn(camera_info:CameraInfo, green_is_left:bool, backward_speed:float=-1.0, turn_magnitude:float=0.8, **args) -> SpeedDirection:
     """Return the speed and direction commands to go backward and turn to the color side."""
 
     if backward_speed > 0:

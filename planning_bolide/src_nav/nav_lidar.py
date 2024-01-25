@@ -10,7 +10,7 @@ import rospy
 import sys
 from control_bolide.msg import SpeedDirection
 from sensor_msgs.msg import LaserScan
-from nav_module.nav_functions import nav_3_dials, nav_n_dials_with_biases
+from nav_module.nav_functions import nav_3_dials, nav_3_dials_spaced, nav_n_dials
 
 #%% CLASS
 class NavLidar():
@@ -19,12 +19,23 @@ class NavLidar():
         self.get_all_params()
         self.pub = rospy.Publisher("cmd_vel",SpeedDirection,queue_size=1)
         self.cmd = SpeedDirection()
+        self.navigation_dict = {
+            "3Dials_classic":nav_3_dials,
+            "3Dials_spaced":nav_3_dials_spaced,
+            "nDials":nav_n_dials
+        }
+        self.navigation_choice = "3Dials_spaced"
     
     def get_scan(self, msg:LaserScan):
-        if self.use_dials == False : 
-            self.cmd = nav_3_dials(msg, self.Kv, self.Kd, self.Ka)
-        elif self.use_dials :
-            self.cmd = nav_n_dials_with_biases(msg, self.Kv, self.Kd, self.Ka, self.n_dials, self.Mode)
+        navigation_function = self.navigation_dict[self.navigation_choice]
+        self.cmd = navigation_function(
+            lidar_data=msg,
+            Kspeed=self.Kv,
+            Kdir=self.Kd,
+            Karg=self.Ka,
+            Mode=self.Mode,
+            n_dials=self.n_dials
+        )
         self.pub.publish(self.cmd)
 
     def get_all_params(self, value = True):
