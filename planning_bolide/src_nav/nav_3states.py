@@ -80,14 +80,14 @@ class NavSensors():
         self.pub.publish(SpeedDirection(0, 0))
         rospy.sleep(0.05)
     
-    def protocol_break(self):
-        """Protocol to break."""
+    def protocol_brake(self):
+        """Protocol to brake."""
         self.pub.publish(SpeedDirection(2, 0))
         rospy.sleep(0.1)
 
     def protocol_inverse_prop(self):
         """Protocol to go to backward from forward."""
-        self.protocol_break()
+        self.protocol_brake()
         self.protocol_through_neutral()
     
     def apply_protocol(self):
