@@ -176,6 +176,9 @@ catkin_install_python(PROGRAMS
   src_process/lidar_process.py
   src_process/camera_info.py
   src_publisher/STM32_sensors_pub.py
+  src_publisher/imu_publisher.py
+  src_publisher/fork_data_publisher.py
+  src_publisher/rear_sensor_publisher.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 
