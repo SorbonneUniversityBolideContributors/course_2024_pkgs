@@ -64,6 +64,7 @@ class NavSensors():
 # PARAMS UPDATE ===============================================================
     def get_params(self, value = True):
         """Update the parameters when the parameter change alert is received."""
+        rospy.loginfo("Updating the parameters")
         self.Kd = rospy.get_param("/gain_direction", default = 0.3)
         self.Kv = rospy.get_param("/gain_vitesse", default = 0.33)
         self.Ka = rospy.get_param("/gain_direction_arg_max", default = 0.2)
