@@ -88,7 +88,7 @@ def nav_3_dials(lidar_data:LaserScan, Kspeed:float, Kdir:float, Karg:float, Mode
     speed_cmd = Kspeed * dist_center
 
     # Compute the direction command
-    dir_cmd = (- Kdir * (dist_right - dist_left) / dist_center) + (Karg * arg)
+    dir_cmd = (- Kdir * (dist_right - dist_left) / dist_center /0.2) + (Karg * arg)
 
     cmd_vel = SpeedDirection(speed_cmd, dir_cmd)
 
@@ -120,14 +120,14 @@ def nav_n_dials(lidar_data:LaserScan, Kspeed:float, Kdir:float, Karg:float, n_di
     # Compute the direction command
 
     if "classic" in Mode :
-        dir_cmd = - Kdir * (dist_right - dist_left) / dist_center + Karg * arg
+        dir_cmd = - Kdir * (dist_right - dist_left) / dist_center / 0.1 + Karg * arg
 
     elif "pondéré" in Mode :
-        dir_cmd = (- Kdir * (dist_right - dist_left) / dist_center+ Karg * arg) / (Kdir + Karg)
+        dir_cmd = (- Kdir * (dist_right - dist_left) / dist_center / 0.1+ Karg * arg) / (Kdir + Karg)
 
     elif "division" in Mode : 
         dir_cmd = - dist_right/dist_left - 1 if dist_right > dist_left else dist_left/dist_right - 1
-        dir_cmd = (Kdir * dir_cmd / dist_center + Karg * arg) / (Kdir + Karg)
+        dir_cmd = (Kdir * dir_cmd / dist_center / 0.1 + Karg * arg) / (Kdir + Karg)
 
     cmd_vel = SpeedDirection(speed_cmd, dir_cmd)
 
