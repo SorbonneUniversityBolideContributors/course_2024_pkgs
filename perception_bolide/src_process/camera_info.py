@@ -119,7 +119,6 @@ class CameraProcess:
             self.image_matrix[(mid_index[0] - self.side_range) : (mid_index[0] + self.side_range), -self.side_range:],
             axis = (0,1)
         )
-
         return self.nearest_color(middle_pixel_mean), self.nearest_color(left_pixel_mean), self.nearest_color(right_pixel_mean)
 
     def get_ROS_params(self, value = True):
@@ -130,7 +129,8 @@ class CameraProcess:
         }
         self.HSV_COLORS = {color : rgb2hsv(self.RGB_COLORS[color]) for color in self.RGB_COLORS}
 
-        self.tolerance = rospy.get_param("/color_detection_tolerance", default = 0.25) # The tolerance percentage for the color detection
+        self.tolerance = rospy.get_param("/color_detection_tolerance", default = 0.8) # The tolerance percentage for the color detection
+        self.green_is_left = rospy.get_param("/green_is_left", default = True) # True if the robot is going "green is left"
 
 
 if __name__ == "__main__" :
