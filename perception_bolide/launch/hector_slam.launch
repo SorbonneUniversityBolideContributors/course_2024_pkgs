@@ -3,8 +3,8 @@
 <launch>
   <arg name="tf_map_scanmatch_transform_frame_name" default="scanmatcher_frame"/>
   <arg name="base_frame" default="base_link"/>
-  <arg name="odom_frame" default="base_link"/>
-  <arg name="pub_map_odom_transform" default="true"/>
+  <arg name="odom_frame" default="odom"/>
+  <arg name="pub_map_odom_transform" default="false"/>
   <arg name="scan_subscriber_queue_size" default="10"/>
   <arg name="scan_topic" default="lidar_data"/>
   <arg name="map_size" default="512"/>
@@ -17,7 +17,7 @@
     <param name="odom_frame" value="$(arg odom_frame)" />
     
     <!-- Tf use -->
-    <param name="use_tf_scan_transformation" value="true"/>
+    <param name="use_tf_scan_transformation" value="false"/>
     <param name="use_tf_pose_start_estimate" value="false"/>
     <param name="pub_map_odom_transform" value="$(arg pub_map_odom_transform)"/>
     
@@ -53,7 +53,7 @@
     <param name="tf_map_scanmatch_transform_frame_name" value="$(arg tf_map_scanmatch_transform_frame_name)" />
   </node>
     
-  <node pkg="tf" type="static_transform_publisher" name="map_nav_broadcaster" args="0 0 0 0 0 0 base_link lidar_frame 100.0"/>
+  <!--<node pkg="tf" type="static_transform_publisher" name="map_nav_broadcaster" args="0 0 0 0 0 0 base_link lidar_frame 100.0"/>-->
 </launch>
   
   

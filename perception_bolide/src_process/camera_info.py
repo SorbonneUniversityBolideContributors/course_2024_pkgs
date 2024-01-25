@@ -15,29 +15,10 @@ from sensor_msgs.msg import Image
 from std_msgs.msg import Bool
 
 
-RGB_COLORS = {
-    "red" : (255, 0, 0),
-    "green" : (0, 255, 0),
-    "blue" : (0, 0, 255),
-    "white" : (255, 255, 255),
-    "black" : (0, 0, 0),
-    "yellow" : (255, 255, 0),
-    "brown" : (250, 175, 100),
-}
-
 def rgb2hsv(rgb:tuple) -> tuple:
     """Convert the RGB color to HSV."""
     return cv2.cvtColor(np.uint8([[rgb]]), cv2.COLOR_RGB2HSV)[0][0]
 
-HSV_COLORS = {color : rgb2hsv(RGB_COLORS[color]) for color in RGB_COLORS}
-
-
-def nearest_color(pixel:np.ndarray) -> str:
-    """Return the nearest color of the pixel."""
-    hsv_pixel = rgb2hsv(pixel)
-    return min(HSV_COLORS.keys(), key = lambda color: np.linalg.norm(np.array(HSV_COLORS[color]) - hsv_pixel))
-    # return min(RGB_COLORS.keys(), key = lambda color: np.linalg.norm(np.array(RGB_COLORS[color]) - pixel))
-    # return str(pixel)
 
 class CameraProcess:
     def __init__(self) :
@@ -45,13 +26,16 @@ class CameraProcess:
         # Initialize the node
         rospy.init_node("camera_info", anonymous = True)
 
+        # log info
+        rospy.loginfo("Initializing the camera_info node")
+
         # Subscribe to the image data
         rospy.Subscriber("raw_image_data", Image, self.callback_image)
 
         # Subscribe to the parameter change alert
-        rospy.Subscriber("/param_change_alert", Bool, self.get_params)
+        rospy.Subscriber("/param_change_alert", Bool, self.get_ROS_params)
 
-        self.get_params()
+        self.get_ROS_params()
 
         # Initialize the stored attributes
         self.image_matrix = None # The image matrix with HSV values
@@ -64,7 +48,7 @@ class CameraProcess:
         self.pub = rospy.Publisher("camera_info", CameraInfo, queue_size = 10)
 
         rospy.spin()
-    
+
     def callback_image(self, image_data:Image) :
         """Callback function for the image data subscriber."""
         # Convert the image to a numpy array reshaped to the image size
@@ -84,6 +68,19 @@ class CameraProcess:
 
         # Publish the message
         self.pub.publish(camera_info_msg)
+
+    def nearest_color(self, pixel:np.ndarray) -> str:
+        """Return the nearest color of the pixel if the difference is under a tolerance threshold. Else return "unknown"."""
+        hsv_pixel = rgb2hsv(pixel)
+        max_dist = np.linalg.norm(np.array([0, 0, 0]) - np.array([180, 255, 255]))
+        differences = {color : np.linalg.norm(hsv_pixel - self.HSV_COLORS[color]) / max_dist for color in self.HSV_COLORS}
+
+        print(differences)
+
+        if min(differences.values()) < self.tolerance:
+            return min(differences, key = lambda x : differences[x])
+        else:
+            return "unknown"
 
     def is_wrong_way(self, left_color:str, right_color:str) -> None:
         """Store if the robot is going the wrong way in the self.wrong_way variable."""
@@ -122,13 +119,18 @@ class CameraProcess:
             self.image_matrix[(mid_index[0] - self.side_range) : (mid_index[0] + self.side_range), -self.side_range:],
             axis = (0,1)
         )
+        return self.nearest_color(middle_pixel_mean), self.nearest_color(left_pixel_mean), self.nearest_color(right_pixel_mean)
 
-        return nearest_color(middle_pixel_mean), nearest_color(left_pixel_mean), nearest_color(right_pixel_mean)
+    def get_ROS_params(self, value = True):
+        """Update the parameters when the parameter change alert is received."""
+        self.RGB_COLORS = {
+            "red"    : rospy.get_param("/red_RBG", default = (255, 0, 0)),
+            "green"  : rospy.get_param("/green_RGB", default = (0, 255, 0)),
+        }
+        self.HSV_COLORS = {color : rgb2hsv(self.RGB_COLORS[color]) for color in self.RGB_COLORS}
 
-    def get_params(self, value = True):
-        self.red_threshold = rospy.get_param("/red_threshold", default = [[200,0,0],[255,100,100]])
-        self.green_threshold = rospy.get_param("/green_threshold", default = [[0,200,0],[100,255,100]])
-        self.green_is_left = rospy.get_param("green_is_left", default = True)
+        self.tolerance = rospy.get_param("/color_detection_tolerance", default = 0.8) # The tolerance percentage for the color detection
+        self.green_is_left = rospy.get_param("/green_is_left", default = True) # True if the robot is going "green is left"
 
 
 if __name__ == "__main__" :
