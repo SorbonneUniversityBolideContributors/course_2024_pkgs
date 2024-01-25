@@ -51,7 +51,8 @@ class NavLidar():
             Kdir=self.Kd,
             Karg=self.Ka,
             Mode=self.mode,
-            n_dials=self.n_dials
+            n_dials=self.n_dials,
+            FrontRatio = self.front_dial_ratio
         )
 
         # Publish the command
@@ -71,6 +72,7 @@ class NavLidar():
 
         self.use_dials = rospy.get_param("/use_dials", default = False)
         self.n_dials = rospy.get_param("/navigation_n_dials", default = 11)
+        self.front_dial_ratio = rospy.get_param("/front_dial_ratio", default = 0.1)
     
 
 
