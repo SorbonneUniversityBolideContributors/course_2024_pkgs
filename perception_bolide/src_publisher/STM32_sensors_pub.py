@@ -49,7 +49,7 @@ class STM32_data_receiver:
 if __name__ == '__main__':
     try:
         # Create a STM32_data_receiver and start it
-        lidarcontrol = STM32_data_receiver()
+        STM32_data = STM32_data_receiver()
     except rospy.ROSInterruptException:
         # If a ROSInterruptException occurs, exit the program
         exit(0)
