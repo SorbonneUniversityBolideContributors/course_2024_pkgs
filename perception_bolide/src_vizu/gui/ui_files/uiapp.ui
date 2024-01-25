@@ -355,7 +355,7 @@
                   </widget>
                  </item>
                  <item row="1" column="4">
-                  <widget class="QPushButton" name="redAutoThresholdPushButton_3">
+                  <widget class="QPushButton" name="redAutoCalibrationPushButton">
                    <property name="text">
                     <string>Auto</string>
                    </property>
@@ -393,7 +393,7 @@
                   </widget>
                  </item>
                  <item row="2" column="4">
-                  <widget class="QPushButton" name="greenAutoThresholdPushButton_3">
+                  <widget class="QPushButton" name="greenAutoCalibrationPushButton">
                    <property name="text">
                     <string>Auto</string>
                    </property>

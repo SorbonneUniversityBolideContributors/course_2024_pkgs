@@ -100,8 +100,8 @@ class MainWindow(QMainWindow):
         self.msg_alert.data = True
 
         self.init_calibration = rospy.Publisher("/do_an_auto_calibration", Bool, queue_size = 10)
-        self.ui.redAutoThresholdPushButton.clicked.connect(lambda : self.auto_calibration(color = "red"))
-        self.ui.greenAutoThresholdPushButton.clicked.connect(lambda : self.auto_calibration(color = "green"))
+        self.ui.redAutoCalibrationPushButton.clicked.connect(lambda : self.auto_calibration(color = "red"))
+        self.ui.greenAutoCalibrationPushButton.clicked.connect(lambda : self.auto_calibration(color = "green"))
 
 
     def connect(self):

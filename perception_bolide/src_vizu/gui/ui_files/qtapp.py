@@ -268,10 +268,10 @@ class Ui_MainWindow(object):
 
         self.gridLayout_12.addWidget(self.BredCalibrationSpinBox, 1, 3, 1, 1)
 
-        self.redAutoThresholdPushButton_3 = QPushButton(self.layoutWidget_8)
-        self.redAutoThresholdPushButton_3.setObjectName(u"redAutoThresholdPushButton_3")
+        self.redAutoCalibrationPushButton = QPushButton(self.layoutWidget_8)
+        self.redAutoCalibrationPushButton.setObjectName(u"redAutoCalibrationPushButton")
 
-        self.gridLayout_12.addWidget(self.redAutoThresholdPushButton_3, 1, 4, 1, 1)
+        self.gridLayout_12.addWidget(self.redAutoCalibrationPushButton, 1, 4, 1, 1)
 
         self.label_47 = QLabel(self.layoutWidget_8)
         self.label_47.setObjectName(u"label_47")
@@ -297,10 +297,10 @@ class Ui_MainWindow(object):
 
         self.gridLayout_12.addWidget(self.BgreenCalibrationSpinBox, 2, 3, 1, 1)
 
-        self.greenAutoThresholdPushButton_3 = QPushButton(self.layoutWidget_8)
-        self.greenAutoThresholdPushButton_3.setObjectName(u"greenAutoThresholdPushButton_3")
+        self.greenAutoCalibrationPushButton = QPushButton(self.layoutWidget_8)
+        self.greenAutoCalibrationPushButton.setObjectName(u"greenAutoCalibrationPushButton")
 
-        self.gridLayout_12.addWidget(self.greenAutoThresholdPushButton_3, 2, 4, 1, 1)
+        self.gridLayout_12.addWidget(self.greenAutoCalibrationPushButton, 2, 4, 1, 1)
 
         self.splitter_10.addWidget(self.layoutWidget_8)
         self.splitter_20 = QSplitter(self.splitter_10)
@@ -763,9 +763,9 @@ class Ui_MainWindow(object):
         self.label_44.setText(QCoreApplication.translate("MainWindow", u"G", None))
         self.label_45.setText(QCoreApplication.translate("MainWindow", u"B", None))
         self.label_46.setText(QCoreApplication.translate("MainWindow", u"Red", None))
-        self.redAutoThresholdPushButton_3.setText(QCoreApplication.translate("MainWindow", u"Auto", None))
+        self.redAutoCalibrationPushButton.setText(QCoreApplication.translate("MainWindow", u"Auto", None))
         self.label_47.setText(QCoreApplication.translate("MainWindow", u"Green", None))
-        self.greenAutoThresholdPushButton_3.setText(QCoreApplication.translate("MainWindow", u"Auto", None))
+        self.greenAutoCalibrationPushButton.setText(QCoreApplication.translate("MainWindow", u"Auto", None))
         self.label_48.setText(QCoreApplication.translate("MainWindow", u"Tolerance", None))
         self.toolBox.setItemText(self.toolBox.indexOf(self.page_2), QCoreApplication.translate("MainWindow", u"Camera", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), QCoreApplication.translate("MainWindow", u"Perception", None))
