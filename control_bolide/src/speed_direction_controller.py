@@ -21,7 +21,7 @@ class ControllerListener:
         self.BRAKE = 5
 
         # Values for the direction
-        self.CENTER = 6.95
+        self.CENTER = 7
         self.LEFT = 5.5
         self.RIGHT = 8.4
         self.left_range = abs(self.CENTER - self.LEFT)
