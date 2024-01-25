@@ -72,14 +72,14 @@ class NavSensors():
         self.green_is_left = rospy.get_param("/green_is_left", default = True)
 
         self.threshold_front_too_close = rospy.get_param("/threshold_front_too_close", default = 0.2)
-        self.threshold_rear_too_close = rospy.get_param("/threshold_rear_too_close", default = 0.1)
+        self.threshold_rear_too_close = rospy.get_param("/threshold_rear_too_close", default = 0.2)
         self.threshold_front_far_enough = rospy.get_param("/threshold_front_far_enough", default = 0.5)
 
 # PROTOCOLS ===================================================================
     def protocol_through_neutral(self):
         """Protocol to go through the neutral point."""
         self.pub.publish(SpeedDirection(0, 0))
-        rospy.sleep(0.05)
+        rospy.sleep(0.1)
     
     def protocol_brake(self):
         """Protocol to brake."""
