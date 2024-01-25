@@ -1,10 +1,20 @@
 <launch>
-    <!-- Node for lidar_publisher.py -->
+    <!-- Node for lidar data publication -->
     <node pkg="perception_bolide" type="lidar_publisher.py" name="lidar_publisher" output="screen" />
 
-    <!-- Node for cam_publisher.py -->
+    <!-- Node for cam data publication -->
     <node pkg="perception_bolide" type="cam_publisher.py" name="cam_publisher" output="screen" />
 
     <!-- Node for STM32_sensors_pub.py -->
     <node pkg="perception_bolide" type="STM32_sensors_pub.py" name="STM32_sensors_pub" output="screen" />
+
+    <!-- Node for imu data publication -->
+    <node pkg="perception_bolide" type="imu_publisher.py" name="imu_publisher" output="screen" />
+
+    <!-- Node for rear sensors data publication (IR*2, US)-->
+    <node pkg="perception_bolide" type="rear_sensors_publisher.py" name="rear_sensors_publisher" output="screen" />
+
+    <!-- Node for optical fork publication -->
+    <node pkg="perception_bolide" type="fork_data_publisher.py" name="optical_fork_publisher" output="screen" />
+
 </launch>

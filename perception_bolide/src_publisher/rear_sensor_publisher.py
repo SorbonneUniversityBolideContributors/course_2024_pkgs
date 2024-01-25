@@ -6,7 +6,6 @@ __status__ = "Development"
 __version__ = "1.0.0"
 
 import rospy
-import numpy as np
 from sensor_msgs.msg import Range
 from perception_bolide.msg import MultipleRange
 from std_msgs.msg import Float32MultiArray
@@ -20,7 +19,7 @@ class RearSensors:
         # SUBSCRIBER ========================================
         rospy.Subscriber("STM32_sensors_topic", Float32MultiArray, self.callback)
         # PUBLISHER =========================================
-        self.pub = rospy.Publisher('raw_rear_range_data_topic', MultipleRange, queue_size=10)
+        self.pub = rospy.Publisher('raw_rear_range_data', MultipleRange, queue_size=10)
 
         # defining ranges of the IR
         self.ir_min_range = 0.06
