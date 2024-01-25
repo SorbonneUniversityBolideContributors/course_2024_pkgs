@@ -27,6 +27,7 @@ class DetectColor:
         self.color = rospy.get_param("/color_to_calibrate", default = "no_one")
         if self.color != "no_one" :
             self.subscriber = rospy.Subscriber("raw_image_data", SensorImage, self.callback_image)
+        else : rospy.loginfo("Color is no_one")
 
     def callback_image(self, image_data) :
         h,w = image_data.height, image_data.width
