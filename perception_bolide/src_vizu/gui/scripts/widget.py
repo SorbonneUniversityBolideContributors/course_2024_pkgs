@@ -8,7 +8,6 @@ import cv2
 import numpy as np
 import rospy
 import subprocess
-from easydict import EasyDict
 
 from ui_files.qtapp import Ui_MainWindow    # Correspond à la fenêtre principale du GUI
 from std_msgs.msg import Bool
@@ -141,8 +140,8 @@ class MainWindow(QMainWindow):
 
     def set_color_threshold(self, value, color, key = "no key"):
         self.calibrate[color][key]["default"] = value
-        c = EasyDict(self.calibrate[color])
-        rospy.set_param(f"/{color}_threshold",[[c.Bmin.default,c.Gmin.default,c.Rmin.default],[c.Bmax.default, c.Gmax.default, c.Rmax.default]])
+        c = self.calibrate[color]
+        rospy.set_param(f"/{color}_RGB",[c["R"]["default"],c["G"]["default"],c["B"]["default"]])
         self.changement_alert.publish(self.msg_alert)
 
 
