@@ -86,7 +86,16 @@ def nav_3_dials(lidar_data:LaserScan, Kspeed:float, Kdir:float, Karg:float) -> S
     speed_cmd = Kspeed * dist_center
 
     # Compute the direction command
-    dir_cmd = - Kdir * (dist_right - dist_left) / speed_cmd + Karg * arg
+
+    # First method
+    # dir_cmd = - Kdir * (dist_right - dist_left) / speed_cmd + Karg * arg
+
+    # Second method that should be better
+    dir_cmd = (- Kdir * (dist_right - dist_left) / speed_cmd+ Karg * arg) / ((Kdir + Karg)* 2)
+
+    # Proposition of third method
+    # dir_cmd = - dist_right/dist_left - 1 if dist_right > dist_left else dist_left/dist_right - 1
+    # dir_cmd = (Kdir * dir_cmd / speed_cmd + Karg * arg) / ((Kdir + Karg) * 2)
 
     cmd_vel = SpeedDirection(speed_cmd, dir_cmd)
 
