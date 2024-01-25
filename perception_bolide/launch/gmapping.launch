@@ -1,10 +1,11 @@
+<?xml version="1.0"?>
 <launch> 
-  <arg name="scan_topic" default="scan" /> 
+  <arg name="scan_topic" default="lidar_data" /> 
  
 <!-- Defining parameters for slam_gmapping node --> 
  
   <node pkg="gmapping" type="slam_gmapping" name="slam_gmapping" output="screen"> 
-    <param name="base_frame" value="base_footprint"/> 
+    <param name="base_frame" value="base_link"/> 
     <param name="odom_frame" value="odom"/> 
     <param name="map_update_interval" value="5.0"/> 
     <param name="maxUrange" value="6.0"/> 
@@ -40,16 +41,6 @@
     <param name="lasamplestep" value="0.005"/> 
     <remap from="scan" to="$(arg scan_topic)"/> 
   </node> 
- 
-<!-- Defining parameters for move_base node --> 
- 
-  <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen"> 
-    <rosparam file="$(find diff_wheeled_robot_gazebo)/param/costmap_common_params.yaml" command="load" ns="global_costmap" /> 
-    <rosparam file="$(find diff_wheeled_robot_gazebo)/param/costmap_common_params.yaml" command="load" ns="local_costmap" /> 
-    <rosparam file="$(find diff_wheeled_robot_gazebo)/param/local_costmap_params.yaml" command="load" /> 
-    <rosparam file="$(find diff_wheeled_robot_gazebo)/param/global_costmap_params.yaml" command="load" /> 
-    <rosparam file="$(find diff_wheeled_robot_gazebo)/param/base_local_planner_params.yaml" command="load" /> 
-    <rosparam file="$(find diff_wheeled_robot_gazebo)/param/dwa_local_planner_params.yaml" command="load" /> 
-    <rosparam file="$(find diff_wheeled_robot_gazebo)/param/move_base_params.yaml" command="load" /> 
- 
-  </node> 
+  <node pkg="tf" type="static_transform_publisher" name="gmapping_broadcaster" args="0 0 0 0 0 0 base_link lidar_frame 100"/>
+  
+</launch>
