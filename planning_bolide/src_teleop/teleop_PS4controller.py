@@ -30,13 +30,13 @@ class MyController(Controller):
         self.current_speed = 0
         self.current_direction = 0
 
-        # use to make the first pression on trigger break and second one backward
+        # use to make the first pression on trigger brake and second one backward
         self.first_press_L2 = True
-        self.breaking = False
+        self.braking = False
         
         # 
         self.NEUTRAL = 0
-        self.BREAK = 2
+        self.BRAKE = 2
 
         # 
         self.CENTER = 0
@@ -51,7 +51,7 @@ class MyController(Controller):
         self.publish_speed_direction()
 
     def on_R2_press(self, value):
-        if not self.breaking:
+        if not self.braking:
             self.first_press_L2 = True
             value = transf_trigger(value)
             rospy.loginfo(f"R2 value: {value}")
@@ -60,7 +60,7 @@ class MyController(Controller):
             self.publish_speed_direction()
 
     def on_R2_release(self):
-        if not self.breaking:
+        if not self.braking:
             rospy.loginfo("R2 released")
             self.current_speed = 0
             # publish speed=0 on /cmd_vel
@@ -68,9 +68,9 @@ class MyController(Controller):
 
     def on_L2_press(self, value):
         if self.first_press_L2:
-            self.breaking = True
-            self.current_speed = self.BREAK
-            rospy.loginfo(f"breaking")
+            self.braking = True
+            self.current_speed = self.BRAKE
+            rospy.loginfo(f"braking")
         else:
             value = -transf_trigger(value)
             rospy.loginfo(f"L2 value: {value}")
@@ -79,7 +79,7 @@ class MyController(Controller):
         self.publish_speed_direction()
 
     def on_L2_release(self):
-        self.breaking = False
+        self.braking = False
         self.first_press_L2 = False
         rospy.loginfo("L2 released")
         self.current_speed = 0

@@ -420,67 +420,136 @@ class Ui_MainWindow(object):
         self.page_5.setGeometry(QRect(0, 0, 270, 375))
         self.verticalLayout_5 = QVBoxLayout(self.page_5)
         self.verticalLayout_5.setObjectName(u"verticalLayout_5")
-        self.gridLayout_6 = QGridLayout()
+        self.splitter_13 = QSplitter(self.page_5)
+        self.splitter_13.setObjectName(u"splitter_13")
+        self.splitter_13.setOrientation(Qt.Horizontal)
+        self.label_36 = QLabel(self.splitter_13)
+        self.label_36.setObjectName(u"label_36")
+        self.splitter_13.addWidget(self.label_36)
+        self.navModeComboBox = QComboBox(self.splitter_13)
+        self.navModeComboBox.setObjectName(u"navModeComboBox")
+        self.splitter_13.addWidget(self.navModeComboBox)
+
+        self.verticalLayout_5.addWidget(self.splitter_13)
+
+        self.splitter_14 = QSplitter(self.page_5)
+        self.splitter_14.setObjectName(u"splitter_14")
+        self.splitter_14.setOrientation(Qt.Vertical)
+        self.label_14 = QLabel(self.splitter_14)
+        self.label_14.setObjectName(u"label_14")
+        self.splitter_14.addWidget(self.label_14)
+        self.layoutWidget_5 = QWidget(self.splitter_14)
+        self.layoutWidget_5.setObjectName(u"layoutWidget_5")
+        self.gridLayout_6 = QGridLayout(self.layoutWidget_5)
         self.gridLayout_6.setObjectName(u"gridLayout_6")
-        self.gainVitesseSlider = QSlider(self.page_5)
+        self.gridLayout_6.setContentsMargins(0, 0, 0, 0)
+        self.gainVitesseSlider = QSlider(self.layoutWidget_5)
         self.gainVitesseSlider.setObjectName(u"gainVitesseSlider")
         self.gainVitesseSlider.setMaximum(100)
         self.gainVitesseSlider.setOrientation(Qt.Horizontal)
 
         self.gridLayout_6.addWidget(self.gainVitesseSlider, 0, 1, 1, 1)
 
-        self.label_15 = QLabel(self.page_5)
+        self.label_15 = QLabel(self.layoutWidget_5)
         self.label_15.setObjectName(u"label_15")
 
         self.gridLayout_6.addWidget(self.label_15, 1, 0, 1, 1)
 
-        self.gainDirectionSpinBox = QDoubleSpinBox(self.page_5)
+        self.gainDirectionSpinBox = QDoubleSpinBox(self.layoutWidget_5)
         self.gainDirectionSpinBox.setObjectName(u"gainDirectionSpinBox")
         self.gainDirectionSpinBox.setMaximum(1.000000000000000)
         self.gainDirectionSpinBox.setSingleStep(0.010000000000000)
 
         self.gridLayout_6.addWidget(self.gainDirectionSpinBox, 1, 2, 1, 1)
 
-        self.gainDirectionSlider = QSlider(self.page_5)
+        self.gainDirectionSlider = QSlider(self.layoutWidget_5)
         self.gainDirectionSlider.setObjectName(u"gainDirectionSlider")
         self.gainDirectionSlider.setMaximum(100)
         self.gainDirectionSlider.setOrientation(Qt.Horizontal)
 
         self.gridLayout_6.addWidget(self.gainDirectionSlider, 1, 1, 1, 1)
 
-        self.gainVitesseSpinBox = QDoubleSpinBox(self.page_5)
+        self.gainVitesseSpinBox = QDoubleSpinBox(self.layoutWidget_5)
         self.gainVitesseSpinBox.setObjectName(u"gainVitesseSpinBox")
         self.gainVitesseSpinBox.setMaximum(1.000000000000000)
         self.gainVitesseSpinBox.setSingleStep(0.010000000000000)
 
         self.gridLayout_6.addWidget(self.gainVitesseSpinBox, 0, 2, 1, 1)
 
-        self.label_14 = QLabel(self.page_5)
-        self.label_14.setObjectName(u"label_14")
-
-        self.gridLayout_6.addWidget(self.label_14, 0, 0, 1, 1)
-
-        self.label_32 = QLabel(self.page_5)
+        self.label_32 = QLabel(self.layoutWidget_5)
         self.label_32.setObjectName(u"label_32")
 
-        self.gridLayout_6.addWidget(self.label_32, 2, 0, 1, 1)
+        self.gridLayout_6.addWidget(self.label_32, 0, 0, 1, 1)
 
-        self.gainDirectionArgMaxSlider = QSlider(self.page_5)
+        self.label_37 = QLabel(self.layoutWidget_5)
+        self.label_37.setObjectName(u"label_37")
+
+        self.gridLayout_6.addWidget(self.label_37, 2, 0, 1, 1)
+
+        self.gainDirectionArgMaxSlider = QSlider(self.layoutWidget_5)
         self.gainDirectionArgMaxSlider.setObjectName(u"gainDirectionArgMaxSlider")
         self.gainDirectionArgMaxSlider.setMaximum(100)
         self.gainDirectionArgMaxSlider.setOrientation(Qt.Horizontal)
 
         self.gridLayout_6.addWidget(self.gainDirectionArgMaxSlider, 2, 1, 1, 1)
 
-        self.gainDirectionArgMaxSpinBox = QDoubleSpinBox(self.page_5)
+        self.gainDirectionArgMaxSpinBox = QDoubleSpinBox(self.layoutWidget_5)
         self.gainDirectionArgMaxSpinBox.setObjectName(u"gainDirectionArgMaxSpinBox")
         self.gainDirectionArgMaxSpinBox.setMaximum(1.000000000000000)
         self.gainDirectionArgMaxSpinBox.setSingleStep(0.010000000000000)
 
         self.gridLayout_6.addWidget(self.gainDirectionArgMaxSpinBox, 2, 2, 1, 1)
 
+        self.splitter_14.addWidget(self.layoutWidget_5)
 
-        self.verticalLayout_5.addLayout(self.gridLayout_6)
+        self.verticalLayout_5.addWidget(self.splitter_14)
+
+        self.splitter_15 = QSplitter(self.page_5)
+        self.splitter_15.setObjectName(u"splitter_15")
+        self.splitter_15.setOrientation(Qt.Vertical)
+        self.label_38 = QLabel(self.splitter_15)
+        self.label_38.setObjectName(u"label_38")
+        self.splitter_15.addWidget(self.label_38)
+        self.layoutWidget_6 = QWidget(self.splitter_15)
+        self.layoutWidget_6.setObjectName(u"layoutWidget_6")
+        self.verticalLayout_8 = QVBoxLayout(self.layoutWidget_6)
+        self.verticalLayout_8.setObjectName(u"verticalLayout_8")
+        self.verticalLayout_8.setContentsMargins(0, 0, 0, 0)
+        self.splitter_16 = QSplitter(self.layoutWidget_6)
+        self.splitter_16.setObjectName(u"splitter_16")
+        self.splitter_16.setOrientation(Qt.Horizontal)
+        self.label_39 = QLabel(self.splitter_16)
+        self.label_39.setObjectName(u"label_39")
+        self.splitter_16.addWidget(self.label_39)
+        self.numberDialsSlider = QSlider(self.splitter_16)
+        self.numberDialsSlider.setObjectName(u"numberDialsSlider")
+        self.numberDialsSlider.setMinimum(1)
+        self.numberDialsSlider.setMaximum(90)
+        self.numberDialsSlider.setOrientation(Qt.Horizontal)
+        self.splitter_16.addWidget(self.numberDialsSlider)
+        self.numberDialsSpinBox = QSpinBox(self.splitter_16)
+        self.numberDialsSpinBox.setObjectName(u"numberDialsSpinBox")
+        self.numberDialsSpinBox.setMinimum(1)
+        self.numberDialsSpinBox.setMaximum(90)
+        self.splitter_16.addWidget(self.numberDialsSpinBox)
+
+        self.verticalLayout_8.addWidget(self.splitter_16)
+
+        self.splitter_17 = QSplitter(self.layoutWidget_6)
+        self.splitter_17.setObjectName(u"splitter_17")
+        self.splitter_17.setOrientation(Qt.Horizontal)
+        self.label_40 = QLabel(self.splitter_17)
+        self.label_40.setObjectName(u"label_40")
+        self.splitter_17.addWidget(self.label_40)
+        self.featureDialsComboBox = QComboBox(self.splitter_17)
+        self.featureDialsComboBox.setObjectName(u"featureDialsComboBox")
+        self.splitter_17.addWidget(self.featureDialsComboBox)
+
+        self.verticalLayout_8.addWidget(self.splitter_17)
+
+        self.splitter_15.addWidget(self.layoutWidget_6)
+
+        self.verticalLayout_5.addWidget(self.splitter_15)
 
         self.verticalSpacer_3 = QSpacerItem(20, 255, QSizePolicy.Minimum, QSizePolicy.Expanding)
 
@@ -726,7 +795,7 @@ class Ui_MainWindow(object):
 
         self.tabWidget.setCurrentIndex(1)
         self.toolBox.setCurrentIndex(1)
-        self.toolBox_3.setCurrentIndex(1)
+        self.toolBox_3.setCurrentIndex(0)
         self.toolBox_2.setCurrentIndex(0)
 
 
@@ -764,9 +833,14 @@ class Ui_MainWindow(object):
         self.label_28.setText(QCoreApplication.translate("MainWindow", u"Max", None))
         self.toolBox.setItemText(self.toolBox.indexOf(self.page_2), QCoreApplication.translate("MainWindow", u"Camera", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), QCoreApplication.translate("MainWindow", u"Perception", None))
+        self.label_36.setText(QCoreApplication.translate("MainWindow", u"Mode", None))
+        self.label_14.setText(QCoreApplication.translate("MainWindow", u"Gains", None))
         self.label_15.setText(QCoreApplication.translate("MainWindow", u"Kd", None))
-        self.label_14.setText(QCoreApplication.translate("MainWindow", u"Kv", None))
-        self.label_32.setText(QCoreApplication.translate("MainWindow", u"Ka", None))
+        self.label_32.setText(QCoreApplication.translate("MainWindow", u"Kv", None))
+        self.label_37.setText(QCoreApplication.translate("MainWindow", u"Ka", None))
+        self.label_38.setText(QCoreApplication.translate("MainWindow", u"Dials", None))
+        self.label_39.setText(QCoreApplication.translate("MainWindow", u"Number", None))
+        self.label_40.setText(QCoreApplication.translate("MainWindow", u"Feature", None))
         self.toolBox_3.setItemText(self.toolBox_3.indexOf(self.page_5), QCoreApplication.translate("MainWindow", u"Gains", None))
         self.label_29.setText(QCoreApplication.translate("MainWindow", u"Front", None))
         self.label_30.setText(QCoreApplication.translate("MainWindow", u"too close", None))
