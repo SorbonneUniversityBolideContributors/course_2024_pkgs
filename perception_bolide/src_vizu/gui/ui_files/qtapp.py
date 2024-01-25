@@ -368,7 +368,7 @@ class Ui_MainWindow(object):
         self.gridLayout_6.setContentsMargins(0, 0, 0, 0)
         self.gainVitesseSlider = QSlider(self.layoutWidget_5)
         self.gainVitesseSlider.setObjectName(u"gainVitesseSlider")
-        self.gainVitesseSlider.setMaximum(100)
+        self.gainVitesseSlider.setMaximum(1000)
         self.gainVitesseSlider.setOrientation(Qt.Horizontal)
 
         self.gridLayout_6.addWidget(self.gainVitesseSlider, 0, 1, 1, 1)
@@ -394,7 +394,7 @@ class Ui_MainWindow(object):
 
         self.gainVitesseSpinBox = QDoubleSpinBox(self.layoutWidget_5)
         self.gainVitesseSpinBox.setObjectName(u"gainVitesseSpinBox")
-        self.gainVitesseSpinBox.setMaximum(1.000000000000000)
+        self.gainVitesseSpinBox.setMaximum(10.000000000000000)
         self.gainVitesseSpinBox.setSingleStep(0.010000000000000)
 
         self.gridLayout_6.addWidget(self.gainVitesseSpinBox, 0, 2, 1, 1)
