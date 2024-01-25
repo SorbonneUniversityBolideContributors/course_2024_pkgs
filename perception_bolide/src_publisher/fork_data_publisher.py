@@ -6,7 +6,6 @@ __status__ = "Development"
 __version__ = "1.0.0"
 
 import rospy
-import numpy as np
 from perception_bolide.msg import ForkSpeed
 from std_msgs.msg import Float32MultiArray
 
@@ -19,7 +18,7 @@ class Optical_Fork:
         # SUBSCRIBER ========================================
         rospy.Subscriber("STM32_sensors_topic", Float32MultiArray, self.callback)
         # PUBLISHER =========================================
-        self.pub = rospy.Publisher('raw_fork_data_topic', ForkSpeed, queue_size=10)
+        self.pub = rospy.Publisher('raw_fork_data', ForkSpeed, queue_size=10)
 
         rospy.spin() # wait for the callback to be called
 

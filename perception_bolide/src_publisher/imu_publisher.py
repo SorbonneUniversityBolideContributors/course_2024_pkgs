@@ -6,7 +6,6 @@ __status__ = "Development"
 __version__ = "1.0.0"
 
 import rospy
-import numpy as np
 from std_msgs.msg import Float32MultiArray
 from sensor_msgs.msg import Imu
 
