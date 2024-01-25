@@ -16,9 +16,7 @@ import time
 
 class DetectColor:
     def __init__(self) :
-
         self.pub = rospy.Publisher("/is_auto_calibration_done", Bool, queue_size = 10)
-
         self.listener_init()
 
     def listener_init(self) :
@@ -29,12 +27,8 @@ class DetectColor:
         self.color = rospy.get_param("/color_to_calibrate", default = "no_one")
         if self.color != "no_one" :
             self.subscriber = rospy.Subscriber("raw_image_data", SensorImage, self.callback_image)
-            # rospy.spin()
-        print("aa")
 
     def callback_image(self, image_data) :
-
-        print("bb")
         h,w = image_data.height, image_data.width
         im = np.frombuffer(image_data.data, dtype = np.uint8)
         im = np.reshape(im, (h,w,3))
@@ -46,13 +40,13 @@ class DetectColor:
         zone_of_interest = im[(W - wW)//2 : (W-wW)//2 + wW, (H - wH)//2 : (H - wH)//2 + wH]
 
         values = np.median(zone_of_interest, axis = (0,1))
-        min_threshold = values - 50
-        max_threshold = values + 50
+        min_threshold = values #- 50
+        max_threshold = values #+ 50
 
-        min_threshold[min_threshold < 0] = 0
-        min_threshold[min_threshold > 255] = 255
-        max_threshold[max_threshold < 0] = 0
-        max_threshold[max_threshold > 255] = 255
+        # min_threshold[min_threshold < 0] = 0
+        # min_threshold[min_threshold > 255] = 255
+        # max_threshold[max_threshold < 0] = 0
+        # max_threshold[max_threshold > 255] = 255
 
 
         param_name = "/red_threshold" if self.color == "red" else "/green_threshold"
