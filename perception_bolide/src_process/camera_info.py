@@ -19,6 +19,20 @@ def rgb2hsv(rgb:tuple) -> tuple:
     """Convert the RGB color to HSV."""
     return cv2.cvtColor(np.uint8([[rgb]]), cv2.COLOR_RGB2HSV)[0][0]
 
+def hsv_dist(hsv1:tuple, hsv2:tuple) -> float:
+    """Return the distance between the two HSV colors (between 0 and 1)."""
+    # the H value is between 0 and 180, and is the main factor of the distance
+    coef_H = 0.7
+    # the S and V values are between 0 and 255, and are the secondary factors of the distance
+    coef_S = 0.2
+    coef_V = 0.1
+
+    loss_H = min((hsv1[0] - hsv2[0])%180, (hsv2[0] - hsv1[0])%180)/180
+    loss_S = abs(hsv1[1] - hsv2[1])/255
+    loss_V = abs(hsv1[2] - hsv2[2])/255
+
+    return coef_H*loss_H + coef_S*loss_S + coef_V*loss_V
+
 
 class CameraProcess:
     def __init__(self) :
@@ -72,13 +86,11 @@ class CameraProcess:
     def nearest_color(self, pixel:np.ndarray) -> str:
         """Return the nearest color of the pixel if the difference is under a tolerance threshold. Else return "unknown"."""
         hsv_pixel = rgb2hsv(pixel)
-        max_dist = np.linalg.norm(np.array([0, 0, 0]) - np.array([180, 255, 255]))
-        differences = {color : np.linalg.norm(hsv_pixel - self.HSV_COLORS[color]) / max_dist for color in self.HSV_COLORS}
+        differences = {color : hsv_dist(hsv_pixel, self.HSV_COLORS[color]) for color in self.HSV_COLORS}
 
-        print(differences)
-
-        if min(differences.values()) < self.tolerance:
-            return min(differences, key = lambda x : differences[x])
+        min_color_name, min_dist = min(differences.items(), key = lambda x : x[1])
+        if min_dist < self.tolerance:
+            return min_color_name
         else:
             return "unknown"
 
