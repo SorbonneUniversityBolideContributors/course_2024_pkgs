@@ -82,7 +82,7 @@ def nav_3_dials(lidar_data:LaserScan, Kspeed:float, Kdir:float, Karg:float, Mode
 
     # Argmax step
     mid_i = len(lidar_data.ranges)//2
-    arg = (np.argmax(lidar_data.ranges) - mid_i)/mid_i
+    arg = -(np.argmax(lidar_data.ranges) - mid_i)/mid_i
 
     rospy.loginfo(f"arg : {arg}")
     # Compute the speed command
@@ -113,7 +113,7 @@ def nav_n_dials(lidar_data:LaserScan, Kspeed:float, Kdir:float, Karg:float, n_di
     mid_i = len(lidar_data.ranges)//2
 
     rospy.loginfo("Not implemented yet, doing a simple argmax")
-    arg = (np.argmax(lidar_data.ranges) - mid_i)/mid_i # à changer avec le bon algorithme
+    arg = -(np.argmax(lidar_data.ranges) - mid_i)/mid_i # à changer avec le bon algorithme
 
     # Compute the speed command
     speed_cmd = Kspeed * dist_center
