@@ -75,7 +75,7 @@ if __name__ == "__main__" :
 	# Get parameters for image dimensions and frame rate
 	width  = rospy.get_param("image_width", default=160)
 	height = rospy.get_param("image_height", default=128)
-	framerate = rospy.get_param("frame_rate", default=30)
+	framerate = rospy.get_param("frame_rate", default=20)
 
 	# Initialize and run CamPub
 	cam_pub = CamPub(width, height, framerate)

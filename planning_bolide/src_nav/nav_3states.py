@@ -52,7 +52,7 @@ class NavSensors():
 
         # Parameters
         self.threshold_front_too_close = 0.2 # The minimum distance in front of the robot
-        self.threshold_rear_too_close = 0.1 # The minimum distance behind the robot
+        self.threshold_rear_too_close = 0.2 # The minimum distance behind the robot
         self.threshold_front_far_enough = 0.5 # The distance in front of the robot to consider it is far enough to go forward
         self.Kv = 0.5 # The speed coefficient
         self.Kd = 0.5 # The direction coefficient
@@ -79,12 +79,12 @@ class NavSensors():
     def protocol_through_neutral(self):
         """Protocol to go through the neutral point."""
         self.pub.publish(SpeedDirection(0, 0))
-        rospy.sleep(0.1)
+        rospy.sleep(0.15)
     
     def protocol_brake(self):
         """Protocol to brake."""
         self.pub.publish(SpeedDirection(2, 0))
-        rospy.sleep(0.1)
+        rospy.sleep(0.15)
 
     def protocol_inverse_prop(self):
         """Protocol to go to backward from forward."""
