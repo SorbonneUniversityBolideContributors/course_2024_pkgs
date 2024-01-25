@@ -45,7 +45,8 @@ class MainWindow(QMainWindow):
             "/simulation_max_angle"     : {"object" : self.ui.simulationMaxAngleSlider, "default" : 25},
             "/gain_vitesse"             : {"object" : self.ui.gainVitesseSpinBox,       "default" : 0.33},
             "/gain_direction"           : {"object" : self.ui.gainDirectionSpinBox,     "default" : 0.8},
-            "/gain_direcition_arg_max"  : {"object" : self.ui.gainDirectionArgMaxSpinBox,"default" : 0.8},
+            "/gain_direction_arg_max"  : {"object" : self.ui.gainDirectionArgMaxSpinBox,"default" : 0.8},
+
             "/threshold_front_too_close"    : {"object" : self.ui.FrontTooCloseSpinBox,         "default" : 0.1},
             "/threshold_front_far_enough"   : {"object" : self.ui.FrontFarEnoughSpinBox,        "default" : 0.5},
             "/threshold_rear_too_close"     : {"object" : self.ui.RearTooCloseSpinBox,          "default" : 0.2},
