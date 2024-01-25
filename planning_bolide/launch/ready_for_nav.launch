@@ -1,9 +1,6 @@
 <launch>
     <!-- Include main_publisher.launch -->
-    <include file="$(find perception_bolide)/launch/main_publisher.launch"/>
-
-    <!-- Node for lidar_process.py -->
-    <node pkg="perception_bolide" type="lidar_process.py" name="lidar_process" output="screen" />
+    <include file="$(find perception_bolide)/launch/perception.launch"/>
 
     <!-- Launch the speed_direction_control node -->
     <node pkg="control_bolide" type="speed_direction_controller.py" name="speed_direction_controller" output="screen" />

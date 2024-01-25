@@ -12,7 +12,7 @@
     <node pkg="perception_bolide" type="imu_publisher.py" name="imu_publisher" output="screen" />
 
     <!-- Node for rear sensors data publication (IR*2, US)-->
-    <node pkg="perception_bolide" type="rear_sensors_publisher.py" name="rear_sensors_publisher" output="screen" />
+    <node pkg="perception_bolide" type="rear_sensor_publisher.py" name="rear_sensor_publisher" output="screen" />
 
     <!-- Node for optical fork publication -->
     <node pkg="perception_bolide" type="fork_data_publisher.py" name="optical_fork_publisher" output="screen" />
