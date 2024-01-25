@@ -27,6 +27,7 @@ class DetectColor:
         self.color = rospy.get_param("/color_to_calibrate", default = "no_one")
         if self.color != "no_one" :
             self.subscriber = rospy.Subscriber("raw_image_data", SensorImage, self.callback_image)
+        else : rospy.loginfo("Color is no_one")
 
     def callback_image(self, image_data) :
         h,w = image_data.height, image_data.width
@@ -40,22 +41,11 @@ class DetectColor:
         zone_of_interest = im[(W - wW)//2 : (W-wW)//2 + wW, (H - wH)//2 : (H - wH)//2 + wH]
 
         values = np.median(zone_of_interest, axis = (0,1))
-        min_threshold = values #- 50
-        max_threshold = values #+ 50
-
-        # min_threshold[min_threshold < 0] = 0
-        # min_threshold[min_threshold > 255] = 255
-        # max_threshold[max_threshold < 0] = 0
-        # max_threshold[max_threshold > 255] = 255
-
-
-        param_name = "/red_threshold" if self.color == "red" else "/green_threshold"
-        rospy.loginfo(param_name)
-
-        rospy.set_param(param_name, [min_threshold.astype(np.uint8).tolist(), max_threshold.astype(np.uint8).tolist()])
 
         param_name = "/red_RGB" if self.color == "red" else "/green_RGB"
-        rospy.set_param(param_name, [min_threshold.astype(np.uint8).tolist(), max_threshold.astype(np.uint8).tolist()])
+        rospy.loginfo(param_name)
+
+        rospy.set_param(param_name, values.astype(np.uint8).tolist())
 
         rospy.set_param("/color_to_calibrate", "no_one")
 

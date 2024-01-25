@@ -8,7 +8,6 @@ import cv2
 import numpy as np
 import rospy
 import subprocess
-from easydict import EasyDict
 
 from ui_files.qtapp import Ui_MainWindow    # Correspond à la fenêtre principale du GUI
 from std_msgs.msg import Bool
@@ -31,7 +30,8 @@ class MainWindow(QMainWindow):
             "/temporal_filter_bool"     : {"object" : self.ui.temporalFilterCheckBox,   "default" : False},
             "/spatial_filter_bool"      : {"object" : self.ui.spatialFilterCheckBox,    "default" : False},
             "/enable_camera_bool"       : {"object" : self.ui.enableCameraCheckBox,     "default" : True},
-            "/green_is_left"            : {"object" : self.ui.GreenIsLeftCheckBox,     "default" : True},
+            "/green_is_left"            : {"object" : self.ui.GreenIsLeftCheckBox,      "default" : True},
+            "/use_dials"                : {"object" : self.ui.useDialsCheckBox,         "default" : False},
 
         }
 
@@ -46,10 +46,12 @@ class MainWindow(QMainWindow):
             "/gain_vitesse"             : {"object" : self.ui.gainVitesseSpinBox,       "default" : 0.33},
             "/gain_direction"           : {"object" : self.ui.gainDirectionSpinBox,     "default" : 0.8},
             "/gain_direcition_arg_max"  : {"object" : self.ui.gainDirectionArgMaxSpinBox,"default" : 0.8},
-            "/threshold_front_too_close"    : {"object" : self.ui.FrontTooCloseSpinBox,     "default" : 0.1},
-            "/threshold_front_far_enough"   : {"object" : self.ui.FrontFarEnoughSpinBox,    "default" : 0.5},
-            "/threshold_rear_too_close"     : {"object" : self.ui.RearTooCloseSpinBox,      "default" : 0.2},
-            "/navigation_n_dials"       : {"object" : self.ui.numberDialsSlider,        "default" : 11},
+            "/threshold_front_too_close"    : {"object" : self.ui.FrontTooCloseSpinBox,         "default" : 0.1},
+            "/threshold_front_far_enough"   : {"object" : self.ui.FrontFarEnoughSpinBox,        "default" : 0.5},
+            "/threshold_rear_too_close"     : {"object" : self.ui.RearTooCloseSpinBox,          "default" : 0.2},
+            "/navigation_n_dials"           : {"object" : self.ui.numberDialsSlider,            "default" : 11},
+            "/color_detection_tolerance": {"object" : self.ui.colorDetectionToleranceSpinBox,   "default" : 0.25},
+
         }
 
         self.combobox = {
@@ -73,20 +75,14 @@ class MainWindow(QMainWindow):
 
         self.calibrate = {
             "red" : {
-                "Rmin"  : {"object" : self.ui.redMinRThresholdSpinBox, "default" : 150},
-                "Gmin"  : {"object" : self.ui.redMinGThresholdSpinBox, "default" : 0},
-                "Bmin"  : {"object" : self.ui.redMinBThresholdSpinBox, "default" : 0},
-                "Rmax"  : {"object" : self.ui.redMaxRThresholdSpinBox, "default" : 255},
-                "Gmax"  : {"object" : self.ui.redMaxGThresholdSpinBox, "default" : 100},
-                "Bmax"  : {"object" : self.ui.redMaxBThresholdSpinBox, "default" : 100},
+                "R"  : {"object" : self.ui.RredCalibrationSpinBox, "default" : 150},
+                "G"  : {"object" : self.ui.GredCalibrationSpinBox, "default" : 0},
+                "B"  : {"object" : self.ui.BredCalibrationSpinBox, "default" : 0},
             },
             "green" : {
-                "Rmin"  : {"object" : self.ui.greenMinRThresholdSpinBox, "default" : 0},
-                "Gmin"  : {"object" : self.ui.greenMinGThresholdSpinBox, "default" : 150},
-                "Bmin"  : {"object" : self.ui.greenMinBThresholdSpinBox, "default" : 0},
-                "Rmax"  : {"object" : self.ui.greenMaxRThresholdSpinBox, "default" : 100},
-                "Gmax"  : {"object" : self.ui.greenMaxGThresholdSpinBox, "default" : 255},
-                "Bmax"  : {"object" : self.ui.greenMaxBThresholdSpinBox, "default" : 100},
+                "R"  : {"object" : self.ui.RgreenCalibrationSpinBox, "default" : 0},
+                "G"  : {"object" : self.ui.GgreenCalibrationSpinBox, "default" : 150},
+                "B"  : {"object" : self.ui.BgreenCalibrationSpinBox, "default" : 0},
             }
         }
 
@@ -105,8 +101,8 @@ class MainWindow(QMainWindow):
         self.msg_alert.data = True
 
         self.init_calibration = rospy.Publisher("/do_an_auto_calibration", Bool, queue_size = 10)
-        self.ui.redAutoThresholdPushButton.clicked.connect(lambda : self.auto_calibration(color = "red"))
-        self.ui.greenAutoThresholdPushButton.clicked.connect(lambda : self.auto_calibration(color = "green"))
+        self.ui.redAutoCalibrationPushButton.clicked.connect(lambda : self.auto_calibration(color = "red"))
+        self.ui.greenAutoCalibrationPushButton.clicked.connect(lambda : self.auto_calibration(color = "green"))
 
 
     def connect(self):
@@ -134,10 +130,9 @@ class MainWindow(QMainWindow):
         
     def update_spinboxes_calibration(self, value = True) :
         color = self.color_to_set
-        thresholds = rospy.get_param(f"/{color}_threshold")
+        thresholds = rospy.get_param(f"/{color}_RGB")
 
-        self.calibrate[color]["Bmin"]["default"], self.calibrate[color]["Gmin"]["default"], self.calibrate[color]["Rmin"]["default"] = thresholds[0]
-        self.calibrate[color]["Bmax"]["default"], self.calibrate[color]["Gmax"]["default"], self.calibrate[color]["Rmax"]["default"] = thresholds[1]
+        self.calibrate[color]["R"]["default"], self.calibrate[color]["G"]["default"], self.calibrate[color]["B"]["default"] = thresholds
         
         for name, info in self.calibrate[color].items() :
             self.calibrate[color][name]["object"].setValue(info["default"])
@@ -147,8 +142,8 @@ class MainWindow(QMainWindow):
 
     def set_color_threshold(self, value, color, key = "no key"):
         self.calibrate[color][key]["default"] = value
-        c = EasyDict(self.calibrate[color])
-        rospy.set_param(f"/{color}_threshold",[[c.Bmin.default,c.Gmin.default,c.Rmin.default],[c.Bmax.default, c.Gmax.default, c.Rmax.default]])
+        c = self.calibrate[color]
+        rospy.set_param(f"/{color}_RGB",[c["R"]["default"],c["G"]["default"],c["B"]["default"]])
         self.changement_alert.publish(self.msg_alert)
 
 
@@ -173,6 +168,12 @@ class MainWindow(QMainWindow):
 
         self.ui.RearTooCloseSlider.valueChanged.connect(lambda value: self.ui.RearTooCloseSpinBox.setValue(value /100))
         self.ui.RearTooCloseSpinBox.valueChanged.connect(lambda value: self.ui.RearTooCloseSlider.setValue(int(value *100)))
+
+        self.ui.frontRatioSlider.valueChanged.connect(lambda value: self.ui.frontRatioSpinBox.setValue(value /100))
+        self.ui.frontRatioSpinBox.valueChanged.connect(lambda value: self.ui.frontRatioSlider.setValue(int(value *100)))
+
+        self.ui.colorDetectionToleranceSlider.valueChanged.connect(lambda value: self.ui.colorDetectionToleranceSpinBox.setValue(value /100))
+        self.ui.colorDetectionToleranceSpinBox.valueChanged.connect(lambda value: self.ui.colorDetectionToleranceSlider.setValue(int(value *100)))
 
     def set_parameters(self):
         for name,info in self.values.items() :
