@@ -22,7 +22,7 @@ from std_msgs.msg import Bool
 class Plot:
 	"""Class used to plot the lidar data"""
 
-	def __init__(self, rmax:int=15): 
+	def __init__(self, rmax:int=7): 
 		
 		# Initialize the figure
 		self.fig, self.ax = plt.subplots(subplot_kw={'projection': 'polar'})
@@ -63,7 +63,7 @@ class Plot:
 			self.data_processed[index] = scan[i]
 
 	def get_rmax(self, value = True) :
-		self.rmax = rospy.get_param("/lidar_rmax", default = 15000)/1000 	# in QT the unit of the slider is mm
+		self.rmax = rospy.get_param("/lidar_rmax", default = 5000)/1000 	# in QT the unit of the slider is mm
 		self.ax.set_rmax(self.rmax)
 		print(self.rmax)
 
