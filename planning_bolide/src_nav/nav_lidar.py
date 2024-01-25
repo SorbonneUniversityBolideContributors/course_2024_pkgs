@@ -21,9 +21,9 @@ class NavLidar():
         self.cmd = SpeedDirection()
     
     def get_scan(self, msg:LaserScan):
-        if self.Mode == "3Dials_classic" :
+        if self.use_dials == False : 
             self.cmd = nav_3_dials(msg, self.Kv, self.Kd, self.Ka)
-        else :
+        elif self.use_dials :
             self.cmd = nav_n_dials_with_biases(msg, self.Kv, self.Kd, self.Ka, self.n_dials, self.Mode)
         self.pub.publish(self.cmd)
 
@@ -36,6 +36,7 @@ class NavLidar():
         self.Mode = rospy.get_param("/navigation_mode", default = "3Dials_classic")
         self.feature = rospy.get_param("/navigation_feature", default = "mean")
 
+        self.use_dials = rospy.get_param("/use_dials", default = False)
         self.n_dials = rospy.get_param("/navigation_n_dials", default = 11)
 
 def listener(s:NavLidar):

@@ -31,7 +31,8 @@ class MainWindow(QMainWindow):
             "/temporal_filter_bool"     : {"object" : self.ui.temporalFilterCheckBox,   "default" : False},
             "/spatial_filter_bool"      : {"object" : self.ui.spatialFilterCheckBox,    "default" : False},
             "/enable_camera_bool"       : {"object" : self.ui.enableCameraCheckBox,     "default" : True},
-            "/green_is_left"            : {"object" : self.ui.GreenIsLeftCheckBox,     "default" : True},
+            "/green_is_left"            : {"object" : self.ui.GreenIsLeftCheckBox,      "default" : True},
+            "/use_dials"                : {"object" : self.ui.useDialsCheckBox,         "default" : False},
 
         }
 
@@ -173,6 +174,9 @@ class MainWindow(QMainWindow):
 
         self.ui.RearTooCloseSlider.valueChanged.connect(lambda value: self.ui.RearTooCloseSpinBox.setValue(value /100))
         self.ui.RearTooCloseSpinBox.valueChanged.connect(lambda value: self.ui.RearTooCloseSlider.setValue(int(value *100)))
+
+        self.ui.frontRatioSlider.valueChanged.connect(lambda value: self.ui.frontRatioSpinBox.setValue(value /100))
+        self.ui.frontRatioSpinBox.valueChanged.connect(lambda value: self.ui.frontRatioSlider.setValue(int(value *100)))
 
     def set_parameters(self):
         for name,info in self.values.items() :
