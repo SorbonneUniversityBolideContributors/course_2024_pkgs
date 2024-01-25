@@ -49,6 +49,26 @@ class MainWindow(QMainWindow):
             "/threshold_front_too_close"    : {"object" : self.ui.FrontTooCloseSpinBox,     "default" : 0.1},
             "/threshold_front_far_enough"   : {"object" : self.ui.FrontFarEnoughSpinBox,    "default" : 0.5},
             "/threshold_rear_too_close"     : {"object" : self.ui.RearTooCloseSpinBox,      "default" : 0.2},
+            "/navigation_n_dials"       : {"object" : self.ui.numberDialsSlider,        "default" : 11},
+        }
+
+        self.combobox = {
+            "/navigation_mode"          : {"object" : self.ui.navModeComboBox,          
+                                           "default" : "3Dials_classic",
+                                           "choices" : [
+                                               "3Dials_classic",
+                                               "NDials_classic",
+                                               "NDials_division",
+                                               "NDials_pondéré",
+                                           ]},
+
+            "/navigation_feature"       : {"object" : self.ui.featureDialsComboBox,
+                                           "default" : "mean",
+                                           "choices" : [
+                                               "mean",
+                                               "median",
+                                               "min",
+                                            ]},
         }
 
         self.calibrate = {
@@ -97,11 +117,13 @@ class MainWindow(QMainWindow):
         for name,info in self.checkbox.items() :
             info["object"].toggled.connect(lambda value, key=name: self.change_param(bool(value),key=key))
 
+        for name,info in self.combobox.items() :
+            info["object"].currentTextChanged.connect(lambda value, key=name: self.change_param(value,key=key))
+            info["object"].addItems(info["choices"])  
+
         for color in self.calibrate:
             for name, info in self.calibrate[color].items() :
                 info["object"].valueChanged.connect(lambda value, color=color, key=name: self.set_color_threshold(value,color,key=key))
-
-
 
     def auto_calibration(self, color = "no_one") :
         rospy.set_param("/color_to_calibrate", color)
