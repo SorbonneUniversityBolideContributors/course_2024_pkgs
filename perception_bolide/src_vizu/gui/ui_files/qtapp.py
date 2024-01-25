@@ -16,16 +16,16 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
 from PySide6.QtWidgets import (QApplication, QCheckBox, QComboBox, QDoubleSpinBox,
-    QGridLayout, QHBoxLayout, QLabel, QMainWindow,
-    QMenuBar, QPushButton, QSizePolicy, QSlider,
-    QSpacerItem, QSpinBox, QSplitter, QStatusBar,
-    QTabWidget, QToolBox, QVBoxLayout, QWidget)
+    QGridLayout, QLabel, QMainWindow, QMenuBar,
+    QPushButton, QSizePolicy, QSlider, QSpacerItem,
+    QSpinBox, QSplitter, QStatusBar, QTabWidget,
+    QToolBox, QVBoxLayout, QWidget)
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         if not MainWindow.objectName():
             MainWindow.setObjectName(u"MainWindow")
-        MainWindow.resize(324, 686)
+        MainWindow.resize(390, 686)
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
         self.verticalLayout_7 = QVBoxLayout(self.centralwidget)
@@ -48,7 +48,7 @@ class Ui_MainWindow(object):
         self.toolBox.setObjectName(u"toolBox")
         self.page = QWidget()
         self.page.setObjectName(u"page")
-        self.page.setGeometry(QRect(0, 0, 270, 375))
+        self.page.setGeometry(QRect(0, 0, 336, 375))
         self.verticalLayout = QVBoxLayout(self.page)
         self.verticalLayout.setObjectName(u"verticalLayout")
         self.splitter_2 = QSplitter(self.page)
@@ -207,7 +207,7 @@ class Ui_MainWindow(object):
         self.toolBox.addItem(self.page, u"LiDAR")
         self.page_2 = QWidget()
         self.page_2.setObjectName(u"page_2")
-        self.page_2.setGeometry(QRect(0, 0, 270, 375))
+        self.page_2.setGeometry(QRect(0, 0, 336, 375))
         self.verticalLayout_6 = QVBoxLayout(self.page_2)
         self.verticalLayout_6.setObjectName(u"verticalLayout_6")
         self.enableCameraCheckBox = QCheckBox(self.page_2)
@@ -215,194 +215,117 @@ class Ui_MainWindow(object):
 
         self.verticalLayout_6.addWidget(self.enableCameraCheckBox)
 
-        self.splitter_11 = QSplitter(self.page_2)
-        self.splitter_11.setObjectName(u"splitter_11")
-        self.splitter_11.setOrientation(Qt.Vertical)
-        self.label_16 = QLabel(self.splitter_11)
-        self.label_16.setObjectName(u"label_16")
-        self.splitter_11.addWidget(self.label_16)
-        self.splitter_10 = QSplitter(self.splitter_11)
+        self.splitter_10 = QSplitter(self.page_2)
         self.splitter_10.setObjectName(u"splitter_10")
         self.splitter_10.setOrientation(Qt.Vertical)
-        self.layoutWidget2 = QWidget(self.splitter_10)
-        self.layoutWidget2.setObjectName(u"layoutWidget2")
-        self.horizontalLayout_2 = QHBoxLayout(self.layoutWidget2)
-        self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
-        self.horizontalLayout_2.setContentsMargins(0, 0, 0, 0)
-        self.label_17 = QLabel(self.layoutWidget2)
-        self.label_17.setObjectName(u"label_17")
+        self.label_42 = QLabel(self.splitter_10)
+        self.label_42.setObjectName(u"label_42")
+        self.splitter_10.addWidget(self.label_42)
+        self.layoutWidget_8 = QWidget(self.splitter_10)
+        self.layoutWidget_8.setObjectName(u"layoutWidget_8")
+        self.gridLayout_12 = QGridLayout(self.layoutWidget_8)
+        self.gridLayout_12.setObjectName(u"gridLayout_12")
+        self.gridLayout_12.setContentsMargins(0, 0, 0, 0)
+        self.label_43 = QLabel(self.layoutWidget_8)
+        self.label_43.setObjectName(u"label_43")
+        self.label_43.setAlignment(Qt.AlignCenter)
 
-        self.horizontalLayout_2.addWidget(self.label_17)
+        self.gridLayout_12.addWidget(self.label_43, 0, 1, 1, 1)
 
-        self.redAutoThresholdPushButton = QPushButton(self.layoutWidget2)
-        self.redAutoThresholdPushButton.setObjectName(u"redAutoThresholdPushButton")
+        self.label_44 = QLabel(self.layoutWidget_8)
+        self.label_44.setObjectName(u"label_44")
+        self.label_44.setAlignment(Qt.AlignCenter)
 
-        self.horizontalLayout_2.addWidget(self.redAutoThresholdPushButton)
+        self.gridLayout_12.addWidget(self.label_44, 0, 2, 1, 1)
 
-        self.splitter_10.addWidget(self.layoutWidget2)
-        self.layoutWidget3 = QWidget(self.splitter_10)
-        self.layoutWidget3.setObjectName(u"layoutWidget3")
-        self.gridLayout_7 = QGridLayout(self.layoutWidget3)
-        self.gridLayout_7.setObjectName(u"gridLayout_7")
-        self.gridLayout_7.setContentsMargins(0, 0, 0, 0)
-        self.label_18 = QLabel(self.layoutWidget3)
-        self.label_18.setObjectName(u"label_18")
-        self.label_18.setAlignment(Qt.AlignCenter)
+        self.label_45 = QLabel(self.layoutWidget_8)
+        self.label_45.setObjectName(u"label_45")
+        self.label_45.setAlignment(Qt.AlignCenter)
 
-        self.gridLayout_7.addWidget(self.label_18, 0, 1, 1, 1)
+        self.gridLayout_12.addWidget(self.label_45, 0, 3, 1, 1)
 
-        self.label_19 = QLabel(self.layoutWidget3)
-        self.label_19.setObjectName(u"label_19")
-        self.label_19.setAlignment(Qt.AlignCenter)
+        self.label_46 = QLabel(self.layoutWidget_8)
+        self.label_46.setObjectName(u"label_46")
+        self.label_46.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
 
-        self.gridLayout_7.addWidget(self.label_19, 0, 2, 1, 1)
+        self.gridLayout_12.addWidget(self.label_46, 1, 0, 1, 1)
 
-        self.label_20 = QLabel(self.layoutWidget3)
-        self.label_20.setObjectName(u"label_20")
-        self.label_20.setAlignment(Qt.AlignCenter)
+        self.RredCalibrationSpinBox = QSpinBox(self.layoutWidget_8)
+        self.RredCalibrationSpinBox.setObjectName(u"RredCalibrationSpinBox")
+        self.RredCalibrationSpinBox.setMaximum(255)
 
-        self.gridLayout_7.addWidget(self.label_20, 0, 3, 1, 1)
+        self.gridLayout_12.addWidget(self.RredCalibrationSpinBox, 1, 1, 1, 1)
 
-        self.label_21 = QLabel(self.layoutWidget3)
-        self.label_21.setObjectName(u"label_21")
-        self.label_21.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
+        self.GredCalibrationSpinBox = QSpinBox(self.layoutWidget_8)
+        self.GredCalibrationSpinBox.setObjectName(u"GredCalibrationSpinBox")
+        self.GredCalibrationSpinBox.setMaximum(255)
 
-        self.gridLayout_7.addWidget(self.label_21, 1, 0, 1, 1)
+        self.gridLayout_12.addWidget(self.GredCalibrationSpinBox, 1, 2, 1, 1)
 
-        self.redMinRThresholdSpinBox = QSpinBox(self.layoutWidget3)
-        self.redMinRThresholdSpinBox.setObjectName(u"redMinRThresholdSpinBox")
-        self.redMinRThresholdSpinBox.setMaximum(255)
+        self.BredCalibrationSpinBox = QSpinBox(self.layoutWidget_8)
+        self.BredCalibrationSpinBox.setObjectName(u"BredCalibrationSpinBox")
+        self.BredCalibrationSpinBox.setMaximum(255)
 
-        self.gridLayout_7.addWidget(self.redMinRThresholdSpinBox, 1, 1, 1, 1)
+        self.gridLayout_12.addWidget(self.BredCalibrationSpinBox, 1, 3, 1, 1)
 
-        self.redMinGThresholdSpinBox = QSpinBox(self.layoutWidget3)
-        self.redMinGThresholdSpinBox.setObjectName(u"redMinGThresholdSpinBox")
-        self.redMinGThresholdSpinBox.setMaximum(255)
+        self.redAutoThresholdPushButton_3 = QPushButton(self.layoutWidget_8)
+        self.redAutoThresholdPushButton_3.setObjectName(u"redAutoThresholdPushButton_3")
 
-        self.gridLayout_7.addWidget(self.redMinGThresholdSpinBox, 1, 2, 1, 1)
+        self.gridLayout_12.addWidget(self.redAutoThresholdPushButton_3, 1, 4, 1, 1)
 
-        self.redMinBThresholdSpinBox = QSpinBox(self.layoutWidget3)
-        self.redMinBThresholdSpinBox.setObjectName(u"redMinBThresholdSpinBox")
-        self.redMinBThresholdSpinBox.setMaximum(255)
+        self.label_47 = QLabel(self.layoutWidget_8)
+        self.label_47.setObjectName(u"label_47")
+        self.label_47.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
 
-        self.gridLayout_7.addWidget(self.redMinBThresholdSpinBox, 1, 3, 1, 1)
+        self.gridLayout_12.addWidget(self.label_47, 2, 0, 1, 1)
 
-        self.label_22 = QLabel(self.layoutWidget3)
-        self.label_22.setObjectName(u"label_22")
-        self.label_22.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
+        self.RgreenCalibrationSpinBox = QSpinBox(self.layoutWidget_8)
+        self.RgreenCalibrationSpinBox.setObjectName(u"RgreenCalibrationSpinBox")
+        self.RgreenCalibrationSpinBox.setMaximum(255)
 
-        self.gridLayout_7.addWidget(self.label_22, 2, 0, 1, 1)
+        self.gridLayout_12.addWidget(self.RgreenCalibrationSpinBox, 2, 1, 1, 1)
 
-        self.redMaxRThresholdSpinBox = QSpinBox(self.layoutWidget3)
-        self.redMaxRThresholdSpinBox.setObjectName(u"redMaxRThresholdSpinBox")
-        self.redMaxRThresholdSpinBox.setMaximum(255)
+        self.GgreenCalibrationSpinBox = QSpinBox(self.layoutWidget_8)
+        self.GgreenCalibrationSpinBox.setObjectName(u"GgreenCalibrationSpinBox")
+        self.GgreenCalibrationSpinBox.setMaximum(255)
 
-        self.gridLayout_7.addWidget(self.redMaxRThresholdSpinBox, 2, 1, 1, 1)
+        self.gridLayout_12.addWidget(self.GgreenCalibrationSpinBox, 2, 2, 1, 1)
 
-        self.redMaxGThresholdSpinBox = QSpinBox(self.layoutWidget3)
-        self.redMaxGThresholdSpinBox.setObjectName(u"redMaxGThresholdSpinBox")
-        self.redMaxGThresholdSpinBox.setMaximum(255)
+        self.BgreenCalibrationSpinBox = QSpinBox(self.layoutWidget_8)
+        self.BgreenCalibrationSpinBox.setObjectName(u"BgreenCalibrationSpinBox")
+        self.BgreenCalibrationSpinBox.setMaximum(255)
 
-        self.gridLayout_7.addWidget(self.redMaxGThresholdSpinBox, 2, 2, 1, 1)
+        self.gridLayout_12.addWidget(self.BgreenCalibrationSpinBox, 2, 3, 1, 1)
 
-        self.redMaxBThresholdSpinBox = QSpinBox(self.layoutWidget3)
-        self.redMaxBThresholdSpinBox.setObjectName(u"redMaxBThresholdSpinBox")
-        self.redMaxBThresholdSpinBox.setMaximum(255)
+        self.greenAutoThresholdPushButton_3 = QPushButton(self.layoutWidget_8)
+        self.greenAutoThresholdPushButton_3.setObjectName(u"greenAutoThresholdPushButton_3")
 
-        self.gridLayout_7.addWidget(self.redMaxBThresholdSpinBox, 2, 3, 1, 1)
+        self.gridLayout_12.addWidget(self.greenAutoThresholdPushButton_3, 2, 4, 1, 1)
 
-        self.splitter_10.addWidget(self.layoutWidget3)
-        self.layoutWidget4 = QWidget(self.splitter_10)
-        self.layoutWidget4.setObjectName(u"layoutWidget4")
-        self.horizontalLayout = QHBoxLayout(self.layoutWidget4)
-        self.horizontalLayout.setObjectName(u"horizontalLayout")
-        self.horizontalLayout.setContentsMargins(0, 0, 0, 0)
-        self.label_23 = QLabel(self.layoutWidget4)
-        self.label_23.setObjectName(u"label_23")
+        self.splitter_10.addWidget(self.layoutWidget_8)
+        self.splitter_20 = QSplitter(self.splitter_10)
+        self.splitter_20.setObjectName(u"splitter_20")
+        self.splitter_20.setOrientation(Qt.Horizontal)
+        self.label_48 = QLabel(self.splitter_20)
+        self.label_48.setObjectName(u"label_48")
+        self.splitter_20.addWidget(self.label_48)
+        self.colorDetectionToleranceSlider_3 = QSlider(self.splitter_20)
+        self.colorDetectionToleranceSlider_3.setObjectName(u"colorDetectionToleranceSlider_3")
+        self.colorDetectionToleranceSlider_3.setMaximum(100)
+        self.colorDetectionToleranceSlider_3.setOrientation(Qt.Horizontal)
+        self.splitter_20.addWidget(self.colorDetectionToleranceSlider_3)
+        self.colorDetectionToleranceSpinBox_3 = QDoubleSpinBox(self.splitter_20)
+        self.colorDetectionToleranceSpinBox_3.setObjectName(u"colorDetectionToleranceSpinBox_3")
+        self.colorDetectionToleranceSpinBox_3.setMaximum(1.000000000000000)
+        self.colorDetectionToleranceSpinBox_3.setSingleStep(0.010000000000000)
+        self.splitter_20.addWidget(self.colorDetectionToleranceSpinBox_3)
+        self.splitter_10.addWidget(self.splitter_20)
 
-        self.horizontalLayout.addWidget(self.label_23)
+        self.verticalLayout_6.addWidget(self.splitter_10)
 
-        self.greenAutoThresholdPushButton = QPushButton(self.layoutWidget4)
-        self.greenAutoThresholdPushButton.setObjectName(u"greenAutoThresholdPushButton")
+        self.verticalSpacer_4 = QSpacerItem(20, 160, QSizePolicy.Minimum, QSizePolicy.Expanding)
 
-        self.horizontalLayout.addWidget(self.greenAutoThresholdPushButton)
-
-        self.splitter_10.addWidget(self.layoutWidget4)
-        self.layoutWidget_2 = QWidget(self.splitter_10)
-        self.layoutWidget_2.setObjectName(u"layoutWidget_2")
-        self.gridLayout_8 = QGridLayout(self.layoutWidget_2)
-        self.gridLayout_8.setObjectName(u"gridLayout_8")
-        self.gridLayout_8.setContentsMargins(0, 0, 0, 0)
-        self.label_24 = QLabel(self.layoutWidget_2)
-        self.label_24.setObjectName(u"label_24")
-        self.label_24.setAlignment(Qt.AlignCenter)
-
-        self.gridLayout_8.addWidget(self.label_24, 0, 1, 1, 1)
-
-        self.label_25 = QLabel(self.layoutWidget_2)
-        self.label_25.setObjectName(u"label_25")
-        self.label_25.setAlignment(Qt.AlignCenter)
-
-        self.gridLayout_8.addWidget(self.label_25, 0, 2, 1, 1)
-
-        self.label_26 = QLabel(self.layoutWidget_2)
-        self.label_26.setObjectName(u"label_26")
-        self.label_26.setAlignment(Qt.AlignCenter)
-
-        self.gridLayout_8.addWidget(self.label_26, 0, 3, 1, 1)
-
-        self.label_27 = QLabel(self.layoutWidget_2)
-        self.label_27.setObjectName(u"label_27")
-        self.label_27.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
-
-        self.gridLayout_8.addWidget(self.label_27, 1, 0, 1, 1)
-
-        self.greenMinRThresholdSpinBox = QSpinBox(self.layoutWidget_2)
-        self.greenMinRThresholdSpinBox.setObjectName(u"greenMinRThresholdSpinBox")
-        self.greenMinRThresholdSpinBox.setMaximum(255)
-
-        self.gridLayout_8.addWidget(self.greenMinRThresholdSpinBox, 1, 1, 1, 1)
-
-        self.greenMinGThresholdSpinBox = QSpinBox(self.layoutWidget_2)
-        self.greenMinGThresholdSpinBox.setObjectName(u"greenMinGThresholdSpinBox")
-        self.greenMinGThresholdSpinBox.setMaximum(255)
-
-        self.gridLayout_8.addWidget(self.greenMinGThresholdSpinBox, 1, 2, 1, 1)
-
-        self.greenMinBThresholdSpinBox = QSpinBox(self.layoutWidget_2)
-        self.greenMinBThresholdSpinBox.setObjectName(u"greenMinBThresholdSpinBox")
-        self.greenMinBThresholdSpinBox.setMaximum(255)
-
-        self.gridLayout_8.addWidget(self.greenMinBThresholdSpinBox, 1, 3, 1, 1)
-
-        self.label_28 = QLabel(self.layoutWidget_2)
-        self.label_28.setObjectName(u"label_28")
-        self.label_28.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
-
-        self.gridLayout_8.addWidget(self.label_28, 2, 0, 1, 1)
-
-        self.greenMaxRThresholdSpinBox = QSpinBox(self.layoutWidget_2)
-        self.greenMaxRThresholdSpinBox.setObjectName(u"greenMaxRThresholdSpinBox")
-        self.greenMaxRThresholdSpinBox.setMaximum(255)
-
-        self.gridLayout_8.addWidget(self.greenMaxRThresholdSpinBox, 2, 1, 1, 1)
-
-        self.greenMaxGThresholdSpinBox = QSpinBox(self.layoutWidget_2)
-        self.greenMaxGThresholdSpinBox.setObjectName(u"greenMaxGThresholdSpinBox")
-        self.greenMaxGThresholdSpinBox.setMaximum(255)
-
-        self.gridLayout_8.addWidget(self.greenMaxGThresholdSpinBox, 2, 2, 1, 1)
-
-        self.greenMaxBThresholdSpinBox = QSpinBox(self.layoutWidget_2)
-        self.greenMaxBThresholdSpinBox.setObjectName(u"greenMaxBThresholdSpinBox")
-        self.greenMaxBThresholdSpinBox.setMaximum(255)
-
-        self.gridLayout_8.addWidget(self.greenMaxBThresholdSpinBox, 2, 3, 1, 1)
-
-        self.splitter_10.addWidget(self.layoutWidget_2)
-        self.splitter_11.addWidget(self.splitter_10)
-
-        self.verticalLayout_6.addWidget(self.splitter_11)
+        self.verticalLayout_6.addItem(self.verticalSpacer_4)
 
         self.toolBox.addItem(self.page_2, u"Camera")
 
@@ -417,7 +340,7 @@ class Ui_MainWindow(object):
         self.toolBox_3.setObjectName(u"toolBox_3")
         self.page_5 = QWidget()
         self.page_5.setObjectName(u"page_5")
-        self.page_5.setGeometry(QRect(0, 0, 270, 375))
+        self.page_5.setGeometry(QRect(0, 0, 336, 375))
         self.verticalLayout_5 = QVBoxLayout(self.page_5)
         self.verticalLayout_5.setObjectName(u"verticalLayout_5")
         self.splitter_13 = QSplitter(self.page_5)
@@ -686,7 +609,7 @@ class Ui_MainWindow(object):
         self.toolBox_2.setObjectName(u"toolBox_2")
         self.page_3 = QWidget()
         self.page_3.setObjectName(u"page_3")
-        self.page_3.setGeometry(QRect(0, 0, 270, 409))
+        self.page_3.setGeometry(QRect(0, 0, 336, 409))
         self.verticalLayout_4 = QVBoxLayout(self.page_3)
         self.verticalLayout_4.setObjectName(u"verticalLayout_4")
         self.label_10 = QLabel(self.page_3)
@@ -792,7 +715,7 @@ class Ui_MainWindow(object):
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QMenuBar(MainWindow)
         self.menubar.setObjectName(u"menubar")
-        self.menubar.setGeometry(QRect(0, 0, 324, 24))
+        self.menubar.setGeometry(QRect(0, 0, 390, 24))
         MainWindow.setMenuBar(self.menubar)
         self.statusbar = QStatusBar(MainWindow)
         self.statusbar.setObjectName(u"statusbar")
@@ -812,7 +735,7 @@ class Ui_MainWindow(object):
         self.simulationMaxAngleSlider.valueChanged.connect(self.spinBox_5.setValue)
         self.spinBox_5.valueChanged.connect(self.simulationMaxAngleSlider.setValue)
 
-        self.tabWidget.setCurrentIndex(1)
+        self.tabWidget.setCurrentIndex(0)
         self.toolBox.setCurrentIndex(1)
         self.toolBox_3.setCurrentIndex(0)
         self.toolBox_2.setCurrentIndex(0)
@@ -835,21 +758,15 @@ class Ui_MainWindow(object):
         self.label_9.setText(QCoreApplication.translate("MainWindow", u"Lim", None))
         self.toolBox.setItemText(self.toolBox.indexOf(self.page), QCoreApplication.translate("MainWindow", u"LiDAR", None))
         self.enableCameraCheckBox.setText(QCoreApplication.translate("MainWindow", u"Enable camera", None))
-        self.label_16.setText(QCoreApplication.translate("MainWindow", u"Calibration", None))
-        self.label_17.setText(QCoreApplication.translate("MainWindow", u"Red", None))
-        self.redAutoThresholdPushButton.setText(QCoreApplication.translate("MainWindow", u"Auto", None))
-        self.label_18.setText(QCoreApplication.translate("MainWindow", u"R", None))
-        self.label_19.setText(QCoreApplication.translate("MainWindow", u"G", None))
-        self.label_20.setText(QCoreApplication.translate("MainWindow", u"B", None))
-        self.label_21.setText(QCoreApplication.translate("MainWindow", u"Min", None))
-        self.label_22.setText(QCoreApplication.translate("MainWindow", u"Max", None))
-        self.label_23.setText(QCoreApplication.translate("MainWindow", u"Green", None))
-        self.greenAutoThresholdPushButton.setText(QCoreApplication.translate("MainWindow", u"Auto", None))
-        self.label_24.setText(QCoreApplication.translate("MainWindow", u"R", None))
-        self.label_25.setText(QCoreApplication.translate("MainWindow", u"G", None))
-        self.label_26.setText(QCoreApplication.translate("MainWindow", u"B", None))
-        self.label_27.setText(QCoreApplication.translate("MainWindow", u"Min", None))
-        self.label_28.setText(QCoreApplication.translate("MainWindow", u"Max", None))
+        self.label_42.setText(QCoreApplication.translate("MainWindow", u"Calibration", None))
+        self.label_43.setText(QCoreApplication.translate("MainWindow", u"R", None))
+        self.label_44.setText(QCoreApplication.translate("MainWindow", u"G", None))
+        self.label_45.setText(QCoreApplication.translate("MainWindow", u"B", None))
+        self.label_46.setText(QCoreApplication.translate("MainWindow", u"Red", None))
+        self.redAutoThresholdPushButton_3.setText(QCoreApplication.translate("MainWindow", u"Auto", None))
+        self.label_47.setText(QCoreApplication.translate("MainWindow", u"Green", None))
+        self.greenAutoThresholdPushButton_3.setText(QCoreApplication.translate("MainWindow", u"Auto", None))
+        self.label_48.setText(QCoreApplication.translate("MainWindow", u"Tolerance", None))
         self.toolBox.setItemText(self.toolBox.indexOf(self.page_2), QCoreApplication.translate("MainWindow", u"Camera", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), QCoreApplication.translate("MainWindow", u"Perception", None))
         self.label_36.setText(QCoreApplication.translate("MainWindow", u"Mode", None))

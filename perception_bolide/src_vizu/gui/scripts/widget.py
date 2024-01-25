@@ -74,20 +74,14 @@ class MainWindow(QMainWindow):
 
         self.calibrate = {
             "red" : {
-                "Rmin"  : {"object" : self.ui.redMinRThresholdSpinBox, "default" : 150},
-                "Gmin"  : {"object" : self.ui.redMinGThresholdSpinBox, "default" : 0},
-                "Bmin"  : {"object" : self.ui.redMinBThresholdSpinBox, "default" : 0},
-                "Rmax"  : {"object" : self.ui.redMaxRThresholdSpinBox, "default" : 255},
-                "Gmax"  : {"object" : self.ui.redMaxGThresholdSpinBox, "default" : 100},
-                "Bmax"  : {"object" : self.ui.redMaxBThresholdSpinBox, "default" : 100},
+                "R"  : {"object" : self.ui.RredCalibrationSpinBox, "default" : 150},
+                "G"  : {"object" : self.ui.GredCalibrationSpinBox, "default" : 0},
+                "B"  : {"object" : self.ui.BredCalibrationSpinBox, "default" : 0},
             },
             "green" : {
-                "Rmin"  : {"object" : self.ui.greenMinRThresholdSpinBox, "default" : 0},
-                "Gmin"  : {"object" : self.ui.greenMinGThresholdSpinBox, "default" : 150},
-                "Bmin"  : {"object" : self.ui.greenMinBThresholdSpinBox, "default" : 0},
-                "Rmax"  : {"object" : self.ui.greenMaxRThresholdSpinBox, "default" : 100},
-                "Gmax"  : {"object" : self.ui.greenMaxGThresholdSpinBox, "default" : 255},
-                "Bmax"  : {"object" : self.ui.greenMaxBThresholdSpinBox, "default" : 100},
+                "R"  : {"object" : self.ui.RgreenCalibrationSpinBox, "default" : 0},
+                "G"  : {"object" : self.ui.GgreenCalibrationSpinBox, "default" : 150},
+                "B"  : {"object" : self.ui.BgreenCalibrationSpinBox, "default" : 0},
             }
         }
 
@@ -135,10 +129,9 @@ class MainWindow(QMainWindow):
         
     def update_spinboxes_calibration(self, value = True) :
         color = self.color_to_set
-        thresholds = rospy.get_param(f"/{color}_threshold")
+        thresholds = rospy.get_param(f"/{color}_RGB")
 
-        self.calibrate[color]["Bmin"]["default"], self.calibrate[color]["Gmin"]["default"], self.calibrate[color]["Rmin"]["default"] = thresholds[0]
-        self.calibrate[color]["Bmax"]["default"], self.calibrate[color]["Gmax"]["default"], self.calibrate[color]["Rmax"]["default"] = thresholds[1]
+        self.calibrate[color]["R"]["default"], self.calibrate[color]["G"]["default"], self.calibrate[color]["B"]["default"] = thresholds
         
         for name, info in self.calibrate[color].items() :
             self.calibrate[color][name]["object"].setValue(info["default"])
