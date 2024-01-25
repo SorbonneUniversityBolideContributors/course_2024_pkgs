@@ -164,7 +164,7 @@ catkin_install_python(PROGRAMS
   src_teleop/teleop_PS4controller.py
   src_teleop/teleop_keyboard.py
   src_nav/nav_lidar.py
-  src_nav/nav_sensors.py
+  src_nav/nav_3states.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 

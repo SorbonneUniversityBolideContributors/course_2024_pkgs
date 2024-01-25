@@ -22,12 +22,12 @@ class NavSensors():
 
     def __init__(self):
         # Initialize the node
-        rospy.init_node("nav_sensors", anonymous = True)
+        rospy.init_node("nav_3states", anonymous = True)
 
         # Subscribe to the sensor data
         rospy.Subscriber("lidar_data", LaserScan, self.callback_lidar)
         rospy.Subscriber("camera_info", CameraInfo, self.callback_camera_info)
-        rospy.Subscriber("rear_range_data", MultipleRange, self.callback_multiple_range)
+        rospy.Subscriber("raw_rear_range_data", MultipleRange, self.callback_multiple_range)
 
         rospy.Subscriber("param_change_alert", Bool, self.get_params)
 
@@ -129,7 +129,9 @@ class NavSensors():
         self.front_too_close = current_front_distance < self.threshold_front_too_close
         self.front_far_enough = current_front_distance > self.threshold_front_far_enough
 
-        current_rear_distance = np.min([self.rear_range_data.IR_rear_left, self.rear_range_data.IR_rear_right])
+        current_rear_distance = np.min([self.rear_range_data.IR_rear_left.range, self.rear_range_data.IR_rear_right.range])
+        print("rear left: ", self.rear_range_data.IR_rear_left.range)
+        print("rear right: ", self.rear_range_data.IR_rear_right.range)
         self.rear_too_close = current_rear_distance < self.threshold_rear_too_close
     
 # STATES ======================================================================
@@ -187,6 +189,12 @@ class NavSensors():
 
         self.previous_state = self.current_state
         self.next_state()
+
+        print("time: ", rospy.get_time())
+        print("   state: ", self.previous_state)
+        print("   front_too_close: ", self.front_too_close)
+        print("   rear_too_close: ", self.rear_too_close)
+        print("   front_far_enough: ", self.front_far_enough)
 
         if self.previous_state != self.current_state:
             self.apply_protocol()
