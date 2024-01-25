@@ -8,7 +8,7 @@ from pynput.keyboard import Key, Listener
 
 class Keyboard_ctrl():
     def __init__(self):
-        self.pub = rospy.Publisher("emergency_break", Bool, queue_size=1)
+        self.pub = rospy.Publisher("emergency_brake", Bool, queue_size=1)
         self.space_pressed = False
         self.last_space_pressed = False
 
@@ -46,7 +46,7 @@ def listener_keyboard(s: Keyboard_ctrl):
 
 
 if __name__ == '__main__':
-    rospy.init_node('keyboard_emergency_break')
+    rospy.init_node('keyboard_emergency_brake')
     s = Keyboard_ctrl()
 
     try:
