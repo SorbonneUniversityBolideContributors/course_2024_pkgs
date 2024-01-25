@@ -125,7 +125,7 @@ class NavSensors():
     def update_conditions(self):
         """Update the conditions of the robot."""
         _, front_ranges, _ = get_dials_ranges(self.lidar_data, n_dials=3, proportion=[1, 0.5, 1])
-        current_front_distance = np.min(front_ranges)
+        current_front_distance = np.mean(front_ranges)
         self.front_too_close = current_front_distance < self.threshold_front_too_close
         self.front_far_enough = current_front_distance > self.threshold_front_far_enough
 
