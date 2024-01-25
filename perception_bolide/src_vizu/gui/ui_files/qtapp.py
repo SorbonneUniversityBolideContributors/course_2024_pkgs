@@ -860,10 +860,3 @@ class Ui_MainWindow(object):
         self.label_7.setText(QCoreApplication.translate("MainWindow", u"Load ", None))
         self.loadParamPushButton.setText(QCoreApplication.translate("MainWindow", u"Load", None))
     # retranslateUi
-
-Error: uiapp.ui: Warning: The name 'layoutWidget' (QWidget) is already in use, defaulting to 'layoutWidget1'.
-uiapp.ui: Warning: The name 'layoutWidget' (QWidget) is already in use, defaulting to 'layoutWidget2'.
-uiapp.ui: Warning: The name 'layoutWidget' (QWidget) is already in use, defaulting to 'layoutWidget3'.
-uiapp.ui: Warning: The name 'layoutWidget' (QWidget) is already in use, defaulting to 'layoutWidget4'.
-
-while executing '/Users/travail/anaconda3/lib/python3.11/site-packages/PySide6/Qt/libexec/uic -g python uiapp.ui'
