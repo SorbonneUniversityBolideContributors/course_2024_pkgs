@@ -411,14 +411,14 @@ class Ui_MainWindow(object):
 
         self.gainDirectionArgMaxSlider = QSlider(self.layoutWidget_5)
         self.gainDirectionArgMaxSlider.setObjectName(u"gainDirectionArgMaxSlider")
-        self.gainDirectionArgMaxSlider.setMaximum(100)
+        self.gainDirectionArgMaxSlider.setMaximum(1000)
         self.gainDirectionArgMaxSlider.setOrientation(Qt.Horizontal)
 
         self.gridLayout_6.addWidget(self.gainDirectionArgMaxSlider, 2, 1, 1, 1)
 
         self.gainDirectionArgMaxSpinBox = QDoubleSpinBox(self.layoutWidget_5)
         self.gainDirectionArgMaxSpinBox.setObjectName(u"gainDirectionArgMaxSpinBox")
-        self.gainDirectionArgMaxSpinBox.setMaximum(1.000000000000000)
+        self.gainDirectionArgMaxSpinBox.setMaximum(10.000000000000000)
         self.gainDirectionArgMaxSpinBox.setSingleStep(0.010000000000000)
 
         self.gridLayout_6.addWidget(self.gainDirectionArgMaxSpinBox, 2, 2, 1, 1)
@@ -736,7 +736,7 @@ class Ui_MainWindow(object):
         self.simulationMaxAngleSlider.valueChanged.connect(self.spinBox_5.setValue)
         self.spinBox_5.valueChanged.connect(self.simulationMaxAngleSlider.setValue)
 
-        self.tabWidget.setCurrentIndex(0)
+        self.tabWidget.setCurrentIndex(1)
         self.toolBox.setCurrentIndex(1)
         self.toolBox_3.setCurrentIndex(0)
         self.toolBox_2.setCurrentIndex(0)
