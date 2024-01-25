@@ -119,6 +119,7 @@ class MainWindow(QMainWindow):
 
         for name,info in self.combobox.items() :
             info["object"].currentTextChanged.connect(lambda value, key=name: self.change_param(value,key=key))
+            info["object"].clear()
             info["object"].addItems(info["choices"])  
 
         for color in self.calibrate:
