@@ -46,10 +46,12 @@ class MainWindow(QMainWindow):
             "/gain_vitesse"             : {"object" : self.ui.gainVitesseSpinBox,       "default" : 0.33},
             "/gain_direction"           : {"object" : self.ui.gainDirectionSpinBox,     "default" : 0.8},
             "/gain_direcition_arg_max"  : {"object" : self.ui.gainDirectionArgMaxSpinBox,"default" : 0.8},
-            "/threshold_front_too_close"    : {"object" : self.ui.FrontTooCloseSpinBox,     "default" : 0.1},
-            "/threshold_front_far_enough"   : {"object" : self.ui.FrontFarEnoughSpinBox,    "default" : 0.5},
-            "/threshold_rear_too_close"     : {"object" : self.ui.RearTooCloseSpinBox,      "default" : 0.2},
-            "/navigation_n_dials"       : {"object" : self.ui.numberDialsSlider,        "default" : 11},
+            "/threshold_front_too_close"    : {"object" : self.ui.FrontTooCloseSpinBox,         "default" : 0.1},
+            "/threshold_front_far_enough"   : {"object" : self.ui.FrontFarEnoughSpinBox,        "default" : 0.5},
+            "/threshold_rear_too_close"     : {"object" : self.ui.RearTooCloseSpinBox,          "default" : 0.2},
+            "/navigation_n_dials"           : {"object" : self.ui.numberDialsSlider,            "default" : 11},
+            "/color_detection_tolerance": {"object" : self.ui.colorDetectionToleranceSpinBox,   "default" : 0.25},
+
         }
 
         self.combobox = {
@@ -169,6 +171,9 @@ class MainWindow(QMainWindow):
 
         self.ui.frontRatioSlider.valueChanged.connect(lambda value: self.ui.frontRatioSpinBox.setValue(value /100))
         self.ui.frontRatioSpinBox.valueChanged.connect(lambda value: self.ui.frontRatioSlider.setValue(int(value *100)))
+
+        self.ui.colorDetectionToleranceSlider.valueChanged.connect(lambda value: self.ui.colorDetectionToleranceSpinBox.setValue(value /100))
+        self.ui.colorDetectionToleranceSpinBox.valueChanged.connect(lambda value: self.ui.colorDetectionToleranceSlider.setValue(int(value *100)))
 
     def set_parameters(self):
         for name,info in self.values.items() :
