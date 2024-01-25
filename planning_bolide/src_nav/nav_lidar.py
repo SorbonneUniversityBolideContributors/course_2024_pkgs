@@ -10,7 +10,7 @@ import rospy
 from control_bolide.msg import SpeedDirection
 from sensor_msgs.msg import LaserScan
 from std_msgs.msg import Bool
-from nav_module.nav_functions import nav_3_dials, nav_3_dials_spaced, nav_n_dials
+from nav_module.nav_functions import nav_3_dials, nav_n_dials
 
 #%% CLASS
 class NavLidar():
