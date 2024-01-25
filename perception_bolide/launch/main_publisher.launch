@@ -4,4 +4,7 @@
 
     <!-- Node for cam_publisher.py -->
     <node pkg="perception_bolide" type="cam_publisher.py" name="cam_publisher" output="screen" />
+
+    <!-- Node for STM32_sensors_pub.py -->
+    <node pkg="perception_bolide" type="STM32_sensors_pub.py" name="STM32_sensors_pub" output="screen" />
 </launch>
