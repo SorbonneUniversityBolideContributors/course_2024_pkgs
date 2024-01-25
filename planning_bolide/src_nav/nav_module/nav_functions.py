@@ -65,7 +65,7 @@ def crop_cmd_vel(
 
 
 
-def nav_3_dials(lidar_data:LaserScan, Kspeed:float, Kdir:float, Karg:float, Mode:str, FrontRatio: float = 0.2, **args) -> SpeedDirection:
+def nav_3_dials(lidar_data:LaserScan, Kspeed:float, Kdir:float, Karg:float, Mode:str="spaced", FrontRatio: float = 0.2, **args) -> SpeedDirection:
     """Return the speed and direction of the robot based on 3 dials range data."""
 
     # Get the ranges of the dials
