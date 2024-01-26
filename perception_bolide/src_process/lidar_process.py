@@ -167,16 +167,27 @@ class ProcessLidarData:
         if self.anti_jumping_filter :
             # Anti-jumping filter to prevent unexpected jumps in the lidar data:
             # For each null value in the data array, replace it with the median of the values around it (non-null values) (around in a temporal sense)
+            
+            # Add the current data array to the list of last values
             self.last_values += [data_array]
 
-            # If the list of last values is longer than the anti-jumping filter range, remove the oldest values
-            while len(self.last_values) > self.anti_jumping_filter_range : self.last_values.pop(0)
+            # If the list of last values is longer than the temporal filter range, remove the oldest values
+            while len(self.last_values) > self.temporal_filter_range : self.last_values.pop(0)
 
             # Convert the list of last values to a numpy array
             data_array = np.array(self.last_values)
 
-            # Replace the null values with the median of the last values at the same index
-            data_array = np.where(data_array == 0, np.median(data_array, axis = 0), data_array)
+            # where the data array is null, replace it with the previous non-null value
+            data_array = np.where(data_array == 0, np.roll(data_array, 1), data_array)
+
+            # update the last values array with the new data array
+            self.last_values[-1] = data_array
+
+            # take the most recent value of the data array
+            data_array = data_array[-1]
+
+            print(data_array)
+
 
         # Return the filtered data array as a list
         return list(data_array)
