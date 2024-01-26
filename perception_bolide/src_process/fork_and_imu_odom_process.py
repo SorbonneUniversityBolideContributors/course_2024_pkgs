@@ -13,11 +13,11 @@ class odom_optical_fork:
     def __init__(self):
         self.pub = rospy.Publisher('Odom',Odometry,queue_size=10)
         self.Odom = Odometry()
-        self.Odom_broadcaster = tf.TransformBroadcaster()
+        self.Odom_broadcaster = tf.TransformBroadcaster() # TransformBroadcaster is used to send a transformation between odom and base_link
         self.L = 0.257 # Distance between location point and wheel point (back and front wheels) (m)
-        self.fork = 0
+        self.fork = 0 # speed from the fork (m/s)
 
-        self.current_time = rospy.Time.now()
+        self.current_time = rospy.Time.now() # current_time and last_time are used to compute dt
         self.last_time =rospy.Time.now()
 
         self.x_pos = 0
@@ -27,22 +27,7 @@ class odom_optical_fork:
         self.dy = 0
         self.dtheta =0
 
-    def calcul_traction(self):     # From back wheel location
-        self.current_time = rospy.Time.now()
-        dt = (self.current_time - self.last_time).to_sec()
-        # Angular update
-        self.dtheta = self.fork*np.sin(self.dir)/self.L
-        self.theta_pos += dt*self.dtheta
-
-        # Linear update
-        self.dx = self.fork*np.cos(self.theta_pos)*np.cos(self.dir)
-        self.dy = self.fork*np.sin(self.theta_pos)*np.cos(self.dir)
-        self.x_pos += dt*self.dx
-        self.y_pos += dt*self.dy
-
-        self.last_time = self.current_time
-
-    def calcul_propulsion(self):   # From front wheel location
+    def compute_position(self):   # the reference is the center of the back wheels
         self.current_time = rospy.Time.now()
         dt = (self.current_time - self.last_time).to_sec()
 
@@ -56,28 +41,27 @@ class odom_optical_fork:
 
     def update(self):
         # Odom position
-        Odom_quat = tf.transformations.quaternion_from_euler(0,0,self.theta_pos)
+        Odom_quat = tf.transformations.quaternion_from_euler(0,0,self.theta_pos) # Euler to Quaternion
         self.Odom.pose.pose = Pose(Point(self.x_pos,self.y_pos,0.0),Quaternion(*Odom_quat))
 
         # Odom speed
         self.Odom.twist.twist = Twist(Vector3(self.dx,self.dy,0.0),Vector3(0.0,0.0,self.dtheta))
 
         # Transform
-        self.Odom_broadcaster.sendTransform((self.x_pos,self.y_pos,0.0),Odom_quat,self.current_time,"base_link","odom")
+        self.Odom_broadcaster.sendTransform((self.x_pos,self.y_pos,0.0),Odom_quat,self.current_time,"base_link","odom") # send the transformation from odom to base_link
         self.Odom.header.stamp = self.current_time
-        self.Odom.header.frame_id = "odom"
+        self.Odom.header.frame_id = "odom"  # to precise that we create a frame from odom to base_link
         self.Odom.child_frame_id = "base_link"
 
         # Publish Topic
         self.pub.publish(self.Odom)
         
     def get_fork(self,msg:ForkSpeed):
-        self.fork = msg.speed/4
+        self.fork = msg.speed/4 # the /4 is used to scale the speed of the fork so that the odometry and the map are matching
 
     def get_dir(self,msg:Imu):
         self.theta_pos = msg.orientation.z
-        self.dthata = msg.angular_velocity.z
-        s.calcul_propulsion()
+        s.compute_position()
         s.update()
 
 
