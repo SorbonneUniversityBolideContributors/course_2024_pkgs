@@ -96,12 +96,15 @@ def nav_3_dials(lidar_data:LaserScan, Kspeed:float, Kdir:float, Karg:float, Mode
     return crop_cmd_vel(cmd_vel, speed_lim={"min":0.2, "max":1})
 
 
-def nav_n_dials(lidar_data:LaserScan, Kspeed:float, Kdir:float, Karg:float, Mode:str, n_dials:int=11, navigation_feature=np.median, FrontRatio:float = 0.2, **args) -> SpeedDirection:
+def nav_n_dials(lidar_data:LaserScan, Kspeed:float, Kdir:float, Karg:float, Mode:str, n_dials:int=11, is_spaced:bool=True, navigation_feature=np.median, FrontRatio:float = 0.2, **args) -> SpeedDirection:
     """Return the speed and direction of the robot based on N dials range data."""
 
     # Get the ranges of the dials
-    range_left, range_right = get_dials_ranges(lidar_data, n_dials=2)
-    _, range_center, _ = get_dials_ranges(lidar_data, n_dials=3, proportion=[1 - FrontRatio, FrontRatio * 2, 1 - FrontRatio])
+    if is_spaced:
+        range_left, _, range_center, _, range_right = get_dials_ranges(lidar_data, n_dials=5, proportion=[70, 10, 20, 10, 70])
+    else :
+        range_left, range_right = get_dials_ranges(lidar_data, n_dials=2)
+        _, range_center, _ = get_dials_ranges(lidar_data, n_dials=3, proportion=[1-FrontRatio, 2*FrontRatio, 1-FrontRatio])
 
     dial_ranges = get_dials_ranges(lidar_data, n_dials=n_dials)
 
@@ -131,6 +134,9 @@ def nav_n_dials(lidar_data:LaserScan, Kspeed:float, Kdir:float, Karg:float, Mode
     elif Mode == "division" : 
         dir_cmd = - dist_right/dist_left - 1 if dist_right > dist_left else dist_left/dist_right - 1
         dir_cmd = (Kdir * dir_cmd / dist_center + Karg * arg) / (Kdir + Karg)
+    else :
+        rospy.logwarn("The navigation mode is unknown. Here Mode = {}".format(Mode))
+        dir_cmd = 0
 
     cmd_vel = SpeedDirection(speed_cmd, dir_cmd)
 

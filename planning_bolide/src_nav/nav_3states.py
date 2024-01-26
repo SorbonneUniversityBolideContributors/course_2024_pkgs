@@ -62,18 +62,6 @@ class NavSensors():
             "q1" : lambda x: np.percentile(x, 25),
             "q3" : lambda x: np.percentile(x, 75),
         }
-        self.nav_feature_choice = "median"  # The feature to use for the navigation
-        self.nav_func = "3Dials"            # The navigation function to use
-        self.nav_mode = "spaced"            # The navigation mode to use (in the navigation function)
-
-        # Parameters
-        self.threshold_front_too_close = 0.2    # The minimum distance in front of the robot
-        self.threshold_rear_too_close = 0.2     # The minimum distance behind the robot
-        self.threshold_front_far_enough = 0.5   # The distance in front of the robot to consider it is far enough to go forward
-        self.Kv = 0.5                       # The speed coefficient
-        self.Kd = 0.5                       # The direction coefficient
-        self.Ka = 0.5                       # The argmax coefficient
-        self.green_is_left = True # True if the green side is on the left of the robot
 
         self.get_params()
 
@@ -99,6 +87,7 @@ class NavSensors():
         navigation_mode = rospy.get_param("/navigation_mode", default = "3Dials_classic")
         self.nav_func, self.nav_mode = navigation_mode.split("_")
         self.nav_feature_choice = rospy.get_param("/navigation_feature", default = "median")
+        self.nav_is_spaced = rospy.get_param("/spaced_dials", default = True)
 
 # PROTOCOLS ===================================================================
     def protocol_through_neutral(self):
@@ -174,6 +163,7 @@ class NavSensors():
             Kdir=self.Kd,
             Karg=self.Ka,
             Mode=self.nav_mode,
+            is_spaced=self.nav_is_spaced,
             navigation_feature=self.nav_features[self.nav_feature_choice],
         )
 
