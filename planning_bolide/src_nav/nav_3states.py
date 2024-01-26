@@ -29,7 +29,7 @@ class NavSensors():
         rospy.Subscriber("camera_info", CameraInfo, self.callback_camera_info)
         rospy.Subscriber("raw_rear_range_data", MultipleRange, self.callback_multiple_range)
 
-        rospy.Subscriber("param_change_alert", Bool, self.get_params)
+        rospy.Subscriber("/param_change_alert", Bool, self.get_params)
 
         # init the publisher
         self.pub = rospy.Publisher("cmd_vel", SpeedDirection, queue_size=10)
