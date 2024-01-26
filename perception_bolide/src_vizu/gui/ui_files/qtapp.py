@@ -25,7 +25,7 @@ class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         if not MainWindow.objectName():
             MainWindow.setObjectName(u"MainWindow")
-        MainWindow.resize(390, 697)
+        MainWindow.resize(390, 720)
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
         self.verticalLayout_7 = QVBoxLayout(self.centralwidget)
@@ -48,7 +48,7 @@ class Ui_MainWindow(object):
         self.toolBox.setObjectName(u"toolBox")
         self.page = QWidget()
         self.page.setObjectName(u"page")
-        self.page.setGeometry(QRect(0, 0, 336, 386))
+        self.page.setGeometry(QRect(0, 0, 336, 409))
         self.verticalLayout = QVBoxLayout(self.page)
         self.verticalLayout.setObjectName(u"verticalLayout")
         self.splitter_2 = QSplitter(self.page)
@@ -56,20 +56,21 @@ class Ui_MainWindow(object):
         self.splitter_2.setOrientation(Qt.Vertical)
         self.label_6 = QLabel(self.splitter_2)
         self.label_6.setObjectName(u"label_6")
+        font = QFont()
+        font.setBold(True)
+        font.setUnderline(True)
+        font.setStrikeOut(False)
+        self.label_6.setFont(font)
         self.splitter_2.addWidget(self.label_6)
         self.layoutWidget = QWidget(self.splitter_2)
         self.layoutWidget.setObjectName(u"layoutWidget")
         self.gridLayout_2 = QGridLayout(self.layoutWidget)
         self.gridLayout_2.setObjectName(u"gridLayout_2")
         self.gridLayout_2.setContentsMargins(0, 0, 0, 0)
-        self.label = QLabel(self.layoutWidget)
-        self.label.setObjectName(u"label")
-
-        self.gridLayout_2.addWidget(self.label, 0, 0, 1, 1)
-
         self.temporalFilterSlider = QSlider(self.layoutWidget)
         self.temporalFilterSlider.setObjectName(u"temporalFilterSlider")
         self.temporalFilterSlider.setMinimum(1)
+        self.temporalFilterSlider.setMaximum(10)
         self.temporalFilterSlider.setOrientation(Qt.Horizontal)
 
         self.gridLayout_2.addWidget(self.temporalFilterSlider, 0, 1, 1, 1)
@@ -80,19 +81,10 @@ class Ui_MainWindow(object):
 
         self.gridLayout_2.addWidget(self.spinBox_2, 0, 2, 1, 1)
 
-        self.temporalFilterCheckBox = QCheckBox(self.layoutWidget)
-        self.temporalFilterCheckBox.setObjectName(u"temporalFilterCheckBox")
-
-        self.gridLayout_2.addWidget(self.temporalFilterCheckBox, 0, 3, 1, 1)
-
-        self.label_2 = QLabel(self.layoutWidget)
-        self.label_2.setObjectName(u"label_2")
-
-        self.gridLayout_2.addWidget(self.label_2, 1, 0, 1, 1)
-
         self.spatialFilterSlider = QSlider(self.layoutWidget)
         self.spatialFilterSlider.setObjectName(u"spatialFilterSlider")
         self.spatialFilterSlider.setMinimum(1)
+        self.spatialFilterSlider.setMaximum(10)
         self.spatialFilterSlider.setOrientation(Qt.Horizontal)
 
         self.gridLayout_2.addWidget(self.spatialFilterSlider, 1, 1, 1, 1)
@@ -106,17 +98,51 @@ class Ui_MainWindow(object):
         self.spatialFilterCheckBox = QCheckBox(self.layoutWidget)
         self.spatialFilterCheckBox.setObjectName(u"spatialFilterCheckBox")
 
-        self.gridLayout_2.addWidget(self.spatialFilterCheckBox, 1, 3, 1, 1)
+        self.gridLayout_2.addWidget(self.spatialFilterCheckBox, 1, 0, 1, 1)
+
+        self.temporalFilterCheckBox = QCheckBox(self.layoutWidget)
+        self.temporalFilterCheckBox.setObjectName(u"temporalFilterCheckBox")
+
+        self.gridLayout_2.addWidget(self.temporalFilterCheckBox, 0, 0, 1, 1)
 
         self.splitter_2.addWidget(self.layoutWidget)
 
         self.verticalLayout.addWidget(self.splitter_2)
+
+        self.gridLayout_7 = QGridLayout()
+        self.gridLayout_7.setObjectName(u"gridLayout_7")
+        self.antiJumpingCheckBox = QCheckBox(self.page)
+        self.antiJumpingCheckBox.setObjectName(u"antiJumpingCheckBox")
+
+        self.gridLayout_7.addWidget(self.antiJumpingCheckBox, 0, 0, 1, 1)
+
+        self.antiJumpingSlider = QSlider(self.page)
+        self.antiJumpingSlider.setObjectName(u"antiJumpingSlider")
+        self.antiJumpingSlider.setMinimum(1)
+        self.antiJumpingSlider.setMaximum(10)
+        self.antiJumpingSlider.setOrientation(Qt.Horizontal)
+
+        self.gridLayout_7.addWidget(self.antiJumpingSlider, 0, 1, 1, 1)
+
+        self.antiJumpingSpinBox = QSpinBox(self.page)
+        self.antiJumpingSpinBox.setObjectName(u"antiJumpingSpinBox")
+        self.antiJumpingSpinBox.setMinimum(1)
+        self.antiJumpingSpinBox.setMaximum(10)
+
+        self.gridLayout_7.addWidget(self.antiJumpingSpinBox, 0, 2, 1, 1)
+
+
+        self.verticalLayout.addLayout(self.gridLayout_7)
 
         self.splitter = QSplitter(self.page)
         self.splitter.setObjectName(u"splitter")
         self.splitter.setOrientation(Qt.Vertical)
         self.label_5 = QLabel(self.splitter)
         self.label_5.setObjectName(u"label_5")
+        font1 = QFont()
+        font1.setBold(True)
+        font1.setUnderline(True)
+        self.label_5.setFont(font1)
         self.splitter.addWidget(self.label_5)
         self.layoutWidget1 = QWidget(self.splitter)
         self.layoutWidget1.setObjectName(u"layoutWidget1")
@@ -172,6 +198,7 @@ class Ui_MainWindow(object):
         self.splitter_3.setOrientation(Qt.Vertical)
         self.label_8 = QLabel(self.splitter_3)
         self.label_8.setObjectName(u"label_8")
+        self.label_8.setFont(font1)
         self.splitter_3.addWidget(self.label_8)
         self.gridLayoutWidget = QWidget(self.splitter_3)
         self.gridLayoutWidget.setObjectName(u"gridLayoutWidget")
@@ -207,7 +234,7 @@ class Ui_MainWindow(object):
         self.toolBox.addItem(self.page, u"LiDAR")
         self.page_2 = QWidget()
         self.page_2.setObjectName(u"page_2")
-        self.page_2.setGeometry(QRect(0, 0, 336, 386))
+        self.page_2.setGeometry(QRect(0, 0, 336, 409))
         self.verticalLayout_6 = QVBoxLayout(self.page_2)
         self.verticalLayout_6.setObjectName(u"verticalLayout_6")
         self.enableCameraCheckBox = QCheckBox(self.page_2)
@@ -215,11 +242,17 @@ class Ui_MainWindow(object):
 
         self.verticalLayout_6.addWidget(self.enableCameraCheckBox)
 
+        self.label_18 = QLabel(self.page_2)
+        self.label_18.setObjectName(u"label_18")
+
+        self.verticalLayout_6.addWidget(self.label_18)
+
         self.splitter_10 = QSplitter(self.page_2)
         self.splitter_10.setObjectName(u"splitter_10")
         self.splitter_10.setOrientation(Qt.Vertical)
         self.label_42 = QLabel(self.splitter_10)
         self.label_42.setObjectName(u"label_42")
+        self.label_42.setFont(font1)
         self.splitter_10.addWidget(self.label_42)
         self.layoutWidget_8 = QWidget(self.splitter_10)
         self.layoutWidget_8.setObjectName(u"layoutWidget_8")
@@ -340,7 +373,7 @@ class Ui_MainWindow(object):
         self.toolBox_3.setObjectName(u"toolBox_3")
         self.page_5 = QWidget()
         self.page_5.setObjectName(u"page_5")
-        self.page_5.setGeometry(QRect(0, 0, 336, 386))
+        self.page_5.setGeometry(QRect(0, 0, 336, 409))
         self.verticalLayout_5 = QVBoxLayout(self.page_5)
         self.verticalLayout_5.setObjectName(u"verticalLayout_5")
         self.splitter_13 = QSplitter(self.page_5)
@@ -365,6 +398,7 @@ class Ui_MainWindow(object):
         self.splitter_14.setOrientation(Qt.Vertical)
         self.label_14 = QLabel(self.splitter_14)
         self.label_14.setObjectName(u"label_14")
+        self.label_14.setFont(font1)
         self.splitter_14.addWidget(self.label_14)
         self.layoutWidget_5 = QWidget(self.splitter_14)
         self.layoutWidget_5.setObjectName(u"layoutWidget_5")
@@ -451,8 +485,19 @@ class Ui_MainWindow(object):
 
         self.verticalLayout_5.addWidget(self.splitter_14)
 
+        self.label_17 = QLabel(self.page_5)
+        self.label_17.setObjectName(u"label_17")
+
+        self.verticalLayout_5.addWidget(self.label_17)
+
         self.label_16 = QLabel(self.page_5)
         self.label_16.setObjectName(u"label_16")
+        font2 = QFont()
+        font2.setPointSize(13)
+        font2.setBold(True)
+        font2.setItalic(False)
+        font2.setUnderline(True)
+        self.label_16.setFont(font2)
 
         self.verticalLayout_5.addWidget(self.label_16)
 
@@ -510,7 +555,7 @@ class Ui_MainWindow(object):
         self.toolBox_3.addItem(self.page_5, u"Gains")
         self.page_4 = QWidget()
         self.page_4.setObjectName(u"page_4")
-        self.page_4.setGeometry(QRect(0, 0, 182, 198))
+        self.page_4.setGeometry(QRect(0, 0, 336, 386))
         self.gridLayout_11 = QGridLayout(self.page_4)
         self.gridLayout_11.setObjectName(u"gridLayout_11")
         self.verticalSpacer_2 = QSpacerItem(20, 174, QSizePolicy.Minimum, QSizePolicy.Expanding)
@@ -620,11 +665,12 @@ class Ui_MainWindow(object):
         self.toolBox_2.setObjectName(u"toolBox_2")
         self.page_3 = QWidget()
         self.page_3.setObjectName(u"page_3")
-        self.page_3.setGeometry(QRect(0, 0, 336, 420))
+        self.page_3.setGeometry(QRect(0, 0, 336, 443))
         self.verticalLayout_4 = QVBoxLayout(self.page_3)
         self.verticalLayout_4.setObjectName(u"verticalLayout_4")
         self.label_10 = QLabel(self.page_3)
         self.label_10.setObjectName(u"label_10")
+        self.label_10.setFont(font1)
 
         self.verticalLayout_4.addWidget(self.label_10)
 
@@ -747,9 +793,11 @@ class Ui_MainWindow(object):
         self.spinBox_5.valueChanged.connect(self.simulationMaxAngleSlider.setValue)
         self.numberDialsSlider.valueChanged.connect(self.numberDialsSpinBox.setValue)
         self.numberDialsSpinBox.valueChanged.connect(self.numberDialsSlider.setValue)
+        self.antiJumpingSlider.valueChanged.connect(self.antiJumpingSpinBox.setValue)
+        self.antiJumpingSpinBox.valueChanged.connect(self.antiJumpingSlider.setValue)
 
-        self.tabWidget.setCurrentIndex(1)
-        self.toolBox.setCurrentIndex(1)
+        self.tabWidget.setCurrentIndex(0)
+        self.toolBox.setCurrentIndex(0)
         self.toolBox_3.setCurrentIndex(0)
         self.toolBox_2.setCurrentIndex(0)
 
@@ -760,10 +808,9 @@ class Ui_MainWindow(object):
     def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"MainWindow", None))
         self.label_6.setText(QCoreApplication.translate("MainWindow", u"Filter size", None))
-        self.label.setText(QCoreApplication.translate("MainWindow", u"Temporal", None))
-        self.temporalFilterCheckBox.setText("")
-        self.label_2.setText(QCoreApplication.translate("MainWindow", u"Spatial", None))
-        self.spatialFilterCheckBox.setText("")
+        self.spatialFilterCheckBox.setText(QCoreApplication.translate("MainWindow", u"Spatial", None))
+        self.temporalFilterCheckBox.setText(QCoreApplication.translate("MainWindow", u"Temporal", None))
+        self.antiJumpingCheckBox.setText(QCoreApplication.translate("MainWindow", u"Anti jumping", None))
         self.label_5.setText(QCoreApplication.translate("MainWindow", u"Angles range", None))
         self.label_3.setText(QCoreApplication.translate("MainWindow", u"Min", None))
         self.label_4.setText(QCoreApplication.translate("MainWindow", u"Max", None))
@@ -771,6 +818,7 @@ class Ui_MainWindow(object):
         self.label_9.setText(QCoreApplication.translate("MainWindow", u"Lim", None))
         self.toolBox.setItemText(self.toolBox.indexOf(self.page), QCoreApplication.translate("MainWindow", u"LiDAR", None))
         self.enableCameraCheckBox.setText(QCoreApplication.translate("MainWindow", u"Enable camera", None))
+        self.label_18.setText("")
         self.label_42.setText(QCoreApplication.translate("MainWindow", u"Calibration", None))
         self.label_43.setText(QCoreApplication.translate("MainWindow", u"R", None))
         self.label_44.setText(QCoreApplication.translate("MainWindow", u"G", None))
@@ -789,8 +837,9 @@ class Ui_MainWindow(object):
         self.label_32.setText(QCoreApplication.translate("MainWindow", u"Kv", None))
         self.label_37.setText(QCoreApplication.translate("MainWindow", u"Ka", None))
         self.label_38.setText(QCoreApplication.translate("MainWindow", u"Front Ratio", None))
+        self.label_17.setText("")
         self.label_16.setText(QCoreApplication.translate("MainWindow", u"Dials parameters", None))
-        self.useDialsCheckBox.setText(QCoreApplication.translate("MainWindow", u"Use dials", None))
+        self.useDialsCheckBox.setText(QCoreApplication.translate("MainWindow", u"Use dials instead of all angles ?", None))
         self.label_39.setText(QCoreApplication.translate("MainWindow", u"Number", None))
         self.label_40.setText(QCoreApplication.translate("MainWindow", u"Feature", None))
         self.toolBox_3.setItemText(self.toolBox_3.indexOf(self.page_5), QCoreApplication.translate("MainWindow", u"Gains", None))

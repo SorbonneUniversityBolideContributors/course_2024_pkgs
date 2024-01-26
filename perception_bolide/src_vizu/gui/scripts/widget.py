@@ -33,7 +33,7 @@ class MainWindow(QMainWindow):
             "/green_is_left"            : {"object" : self.ui.GreenIsLeftCheckBox,      "default" : True},
             "/use_dials"                : {"object" : self.ui.useDialsCheckBox,         "default" : False},
             "/spaced_dials"             : {"object" : self.ui.spacedDialsCheckBox,      "default" : True},
-
+            "/anti_jumping_filter_bool" : {"object" : self.ui.antiJumpingCheckBox,      "default" : False},
         }
 
         self.values={
@@ -54,6 +54,8 @@ class MainWindow(QMainWindow):
             "/navigation_n_dials"           : {"object" : self.ui.numberDialsSlider,            "default" : 11},
             "/color_detection_tolerance": {"object" : self.ui.colorDetectionToleranceSpinBox,   "default" : 0.25},
             "/front_dial_ratio"         : {"object" : self.ui.frontRatioSlider,                 "default" : 0.1},
+
+            "/anti_jumping_filter_range": {"object" : self.ui.antiJumpingSlider,      "default" : 5},
 
         }
 
