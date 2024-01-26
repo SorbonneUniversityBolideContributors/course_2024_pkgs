@@ -181,12 +181,14 @@ class MainWindow(QMainWindow):
 
     def set_parameters(self):
         for name,info in self.values.items() :
-            rospy.set_param(name, info["default"])
-            info["object"].setValue(info["default"])
+            self.values[name]["default"] = rospy.get_param(name, default = info["default"])
+            rospy.set_param(name, self.values[name]["default"])
+            info["object"].setValue(self.values[name]["default"])
 
         for name,info in self.checkbox.items() :
-            rospy.set_param(name, info["default"])
-            info["object"].setChecked(info["default"])
+            self.checkbox[name]["default"] = rospy.get_param(name, default = info["default"])
+            rospy.set_param(name, self.checkbox[name]["default"])
+            info["object"].setChecked(self.checkbox[name]["default"])
 
     def change_param(self, value, key = None):
         if key in self.checkbox :
