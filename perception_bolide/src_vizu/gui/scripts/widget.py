@@ -44,16 +44,16 @@ class MainWindow(QMainWindow):
             "/lidar_rmax"               : {"object" : self.ui.lidarDisplayLimSpinBox,   "default" : 10},
             "/simulation_max_speed"     : {"object" : self.ui.simulationMaxSpeedSlider, "default" : 28},
             "/simulation_max_angle"     : {"object" : self.ui.simulationMaxAngleSlider, "default" : 25},
-            "/gain_vitesse"             : {"object" : self.ui.gainVitesseSpinBox,       "default" : 0.33},
-            "/gain_direction"           : {"object" : self.ui.gainDirectionSpinBox,     "default" : 0.8},
-            "/gain_direction_arg_max"  : {"object" : self.ui.gainDirectionArgMaxSpinBox,"default" : 0.8},
+            "/gain_vitesse"             : {"object" : self.ui.gainVitesseSpinBox,       "default" : 0.4},
+            "/gain_direction"           : {"object" : self.ui.gainDirectionSpinBox,     "default" : 1.4},
+            "/gain_direction_arg_max"  : {"object" : self.ui.gainDirectionArgMaxSpinBox,"default" : 1.9},
 
-            "/threshold_front_too_close"    : {"object" : self.ui.FrontTooCloseSpinBox,         "default" : 0.1},
+            "/threshold_front_too_close"    : {"object" : self.ui.FrontTooCloseSpinBox,         "default" : 0.35},
             "/threshold_front_far_enough"   : {"object" : self.ui.FrontFarEnoughSpinBox,        "default" : 0.5},
             "/threshold_rear_too_close"     : {"object" : self.ui.RearTooCloseSpinBox,          "default" : 0.2},
             "/navigation_n_dials"           : {"object" : self.ui.numberDialsSlider,            "default" : 11},
             "/color_detection_tolerance": {"object" : self.ui.colorDetectionToleranceSpinBox,   "default" : 0.25},
-            "/front_dial_ratio"         : {"object" : self.ui.frontRatioSlider,                 "default" : 0.1},
+            "/front_dial_ratio"         : {"object" : self.ui.frontRatioSlider,                 "default" : 0.2},
 
             "/anti_jumping_filter_range": {"object" : self.ui.antiJumpingSlider,      "default" : 5},
 

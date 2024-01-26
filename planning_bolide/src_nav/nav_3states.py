@@ -88,6 +88,7 @@ class NavSensors():
         self.nav_func, self.nav_mode = navigation_mode.split("_")
         self.nav_feature_choice = rospy.get_param("/navigation_feature", default = "median")
         self.nav_is_spaced = rospy.get_param("/spaced_dials", default = True)
+        self.front_dial_ratio = rospy.get_param("/front_dial_ratio", default = 0.2)
 
 # PROTOCOLS ===================================================================
     def protocol_through_neutral(self):
@@ -165,6 +166,7 @@ class NavSensors():
             Mode=self.nav_mode,
             is_spaced=self.nav_is_spaced,
             navigation_feature=self.nav_features[self.nav_feature_choice],
+            FrontRatio = self.front_dial_ratio,
         )
 
     def backward_state(self):
