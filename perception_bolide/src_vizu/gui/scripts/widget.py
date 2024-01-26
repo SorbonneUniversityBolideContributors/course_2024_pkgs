@@ -223,9 +223,10 @@ class MainWindow(QMainWindow):
             for color in ["red", "green"]:
                 rospy.set_param(f"/{color}_RGB", calibration_color[color])
                 self.color_to_set = color
-                for key in ["R", "G", "B"] :
-                    self.set_color_calibration(value = False, color = color, key = key)
-
+                # for key in ["R", "G", "B"] :
+                #     self.set_color_calibration(value = False, color = color, key = key)
+            self.update_spinboxes_calibration()
+            
         if "combobox" in to_load :
             for p in to_load["combobox"] :
                 self.combobox[p]["default"] = to_load["combobox"][p]
