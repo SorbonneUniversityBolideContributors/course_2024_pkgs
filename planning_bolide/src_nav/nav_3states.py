@@ -146,17 +146,10 @@ class NavSensors():
         current_front_distance = np.mean(front_ranges)
         current_rear_distance = np.min([self.rear_range_data.IR_rear_left.range, self.rear_range_data.IR_rear_right.range])
 
-        # store old values
-        old_RTC_FTC_FFE = self.rear_too_close, self.front_too_close, self.front_far_enough
-
         # update conditions
         self.front_too_close = current_front_distance < self.threshold_front_too_close
         self.front_far_enough = current_front_distance > self.threshold_front_far_enough
         self.rear_too_close = current_rear_distance < self.threshold_rear_too_close
-
-        # log info if different
-        if old_RTC_FTC_FFE != (self.rear_too_close, self.front_too_close, self.front_far_enough):
-            rospy.loginfo("   RTC: {}, FTC: {}, FFE: {}".format(self.rear_too_close, self.front_too_close, self.front_far_enough))
     
 # STATES ======================================================================
     def foward_state(self):
@@ -227,6 +220,7 @@ class NavSensors():
         if self.previous_state != self.current_state:
             self.protocol_entry = (self.previous_state, self.current_state)
             rospy.loginfo("From {} to {}".format(self.previous_state, self.current_state))
+            rospy.loginfo("   RTC = {}, FTC = {}, FFE = {}".format(self.rear_too_close, self.front_too_close, self.front_far_enough))
             self.apply_protocol()
         
         state_actions = {
