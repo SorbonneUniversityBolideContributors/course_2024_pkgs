@@ -143,7 +143,7 @@ class NavSensors():
         
         # compute the cu
         _, front_ranges, _ = get_dials_ranges(self.lidar_data, n_dials=3, proportion=[1, 0.5, 1])
-        current_front_distance = np.mean(front_ranges)
+        current_front_distance = np.percentile(front_ranges, 25)
         current_rear_distance = np.min([self.rear_range_data.IR_rear_left.range, self.rear_range_data.IR_rear_right.range])
 
         # update conditions
