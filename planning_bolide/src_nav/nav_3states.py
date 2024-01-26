@@ -48,6 +48,7 @@ class NavSensors():
         # stored values
         self.previous_state = "foward"
         self.current_state = "foward"
+        self.protocol_entry = ("foward", "backward")
         self.cmd_vel = SpeedDirection()
         self.navigation_dict = {
             "3Dials":nav_3_dials,
@@ -115,7 +116,7 @@ class NavSensors():
             ("stop"    , "foward")  : None,
             ("stop"    , "backward"): self.protocol_through_neutral,
         }
-        protocol = transitions[(self.previous_state, self.current_state)]
+        protocol = transitions[self.protocol_entry]
         if protocol is not None:
             protocol()
 
@@ -224,6 +225,7 @@ class NavSensors():
         self.next_state()
 
         if self.previous_state != self.current_state:
+            self.protocol_entry = (self.previous_state, self.current_state)
             rospy.loginfo("From {} to {}".format(self.previous_state, self.current_state))
             self.apply_protocol()
         
