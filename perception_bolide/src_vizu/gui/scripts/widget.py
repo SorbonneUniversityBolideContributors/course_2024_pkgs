@@ -53,7 +53,7 @@ class MainWindow(QMainWindow):
             "/threshold_rear_too_close"     : {"object" : self.ui.RearTooCloseSpinBox,          "default" : 0.2},
             "/navigation_n_dials"           : {"object" : self.ui.numberDialsSlider,            "default" : 11},
             "/color_detection_tolerance": {"object" : self.ui.colorDetectionToleranceSpinBox,   "default" : 0.25},
-            "/front_dial_ratio"         : {"object" : self.ui.frontRatioSlider,                 "default" : 0.1},
+            "/front_dial_ratio"         : {"object" : self.ui.frontRatioSlider,                 "default" : 0.2},
 
         }
 
