@@ -57,7 +57,8 @@ class odom_optical_fork:
         self.pub.publish(self.Odom)
         
     def get_fork(self,msg:ForkSpeed):
-        self.fork = msg.speed/4 # the /4 is used to scale the speed of the fork so that the odometry and the map are matching
+        #self.fork = msg.speed/4 # the /4 is used to scale the speed of the fork so that the odometry and the map are matching
+        self.fork = msg.speed
 
     def get_dir(self,msg:Imu):
         self.theta_pos = msg.orientation.z
