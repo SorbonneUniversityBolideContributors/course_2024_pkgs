@@ -174,20 +174,10 @@ class ProcessLidarData:
             # If the list of last values is longer than the temporal filter range, remove the oldest values
             while len(self.last_values) > self.temporal_filter_range : self.last_values.pop(0)
 
-            # Convert the list of last values to a numpy array
-            data_array = np.array(self.last_values)
-
-            # where the data array is null, replace it with the previous non-null value
-            data_array = np.where(data_array == 0, np.roll(data_array, 1), data_array)
-
-            # update the last values array with the new data array
-            self.last_values[-1] = data_array
-
-            # take the most recent value of the data array
-            data_array = data_array[-1]
-
-            print(data_array)
-
+            # where the data array is null, replace it with the previous non-null value (t-1)
+            if len(self.last_values) > 1 :
+                data_array[data_array == 0] = self.last_values[-2][data_array == 0]
+                
 
         # Return the filtered data array as a list
         return list(data_array)
