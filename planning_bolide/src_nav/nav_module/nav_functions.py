@@ -158,6 +158,6 @@ def backward_with_color_turn(camera_info:CameraInfo, green_is_left:bool, backwar
 
     # If the robot is in front of a color, go backward turning to the color side
     if camera_info.front_color in ["red", "green"]:
-        direction = turn_magnitude * (1 if (camera_info.front_color == "red" and green_is_left)  else -1)
+        direction = turn_magnitude * (1 if ((camera_info.front_color == "red" and green_is_left) or (camera_info.front_color == "green" and not green_is_left)) else -1)
     
     return crop_cmd_vel(SpeedDirection(speed, direction), speed_lim={"min":-1, "max":0}, direction_lim={"min":-1, "max":1})
