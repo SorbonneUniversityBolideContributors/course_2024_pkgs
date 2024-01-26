@@ -97,7 +97,7 @@ def nav_3_dials(lidar_data:LaserScan, Kspeed:float, Kdir:float, Karg:float, Mode
 
 
 def nav_n_dials(lidar_data:LaserScan, Kspeed:float, Kdir:float, Karg:float, Mode:str, n_dials:int=11, navigation_feature=np.median, FrontRatio:float = 0.2, **args) -> SpeedDirection:
-    """Return the speed and direction of the robot based on 3 dials range data."""
+    """Return the speed and direction of the robot based on N dials range data."""
 
     # Get the ranges of the dials
     range_left, range_right = get_dials_ranges(lidar_data, n_dials=2)
