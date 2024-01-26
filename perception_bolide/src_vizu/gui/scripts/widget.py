@@ -73,6 +73,8 @@ class MainWindow(QMainWindow):
                                                "mean",
                                                "median",
                                                "min",
+                                               "q1",
+                                               "q3",
                                             ]},
         }
 

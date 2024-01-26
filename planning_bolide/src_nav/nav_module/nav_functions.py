@@ -96,7 +96,7 @@ def nav_3_dials(lidar_data:LaserScan, Kspeed:float, Kdir:float, Karg:float, Mode
     return crop_cmd_vel(cmd_vel, speed_lim={"min":0.2, "max":1})
 
 
-def nav_n_dials(lidar_data:LaserScan, Kspeed:float, Kdir:float, Karg:float, Mode:str, n_dials:int=11, FrontRatio:float = 0.2, **args) -> SpeedDirection:
+def nav_n_dials(lidar_data:LaserScan, Kspeed:float, Kdir:float, Karg:float, Mode:str, n_dials:int=11, navigation_feature=np.median, FrontRatio:float = 0.2, **args) -> SpeedDirection:
     """Return the speed and direction of the robot based on 3 dials range data."""
 
     # Get the ranges of the dials
@@ -104,9 +104,9 @@ def nav_n_dials(lidar_data:LaserScan, Kspeed:float, Kdir:float, Karg:float, Mode
     _, range_center, _ = get_dials_ranges(lidar_data, n_dials=3, proportion=[1 - FrontRatio, FrontRatio * 2, 1 - FrontRatio])
 
     # Compute the mean distance of each dial
-    dist_left = np.mean(range_left)
-    dist_center = np.mean(range_center)
-    dist_right = np.mean(range_right)
+    dist_left = navigation_feature(range_left)
+    dist_center = navigation_feature(range_center)
+    dist_right = navigation_feature(range_right)
 
     # Argmax step
     mid_i = len(lidar_data.ranges)//2

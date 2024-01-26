@@ -40,30 +40,39 @@ class NavSensors():
         self.rear_range_data = MultipleRange()
 
         # conditions
-        self.wrong_way = False
-        self.front_too_close = False
-        self.rear_too_close = False
-        self.front_far_enough = True
+        self.wrong_way = False              # True if the robot is going the wrong way
+        self.front_too_close = False        # True if the front of the robot is too close
+        self.rear_too_close = False         # True if the rear of the robot is too close
+        self.front_far_enough = True        # True if the front of the robot is far enough
 
         # stored values
-        self.previous_state = "foward"
-        self.current_state = "foward"
-        self.protocol_entry = ("foward", "backward")
-        self.cmd_vel = SpeedDirection()
-        self.navigation_dict = {
+        self.previous_state = "foward"      # The previous state of the robot
+        self.current_state = "foward"       # The current state of the robot
+        self.protocol_entry = ("foward", "backward")    # The entry of the protocol, generally the previous and current state when different. This is used to be sure that the protocol follows the good state transition.
+        self.cmd_vel = SpeedDirection()     # The command to publish
+        self.navigation_dict = {            # The navigation functions (see nav_functions.py)
             "3Dials":nav_3_dials,
             "NDials":nav_n_dials
         }
-        self.nav_func = "3Dials"
-        self.nav_mode = "spaced"
+        self.nav_features = {               # The features to use for the navigation (generally the statistics of the dials)
+            "mean": np.mean,
+            "max": np.max,
+            "min": np.min,
+            "median": np.median,
+            "q1" : lambda x: np.percentile(x, 25),
+            "q3" : lambda x: np.percentile(x, 75),
+        }
+        self.nav_feature_choice = "median"  # The feature to use for the navigation
+        self.nav_func = "3Dials"            # The navigation function to use
+        self.nav_mode = "spaced"            # The navigation mode to use (in the navigation function)
 
         # Parameters
-        self.threshold_front_too_close = 0.2 # The minimum distance in front of the robot
-        self.threshold_rear_too_close = 0.2 # The minimum distance behind the robot
-        self.threshold_front_far_enough = 0.5 # The distance in front of the robot to consider it is far enough to go forward
-        self.Kv = 0.5 # The speed coefficient
-        self.Kd = 0.5 # The direction coefficient
-        self.Ka = 0.5 # The argmax coefficient
+        self.threshold_front_too_close = 0.2    # The minimum distance in front of the robot
+        self.threshold_rear_too_close = 0.2     # The minimum distance behind the robot
+        self.threshold_front_far_enough = 0.5   # The distance in front of the robot to consider it is far enough to go forward
+        self.Kv = 0.5                       # The speed coefficient
+        self.Kd = 0.5                       # The direction coefficient
+        self.Ka = 0.5                       # The argmax coefficient
         self.green_is_left = True # True if the green side is on the left of the robot
 
         self.get_params()
@@ -89,6 +98,7 @@ class NavSensors():
         # Foward navigation mode
         navigation_mode = rospy.get_param("/navigation_mode", default = "3Dials_classic")
         self.nav_func, self.nav_mode = navigation_mode.split("_")
+        self.nav_feature_choice = rospy.get_param("/navigation_feature", default = "median")
 
 # PROTOCOLS ===================================================================
     def protocol_through_neutral(self):
@@ -147,9 +157,9 @@ class NavSensors():
         current_rear_distance = np.min([self.rear_range_data.IR_rear_left.range, self.rear_range_data.IR_rear_right.range])
 
         # update conditions
-        self.front_too_close = current_front_distance < self.threshold_front_too_close
+        self.front_too_close  = current_front_distance < self.threshold_front_too_close
         self.front_far_enough = current_front_distance > self.threshold_front_far_enough
-        self.rear_too_close = current_rear_distance < self.threshold_rear_too_close
+        self.rear_too_close   = current_rear_distance  < self.threshold_rear_too_close
     
 # STATES ======================================================================
     def foward_state(self):
@@ -164,6 +174,7 @@ class NavSensors():
             Kdir=self.Kd,
             Karg=self.Ka,
             Mode=self.nav_mode,
+            navigation_feature=self.nav_features[self.nav_feature_choice],
         )
 
     def backward_state(self):
