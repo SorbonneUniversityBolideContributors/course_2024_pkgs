@@ -97,11 +97,15 @@ def nav_3_dials(lidar_data:LaserScan, Kspeed:float, Kdir:float, Karg:float, Mode
 
 
 def nav_n_dials(lidar_data:LaserScan, Kspeed:float, Kdir:float, Karg:float, Mode:str, n_dials:int=11, navigation_feature=np.median, FrontRatio:float = 0.2, **args) -> SpeedDirection:
-    """Return the speed and direction of the robot based on 3 dials range data."""
+    """Return the speed and direction of the robot based on N dials range data."""
 
     # Get the ranges of the dials
     range_left, range_right = get_dials_ranges(lidar_data, n_dials=2)
     _, range_center, _ = get_dials_ranges(lidar_data, n_dials=3, proportion=[1 - FrontRatio, FrontRatio * 2, 1 - FrontRatio])
+
+    dial_ranges = get_dials_ranges(lidar_data, n_dials=n_dials)
+
+    dial_values = np.array([navigation_feature(dial) for dial in dial_ranges])
 
     # Compute the mean distance of each dial
     dist_left = navigation_feature(range_left)
@@ -109,22 +113,22 @@ def nav_n_dials(lidar_data:LaserScan, Kspeed:float, Kdir:float, Karg:float, Mode
     dist_right = navigation_feature(range_right)
 
     # Argmax step
-    mid_i = len(lidar_data.ranges)//2
+    mid_i = len(dial_values)//2
 
-    arg = -(np.argmax(lidar_data.ranges) - mid_i)/mid_i # à changer avec le bon algorithme
+    arg = -(np.argmax(dial_values) - mid_i)/mid_i
 
     # Compute the speed command
     speed_cmd = Kspeed * dist_center
 
     # Compute the direction command
 
-    if "classic" in Mode :
+    if Mode == "classic" :
         dir_cmd = - Kdir * (dist_right - dist_left) / dist_center + Karg * arg
 
-    elif "pondéré" in Mode :
+    elif Mode == "pondéré" :
         dir_cmd = (- Kdir * (dist_right - dist_left) / dist_center + Karg * arg) / (Kdir + Karg)
 
-    elif "division" in Mode : 
+    elif Mode == "division" : 
         dir_cmd = - dist_right/dist_left - 1 if dist_right > dist_left else dist_left/dist_right - 1
         dir_cmd = (Kdir * dir_cmd / dist_center + Karg * arg) / (Kdir + Karg)
 
