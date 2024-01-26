@@ -12,7 +12,7 @@ from sensor_msgs.msg import LaserScan
 from std_msgs.msg import Bool
 from perception_bolide.msg import MultipleRange
 from perception_bolide.msg import CameraInfo
-from nav_module.nav_functions import nav_3_dials, backward_with_color_turn, get_dials_ranges
+from nav_module.nav_functions import nav_3_dials, nav_n_dials, backward_with_color_turn, get_dials_ranges
 
 
 #%% CLASS
@@ -49,6 +49,12 @@ class NavSensors():
         self.previous_state = "foward"
         self.current_state = "foward"
         self.cmd_vel = SpeedDirection()
+        self.navigation_dict = {
+            "3Dials":nav_3_dials,
+            "NDials":nav_n_dials
+        }
+        self.nav_func = "3Dials"
+        self.nav_mode = "spaced"
 
         # Parameters
         self.threshold_front_too_close = 0.2 # The minimum distance in front of the robot
@@ -65,15 +71,23 @@ class NavSensors():
     def get_params(self, value = True):
         """Update the parameters when the parameter change alert is received."""
         rospy.loginfo("Updating the parameters")
+
+        # Gains
         self.Kd = rospy.get_param("/gain_direction", default = 0.3)
         self.Kv = rospy.get_param("/gain_vitesse", default = 0.33)
         self.Ka = rospy.get_param("/gain_direction_arg_max", default = 0.2)
 
+        # Race direction
         self.green_is_left = rospy.get_param("/green_is_left", default = True)
 
+        # Thresholds for changing state
         self.threshold_front_too_close = rospy.get_param("/threshold_front_too_close", default = 0.2)
         self.threshold_rear_too_close = rospy.get_param("/threshold_rear_too_close", default = 0.2)
         self.threshold_front_far_enough = rospy.get_param("/threshold_front_far_enough", default = 0.5)
+
+        # Foward navigation mode
+        navigation_mode = rospy.get_param("/navigation_mode", default = "3Dials_classic")
+        self.nav_func, self.nav_mode = navigation_mode.split("_")
 
 # PROTOCOLS ===================================================================
     def protocol_through_neutral(self):
@@ -125,15 +139,23 @@ class NavSensors():
 # CONDITIONS ==================================================================
     def update_conditions(self):
         """Update the conditions of the robot."""
+        
+        # compute the current distances
         _, front_ranges, _ = get_dials_ranges(self.lidar_data, n_dials=3, proportion=[1, 0.5, 1])
         current_front_distance = np.mean(front_ranges)
+        current_rear_distance = np.min([self.rear_range_data.IR_rear_left.range, self.rear_range_data.IR_rear_right.range])
+
+        # store old values
+        old_RTC_FTC_FFE = self.rear_too_close, self.front_too_close, self.front_far_enough
+
+        # update conditions
         self.front_too_close = current_front_distance < self.threshold_front_too_close
         self.front_far_enough = current_front_distance > self.threshold_front_far_enough
-
-        current_rear_distance = np.min([self.rear_range_data.IR_rear_left.range, self.rear_range_data.IR_rear_right.range])
-        print("rear left: ", self.rear_range_data.IR_rear_left.range)
-        print("rear right: ", self.rear_range_data.IR_rear_right.range)
         self.rear_too_close = current_rear_distance < self.threshold_rear_too_close
+
+        # log info if different
+        if old_RTC_FTC_FFE != (self.rear_too_close, self.front_too_close, self.front_far_enough):
+            rospy.loginfo("   RTC: {}, FTC: {}, FFE: {}".format(self.rear_too_close, self.front_too_close, self.front_far_enough))
     
 # STATES ======================================================================
     def foward_state(self):
@@ -191,13 +213,8 @@ class NavSensors():
         self.previous_state = self.current_state
         self.next_state()
 
-        print("time: ", rospy.get_time())
-        print("   state: ", self.previous_state)
-        print("   front_too_close: ", self.front_too_close)
-        print("   rear_too_close: ", self.rear_too_close)
-        print("   front_far_enough: ", self.front_far_enough)
-
         if self.previous_state != self.current_state:
+            rospy.loginfo("From {} to {}".format(self.previous_state, self.current_state))
             self.apply_protocol()
         
         state_actions = {
