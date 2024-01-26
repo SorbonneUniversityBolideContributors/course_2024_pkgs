@@ -355,6 +355,11 @@ class Ui_MainWindow(object):
 
         self.verticalLayout_5.addWidget(self.splitter_13)
 
+        self.spacedDialsCheckBox = QCheckBox(self.page_5)
+        self.spacedDialsCheckBox.setObjectName(u"spacedDialsCheckBox")
+
+        self.verticalLayout_5.addWidget(self.spacedDialsCheckBox)
+
         self.splitter_14 = QSplitter(self.page_5)
         self.splitter_14.setObjectName(u"splitter_14")
         self.splitter_14.setOrientation(Qt.Vertical)
@@ -445,6 +450,11 @@ class Ui_MainWindow(object):
         self.splitter_14.addWidget(self.splitter_18)
 
         self.verticalLayout_5.addWidget(self.splitter_14)
+
+        self.label_16 = QLabel(self.page_5)
+        self.label_16.setObjectName(u"label_16")
+
+        self.verticalLayout_5.addWidget(self.label_16)
 
         self.splitter_15 = QSplitter(self.page_5)
         self.splitter_15.setObjectName(u"splitter_15")
@@ -773,11 +783,13 @@ class Ui_MainWindow(object):
         self.toolBox.setItemText(self.toolBox.indexOf(self.page_2), QCoreApplication.translate("MainWindow", u"Camera", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), QCoreApplication.translate("MainWindow", u"Perception", None))
         self.label_36.setText(QCoreApplication.translate("MainWindow", u"Mode", None))
+        self.spacedDialsCheckBox.setText(QCoreApplication.translate("MainWindow", u"Use spaced left/right dials ?", None))
         self.label_14.setText(QCoreApplication.translate("MainWindow", u"Gains", None))
         self.label_15.setText(QCoreApplication.translate("MainWindow", u"Kd", None))
         self.label_32.setText(QCoreApplication.translate("MainWindow", u"Kv", None))
         self.label_37.setText(QCoreApplication.translate("MainWindow", u"Ka", None))
         self.label_38.setText(QCoreApplication.translate("MainWindow", u"Front Ratio", None))
+        self.label_16.setText(QCoreApplication.translate("MainWindow", u"Dials parameters", None))
         self.useDialsCheckBox.setText(QCoreApplication.translate("MainWindow", u"Use dials", None))
         self.label_39.setText(QCoreApplication.translate("MainWindow", u"Number", None))
         self.label_40.setText(QCoreApplication.translate("MainWindow", u"Feature", None))

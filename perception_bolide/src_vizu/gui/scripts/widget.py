@@ -32,6 +32,7 @@ class MainWindow(QMainWindow):
             "/enable_camera_bool"       : {"object" : self.ui.enableCameraCheckBox,     "default" : True},
             "/green_is_left"            : {"object" : self.ui.GreenIsLeftCheckBox,      "default" : True},
             "/use_dials"                : {"object" : self.ui.useDialsCheckBox,         "default" : False},
+            "/spaced_dials"             : {"object" : self.ui.spacedDialsCheckBox,      "default" : True},
 
         }
 
@@ -60,8 +61,6 @@ class MainWindow(QMainWindow):
             "/navigation_mode"          : {"object" : self.ui.navModeComboBox,          
                                            "default" : "3Dials_spaced",
                                            "choices" : [
-                                               "3Dials_classic",
-                                               "3Dials_spaced",
                                                "NDials_classic",
                                                "NDials_division",
                                                "NDials_pondéré",
