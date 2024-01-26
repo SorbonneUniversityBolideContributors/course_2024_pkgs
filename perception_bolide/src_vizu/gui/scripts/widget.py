@@ -99,7 +99,7 @@ class MainWindow(QMainWindow):
         self.changement_alert = rospy.Publisher('/param_change_alert', Bool, queue_size = 10)
 
         self.connect()
-        self.set_parameters()
+        self.set_parameters(first_use = True)
         self.get_params_names()
 
         self.ui.loadParamPushButton.clicked.connect(self.load_parameters)
@@ -180,14 +180,14 @@ class MainWindow(QMainWindow):
         self.ui.colorDetectionToleranceSlider.valueChanged.connect(lambda value: self.ui.colorDetectionToleranceSpinBox.setValue(value /100))
         self.ui.colorDetectionToleranceSpinBox.valueChanged.connect(lambda value: self.ui.colorDetectionToleranceSlider.setValue(int(value *100)))
 
-    def set_parameters(self):
+    def set_parameters(self, first_use = False):
         for name,info in self.values.items() :
-            self.values[name]["default"] = rospy.get_param(name, default = info["default"])
+            if first_use : self.values[name]["default"] = rospy.get_param(name, default = info["default"])
             rospy.set_param(name, self.values[name]["default"])
             info["object"].setValue(self.values[name]["default"])
 
         for name,info in self.checkbox.items() :
-            self.checkbox[name]["default"] = rospy.get_param(name, default = info["default"])
+            if first_use : self.checkbox[name]["default"] = rospy.get_param(name, default = info["default"])
             rospy.set_param(name, self.checkbox[name]["default"])
             info["object"].setChecked(self.checkbox[name]["default"])
 
