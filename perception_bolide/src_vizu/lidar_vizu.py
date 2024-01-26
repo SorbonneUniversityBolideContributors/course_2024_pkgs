@@ -28,7 +28,7 @@ class Plot:
 		self.fig, self.ax = plt.subplots(subplot_kw={'projection': 'polar'})
 		self.ln_raw_data, = plt.plot([], [], '.b', label="raw data")
 		self.ln_processed_data, = plt.plot([], [], '.r', label="processed data")
-		plt.legend()
+		plt.legend(loc="upper left")
 
 		self.get_rmax()
 		
@@ -38,12 +38,16 @@ class Plot:
 	def initPlot(self) -> list:
 		"""Initialize the plot"""
 		# set the limits of the polar plot
-		# ofset
+		# offset
 		self.ax.set_theta_offset(np.pi/2.0)
 		self.ax.set_rmax(self.rmax)
 		self.ax.set_title("Lidar Plot")
 		self.ax.grid(color="gray")
 		self.ax.set_facecolor((0.0, 0.0, 0.0))
+
+		# set labels with white color
+		self.ax.tick_params(axis='y', colors='white')
+
 		return [self.ln_raw_data, self.ln_processed_data]
 		
 	def callback_raw_data(self, msg:LaserScan):
@@ -63,12 +67,15 @@ class Plot:
 			self.data_processed[index] = scan[i]
 
 	def get_rmax(self, value = True) :
-		self.rmax = rospy.get_param("/lidar_rmax", default = 5000)/1000 	# in QT the unit of the slider is mm
+		self.rmax = rospy.get_param("/lidar_rmax", default = 5000) 	# in QT the unit of the slider is mm
 		self.ax.set_rmax(self.rmax)
-		print(self.rmax)
 
 	def update_plot(self, frame):
 		"""Update the plot"""
+		print(self.angles[:10])
+		print(self.data_raw[:10])
+		print(self.data_processed[:10])
+		print()
 		self.ln_raw_data.set_data(self.angles, self.data_raw)
 		self.ln_processed_data.set_data(self.angles, self.data_processed)
 		return [self.ln_raw_data, self.ln_processed_data]
