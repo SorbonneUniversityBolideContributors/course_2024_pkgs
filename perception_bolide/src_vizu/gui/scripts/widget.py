@@ -66,6 +66,7 @@ class MainWindow(QMainWindow):
                                                "NDials_classic",
                                                "NDials_division",
                                                "NDials_pondéré",
+                                               "NDials_pondéréNoDivision"
                                            ]},
 
             "/navigation_feature"       : {"object" : self.ui.featureDialsComboBox,
@@ -190,6 +191,11 @@ class MainWindow(QMainWindow):
             if first_use : self.checkbox[name]["default"] = rospy.get_param(name, default = info["default"])
             rospy.set_param(name, self.checkbox[name]["default"])
             info["object"].setChecked(self.checkbox[name]["default"])
+
+        for name,info in self.combobox.items() :
+            if first_use : self.combobox[name]["default"] = rospy.get_param(name, default = info["default"])
+            rospy.set_param(name, self.combobox[name]["default"])
+            info["object"].setCurrentText(self.combobox[name]["default"])
 
     def change_param(self, value, key = None):
         if key in self.checkbox :

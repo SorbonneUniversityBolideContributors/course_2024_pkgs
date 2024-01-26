@@ -134,6 +134,10 @@ def nav_n_dials(lidar_data:LaserScan, Kspeed:float, Kdir:float, Karg:float, Mode
     elif Mode == "division" : 
         dir_cmd = - dist_right/dist_left - 1 if dist_right > dist_left else dist_left/dist_right - 1
         dir_cmd = (Kdir * dir_cmd / dist_center + Karg * arg) / (Kdir + Karg)
+
+    elif Mode == "pondéréNoDivision":
+        dir_cmd = (- Kdir * (dist_right - dist_left)  + Karg * arg) / (Kdir + Karg)
+
     else :
         rospy.logwarn("The navigation mode is unknown. Here Mode = {}".format(Mode))
         dir_cmd = 0
