@@ -125,7 +125,7 @@ class MainWindow(QMainWindow):
 
         for color in self.calibrate:
             for name, info in self.calibrate[color].items() :
-                info["object"].valueChanged.connect(lambda value, color=color, key=name: self.set_color_threshold(value,color,key=key))
+                info["object"].valueChanged.connect(lambda value, color=color, key=name: self.set_color_calibration(value,color,key=key))
 
     def auto_calibration(self, color = "no_one") :
         rospy.set_param("/color_to_calibrate", color)
@@ -145,7 +145,7 @@ class MainWindow(QMainWindow):
         if value == True : 
             self.subscriber_calibration.unregister()
 
-    def set_color_threshold(self, value, color, key = "no key"):
+    def set_color_calibration(self, value, color, key = "no key"):
         self.calibrate[color][key]["default"] = value
         c = self.calibrate[color]
         rospy.set_param(f"/{color}_RGB",[c["R"]["default"],c["G"]["default"],c["B"]["default"]])
@@ -219,14 +219,18 @@ class MainWindow(QMainWindow):
             for p in to_load["values"] :
                 self.values[p]["default"] = to_load["values"][p]
 
-        """
-        if "thresholds" in to_load :
-            self.thresholds_color = to_load["thresholds"]
+        if "calibration" in to_load :
+            calibration_color = to_load["calibration"]
             for color in ["red", "green"]:
-                rospy.set_param(f"/{color}_threshold", self.thresholds_color["red"])
+                rospy.set_param(f"/{color}_RGB", calibration_color[color])
                 self.color_to_set = color
-                self.set_thresholds(value = False)
-        """
+                self.set_color_calibration(value = False, color = color)
+
+        if "combobox" in to_load :
+            for p in to_load["combobox"] :
+                self.combobox[p]["default"] = to_load["combobox"][p]
+
+
         self.set_parameters()
 
 
@@ -241,12 +245,15 @@ class MainWindow(QMainWindow):
 
         checkbox_defaults = {key: value["default"] for key, value in self.checkbox.items()}
         values_defaults = {key: value["default"] for key, value in self.values.items()}
-
+        red_calibration = rospy.get_param("/red_RGB", default = [0]*3)
+        green_calibration = rospy.get_param("/green_RGB", default = [0]*3)
+        comboboxes_default = {key: value["default"] for key, value in self.combobox.items()}
 
         to_save = {
-            "checkbox"  : checkbox_defaults,
-            "values"    : values_defaults,
-
+            "checkbox"      : checkbox_defaults,
+            "values"        : values_defaults,
+            "calibration"   : {"red" : red_calibration, "green" : green_calibration},
+            "combobox"      : comboboxes_default,
         }
     #"thresholds": self.thresholds_color,
 
