@@ -140,7 +140,7 @@ class NavSensors():
     def update_conditions(self):
         """Update the conditions of the robot."""
         
-        # compute the current distances
+        # compute the cu
         _, front_ranges, _ = get_dials_ranges(self.lidar_data, n_dials=3, proportion=[1, 0.5, 1])
         current_front_distance = np.mean(front_ranges)
         current_rear_distance = np.min([self.rear_range_data.IR_rear_left.range, self.rear_range_data.IR_rear_right.range])
@@ -160,7 +160,17 @@ class NavSensors():
 # STATES ======================================================================
     def foward_state(self):
         """Update the speed and direction when the robot is going forward."""
-        self.cmd_vel = nav_3_dials(self.lidar_data, self.Kv, self.Kd, self.Ka)
+        # Get the navigation function
+        navigation_function = self.navigation_dict[self.nav_func]
+
+        # Get the command
+        self.cmd_vel = navigation_function(
+            lidar_data=self.lidar_data,
+            Kspeed=self.Kv,
+            Kdir=self.Kd,
+            Karg=self.Ka,
+            Mode=self.nav_mode,
+        )
 
     def backward_state(self):
         """Update the speed and direction when the robot is going backward."""
