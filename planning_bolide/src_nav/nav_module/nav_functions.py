@@ -84,7 +84,6 @@ def nav_3_dials(lidar_data:LaserScan, Kspeed:float, Kdir:float, Karg:float, Mode
     mid_i = len(lidar_data.ranges)//2
     arg = -(np.argmax(lidar_data.ranges) - mid_i)/mid_i
 
-    rospy.loginfo(f"arg : {arg}")
     # Compute the speed command
     speed_cmd = Kspeed * dist_center
 
