@@ -90,6 +90,8 @@ class MainWindow(QMainWindow):
                 "B"  : {"object" : self.ui.BgreenCalibrationSpinBox, "default" : 0},
             }
         }
+        self.msg_alert = Bool()
+        self.msg_alert.data = True
 
         self.connect_sliders_and_double_spin_boxes()
 
@@ -101,9 +103,6 @@ class MainWindow(QMainWindow):
 
         self.ui.loadParamPushButton.clicked.connect(self.load_parameters)
         self.ui.saveParamPushButton.clicked.connect(self.save_parameters)
-
-        self.msg_alert = Bool()
-        self.msg_alert.data = True
 
         self.init_calibration = rospy.Publisher("/do_an_auto_calibration", Bool, queue_size = 10)
         self.ui.redAutoCalibrationPushButton.clicked.connect(lambda : self.auto_calibration(color = "red"))
