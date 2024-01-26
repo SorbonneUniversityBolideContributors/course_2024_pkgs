@@ -171,7 +171,7 @@ class NavSensors():
 
     def backward_state(self):
         """Update the speed and direction when the robot is going backward."""
-        self.cmd_vel = backward_with_color_turn(self.camera_info, self.green_is_left)
+        self.cmd_vel = backward_with_color_turn(self.camera_info, self.green_is_left, backward_speed=-0.7)
 
     def stop_state(self):
         """Update the speed and direction when the robot is stopped."""

@@ -74,9 +74,17 @@ class LidarController:
 
     def collect_data(self):
         # Continuously fill the array with lidar scan data
+        # Create an array of 360 zeros
+        ### ============= WARNING ==============
+        # Here we initialize the array_lidar once so when no data are received at time t it will keep the data at time t-1
+        # But we should initialize every time we do a new scan (first line commented in the for loop below)
+        # This config create a cloud of point behind the robot (see with lidar_vizu or rviz)
+        # We do this for now to avoid an error from the lidar that make front value blinking and cause the robot to go backward
+        # because it think there is an obstacle in front of him
+        array_lidar = [0]*360
         for scan in self.lidar.iter_scans(scan_type='express') :
-            # Create an array of 360 zeros
-            array_lidar = [0]*360
+            # array_lidar = [0]*360
+
             # Print the number of points in the scan for debug
             rospy.logdebug(f"nb pts : {len(scan)}")
             # Store the scan data in the array
