@@ -735,6 +735,8 @@ class Ui_MainWindow(object):
         self.spinBox_6.valueChanged.connect(self.simulationMaxSpeedSlider.setValue)
         self.simulationMaxAngleSlider.valueChanged.connect(self.spinBox_5.setValue)
         self.spinBox_5.valueChanged.connect(self.simulationMaxAngleSlider.setValue)
+        self.numberDialsSlider.valueChanged.connect(self.numberDialsSpinBox.setValue)
+        self.numberDialsSpinBox.valueChanged.connect(self.numberDialsSlider.setValue)
 
         self.tabWidget.setCurrentIndex(1)
         self.toolBox.setCurrentIndex(1)
