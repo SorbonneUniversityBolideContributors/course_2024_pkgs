@@ -126,7 +126,7 @@ class MainWindow(QMainWindow):
             for name, info in self.calibrate[color].items() :
                 info["object"].valueChanged.connect(lambda value, color=color, key=name: self.set_color_calibration(value,color,key=key))
 
-    def auto_calibration(self, color = "no_one") :
+    def auto_calibration(self, color = "no_one", ) :
         rospy.set_param("/color_to_calibrate", color)
         self.color_to_set = color
         self.subscriber_calibration = rospy.Subscriber("/is_auto_calibration_done", Bool, self.update_spinboxes_calibration)
@@ -225,8 +225,9 @@ class MainWindow(QMainWindow):
                 self.color_to_set = color
                 # for key in ["R", "G", "B"] :
                 #     self.set_color_calibration(value = False, color = color, key = key)
-            self.update_spinboxes_calibration()
-            
+                self.update_spinboxes_calibration(value = False)
+
+
         if "combobox" in to_load :
             for p in to_load["combobox"] :
                 self.combobox[p]["default"] = to_load["combobox"][p]
