@@ -58,7 +58,7 @@ class MainWindow(QMainWindow):
 
         self.combobox = {
             "/navigation_mode"          : {"object" : self.ui.navModeComboBox,          
-                                           "default" : "3Dials_classic",
+                                           "default" : "3Dials_spaced",
                                            "choices" : [
                                                "3Dials_classic",
                                                "3Dials_spaced",
