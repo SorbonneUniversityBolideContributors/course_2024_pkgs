@@ -1,6 +1,8 @@
 # Packages for the 2024 race
 Here are the Sorobnne University ROS packages for the Autonomous driving race host by ENS.
 
+Root repository: [course_2024_pkgs](https://github.com/SorbonneUniversityBolideContributors/Course_2024.git)
+
 The project is divided into three main packages:
 1. **Perception:** [perception_bolide](https://github.com/SorbonneUniversityBolideContributors/course_2024_pkgs/tree/main/perception_bolide)
 2. **Planning:** [planning_bolide](https://github.com/SorbonneUniversityBolideContributors/course_2024_pkgs/tree/main/planning_bolide)
