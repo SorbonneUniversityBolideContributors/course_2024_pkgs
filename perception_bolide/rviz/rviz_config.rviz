@@ -59,7 +59,7 @@ Visualization Manager:
       Draw Behind: false
       Enabled: true
       Name: Map
-      Topic: /simu_bot/map
+      Topic: /bolide2/map
       Unreliable: false
       Use Timestamp: false
       Value: true
@@ -95,7 +95,7 @@ Visualization Manager:
         Shaft Length: 1
         Shaft Radius: 0.05000000074505806
         Value: Arrow
-      Topic: /simu_bot/Odom
+      Topic: /bolide2/Odom
       Unreliable: false
       Value: true
   Enabled: true

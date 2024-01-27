@@ -1,4 +1,11 @@
 #!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+__author__ = "Clément Mizzi and Loris Oumbiche"
+__status__ = "Tested"
+__version__ = ""
+__annotations__ = ""
+
 
 import numpy as np
 import rospy
@@ -60,7 +67,8 @@ class odom_optical_fork:
         self.fork = msg.speed# the /4 is used to scale the speed of the fork so that the odometry and the map are matching
 
     def get_dir(self,msg:Imu):
-        self.theta_pos = - msg.orientation.z
+        self.theta_pos = - msg.orientation.z  # If you want to use the real robot 
+        #self.theta_pos = msg.orientation.z #If you want to use the simulation
         s.compute_position()
         s.update()
 
