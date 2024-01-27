@@ -15,7 +15,7 @@ from control_bolide.msg import SpeedDirection
 from perception_bolide.msg import MultipleRange
 from perception_bolide.msg import CameraInfo
 
-from nav_module.forward_functions import nav_3_dials, nav_n_dials
+from nav_module.forward_functions import forward_3_dials, forward_n_dials
 from nav_module.backward_functions import backward_with_color_turn
 from nav_module.utils import get_dials_ranges
 
@@ -56,8 +56,8 @@ class NavSensors():
         self.protocol_entry = ("forward", "backward")    # The entry of the protocol, generally the previous and current state when different. This is used to be sure that the protocol follows the good state transition.
         self.cmd_vel = SpeedDirection()     # The command to publish
         self.navigation_dict = {            # The navigation functions (see nav_functions.py)
-            "3Dials":nav_3_dials,
-            "NDials":nav_n_dials
+            "3Dials":forward_3_dials,
+            "NDials":forward_n_dials
         }
         self.nav_features = {               # The features to use for the navigation (generally the statistics of the dials)
             "mean": np.mean,

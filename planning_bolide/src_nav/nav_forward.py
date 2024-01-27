@@ -10,7 +10,7 @@ import rospy
 from control_bolide.msg import SpeedDirection
 from sensor_msgs.msg import LaserScan
 from std_msgs.msg import Bool
-from nav_module.forward_functions import nav_3_dials, nav_n_dials
+from nav_module.forward_functions import forward_3_dials, forward_n_dials
 
 #%% CLASS
 class NavForward():
@@ -33,8 +33,8 @@ class NavForward():
 
         self.cmd = SpeedDirection()
         self.navigation_dict = {
-            "3Dials":nav_3_dials,
-            "NDials":nav_n_dials
+            "3Dials":forward_3_dials,
+            "NDials":forward_n_dials
         }
         self.navigation_choice = "3Dials_spaced"
 

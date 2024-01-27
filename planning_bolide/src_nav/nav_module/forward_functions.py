@@ -3,17 +3,16 @@ import rospy
 import numpy as np
 from sensor_msgs.msg import LaserScan
 from control_bolide.msg import SpeedDirection
-from perception_bolide.msg import CameraInfo
 from nav_module.utils import get_dials_ranges, crop_cmd_vel
 
 
 __author__ = "Eliot CHRISTON and Raphael KHORASSANI and Loris OUMBICHE"
 __status__ = "Development"
-__version__ = "3.2.0"
+__version__ = "3.2.1"
 
 
 
-def nav_3_dials(lidar_data:LaserScan, Kspeed:float, Kdir:float, Karg:float, mode:str="spaced", FrontRatio: float = 0.2, **args) -> SpeedDirection:
+def forward_3_dials(lidar_data:LaserScan, Kspeed:float, Kdir:float, Karg:float, mode:str="spaced", FrontRatio: float = 0.2, **args) -> SpeedDirection:
     """Return the speed and direction of the robot based on 3 dials range data."""
 
     # Get the ranges of the dials
@@ -44,7 +43,7 @@ def nav_3_dials(lidar_data:LaserScan, Kspeed:float, Kdir:float, Karg:float, mode
     return crop_cmd_vel(cmd_vel, speed_lim={"min":0.2, "max":1})
 
 
-def nav_n_dials(lidar_data:LaserScan, Kspeed:float, Kdir:float, Karg:float, mode:str, n_dials:int=11, 
+def forward_n_dials(lidar_data:LaserScan, Kspeed:float, Kdir:float, Karg:float, mode:str, n_dials:int=11, 
                 is_spaced:bool=True, navigation_feature=np.median, FrontRatio:float = 0.2,
                 use_maximize_threshold:bool = False,  maximize_threshold:float = 0.5,
                 **args) -> SpeedDirection:
