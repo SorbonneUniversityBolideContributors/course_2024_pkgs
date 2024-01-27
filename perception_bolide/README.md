@@ -63,6 +63,11 @@ In this package, you will find the first nodes in the software architecture of t
 
 - `calibrate_color.py`: TODO
 
+- `fork_and_imu_odom_process.py`: Used in the gmapping launch to send the odometry information and frame.
+    - topic subscribed: `raw_fork_data`, `raw_imu_data`
+    - topic published: `Odom`
+    - msg type: `nav_msgs.msg.Odometry`
+
 #### `msg/` contains the custom message definition:
 
 - `MultipleRange.msg`: The message used to send the IR and US data from the `rear_sensor_publisher.py` node.
@@ -85,13 +90,21 @@ In this package, you will find the first nodes in the software architecture of t
     string left_color
     string right_color
     ```
+#### `rviz/` contains the rviz configuration files:
+
+- `rviz_config_reel.rviz`: Used to set rviz configuration for the real robot
+
+- `rviz_config_simu.rviz`: Usef to set rviz configuration for the robot in simulation
+
 
 #### `launch/` contains the launch files:
 
 - `perception.launch`: Used to launch all the publisher nodes and process nodes.
 - `main_publisher.launch`: Used to launch all the publisher nodes without the processing nodes.
 - `process.launch`: Used to launch all the processing nodes without the publisher nodes (Used for simulation).
-- `hector_lidar_slam.launch`: Used to launch the hector_slam package using only the lidar data.
+- `gmapping.launch`: Used to launch the gmapping_slam package that works better than hector slam in our case as we have odometry.
+- `hector_lidar_slam.launch`: Used to launch the hector_slam package using only the lidar data (usefull when there is no other way than lidar to get the odometry).
+
 
 #### `urdf_files/` contains the urdf files:
 
