@@ -28,7 +28,7 @@
         </sizepolicy>
        </property>
        <property name="currentIndex">
-        <number>0</number>
+        <number>1</number>
        </property>
        <widget class="QWidget" name="tab">
         <attribute name="title">
@@ -516,7 +516,7 @@
         </attribute>
         <layout class="QVBoxLayout" name="verticalLayout_3">
          <item>
-          <widget class="QToolBox" name="toolBox_3">
+          <widget class="QToolBox" name="gainPonderationSlider">
            <property name="currentIndex">
             <number>0</number>
            </property>
@@ -526,7 +526,7 @@
               <x>0</x>
               <y>0</y>
               <width>336</width>
-              <height>409</height>
+              <height>429</height>
              </rect>
             </property>
             <attribute name="label">
@@ -554,7 +554,48 @@
               </widget>
              </item>
              <item>
-              <widget class="QSplitter" name="splitter_14">
+              <widget class="QSplitter" name="splitter_18">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <widget class="QLabel" name="label_38">
+                <property name="text">
+                 <string>Front Ratio</string>
+                </property>
+               </widget>
+               <widget class="QSlider" name="frontRatioSlider">
+                <property name="minimum">
+                 <number>1</number>
+                </property>
+                <property name="maximum">
+                 <number>100</number>
+                </property>
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+               </widget>
+               <widget class="QDoubleSpinBox" name="frontRatioSpinBox">
+                <property name="minimum">
+                 <double>0.010000000000000</double>
+                </property>
+                <property name="maximum">
+                 <double>1.000000000000000</double>
+                </property>
+                <property name="singleStep">
+                 <double>0.010000000000000</double>
+                </property>
+               </widget>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="label_17">
+               <property name="text">
+                <string/>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QSplitter" name="splitter_11">
                <property name="orientation">
                 <enum>Qt::Vertical</enum>
                </property>
@@ -582,64 +623,10 @@
                    </property>
                   </widget>
                  </item>
-                 <item row="1" column="0">
-                  <widget class="QLabel" name="label_15">
-                   <property name="text">
-                    <string>Kd</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="1" column="2">
-                  <widget class="QDoubleSpinBox" name="gainDirectionSpinBox">
-                   <property name="maximum">
-                    <double>10.000000000000000</double>
-                   </property>
-                   <property name="singleStep">
-                    <double>0.010000000000000</double>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="1" column="1">
-                  <widget class="QSlider" name="gainDirectionSlider">
-                   <property name="maximum">
-                    <number>1000</number>
-                   </property>
-                   <property name="orientation">
-                    <enum>Qt::Horizontal</enum>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="0" column="2">
-                  <widget class="QDoubleSpinBox" name="gainVitesseSpinBox">
-                   <property name="maximum">
-                    <double>1.000000000000000</double>
-                   </property>
-                   <property name="singleStep">
-                    <double>0.010000000000000</double>
-                   </property>
-                  </widget>
-                 </item>
                  <item row="0" column="0">
                   <widget class="QLabel" name="label_32">
                    <property name="text">
                     <string>Kv</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="2" column="0">
-                  <widget class="QLabel" name="label_37">
-                   <property name="text">
-                    <string>Ka</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item row="2" column="1">
-                  <widget class="QSlider" name="gainDirectionArgMaxSlider">
-                   <property name="maximum">
-                    <number>1000</number>
-                   </property>
-                   <property name="orientation">
-                    <enum>Qt::Horizontal</enum>
                    </property>
                   </widget>
                  </item>
@@ -653,47 +640,82 @@
                    </property>
                   </widget>
                  </item>
+                 <item row="2" column="1">
+                  <widget class="QSlider" name="gainDirectionArgMaxSlider">
+                   <property name="maximum">
+                    <number>1000</number>
+                   </property>
+                   <property name="orientation">
+                    <enum>Qt::Horizontal</enum>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="1" column="0">
+                  <widget class="QLabel" name="label_15">
+                   <property name="text">
+                    <string>Kd</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="2" column="0">
+                  <widget class="QLabel" name="label_37">
+                   <property name="text">
+                    <string>Ka</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="1" column="1">
+                  <widget class="QSlider" name="gainDirectionSlider">
+                   <property name="maximum">
+                    <number>1000</number>
+                   </property>
+                   <property name="orientation">
+                    <enum>Qt::Horizontal</enum>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="1" column="2">
+                  <widget class="QDoubleSpinBox" name="gainDirectionSpinBox">
+                   <property name="maximum">
+                    <double>10.000000000000000</double>
+                   </property>
+                   <property name="singleStep">
+                    <double>0.010000000000000</double>
+                   </property>
+                  </widget>
+                 </item>
+                 <item row="0" column="2">
+                  <widget class="QDoubleSpinBox" name="gainVitesseSpinBox">
+                   <property name="maximum">
+                    <double>1.000000000000000</double>
+                   </property>
+                   <property name="singleStep">
+                    <double>0.010000000000000</double>
+                   </property>
+                  </widget>
+                 </item>
                 </layout>
-               </widget>
-               <widget class="QSplitter" name="splitter_18">
-                <property name="orientation">
-                 <enum>Qt::Horizontal</enum>
-                </property>
-                <widget class="QLabel" name="label_38">
-                 <property name="text">
-                  <string>Front Ratio</string>
-                 </property>
-                </widget>
-                <widget class="QSlider" name="frontRatioSlider">
-                 <property name="minimum">
-                  <number>1</number>
-                 </property>
-                 <property name="maximum">
-                  <number>100</number>
-                 </property>
-                 <property name="orientation">
-                  <enum>Qt::Horizontal</enum>
-                 </property>
-                </widget>
-                <widget class="QDoubleSpinBox" name="frontRatioSpinBox">
-                 <property name="minimum">
-                  <double>0.010000000000000</double>
-                 </property>
-                 <property name="maximum">
-                  <double>1.000000000000000</double>
-                 </property>
-                 <property name="singleStep">
-                  <double>0.010000000000000</double>
-                 </property>
-                </widget>
                </widget>
               </widget>
              </item>
              <item>
-              <widget class="QLabel" name="label_17">
-               <property name="text">
-                <string/>
+              <widget class="QSplitter" name="splitter_14">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
                </property>
+               <widget class="QCheckBox" name="useMaximiseThresholdCheckBox_2">
+                <property name="text">
+                 <string>Use maximize threshold ?</string>
+                </property>
+               </widget>
+               <widget class="QDoubleSpinBox" name="maximizeThresholdSpinBox">
+                <property name="maximum">
+                 <double>1.000000000000000</double>
+                </property>
+                <property name="singleStep">
+                 <double>0.010000000000000</double>
+                </property>
+               </widget>
               </widget>
              </item>
              <item>
@@ -793,7 +815,7 @@
               <x>0</x>
               <y>0</y>
               <width>336</width>
-              <height>386</height>
+              <height>409</height>
              </rect>
             </property>
             <attribute name="label">
@@ -1081,6 +1103,11 @@
         <widget class="QPushButton" name="saveParamPushButton">
          <property name="text">
           <string>Save</string>
+         </property>
+        </widget>
+        <widget class="QPushButton" name="updateParamPushButton">
+         <property name="text">
+          <string>Update all manually</string>
          </property>
         </widget>
        </widget>

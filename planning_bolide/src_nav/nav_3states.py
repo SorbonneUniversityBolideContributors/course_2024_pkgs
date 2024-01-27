@@ -90,6 +90,10 @@ class NavSensors():
         self.nav_is_spaced = rospy.get_param("/spaced_dials", default = True)
         self.front_dial_ratio = rospy.get_param("/front_dial_ratio", default = 0.2)
 
+        # Maximize threshold
+        self.use_maximize_threshold = rospy.get_param("/use_maximize_threshold", default = False)
+        self.maximize_threshold = rospy.get_param("/maximize_threshold", default = 0.5)
+
 # PROTOCOLS ===================================================================
     def protocol_through_neutral(self):
         """Protocol to go through the neutral point."""
@@ -167,6 +171,8 @@ class NavSensors():
             is_spaced=self.nav_is_spaced,
             navigation_feature=self.nav_features[self.nav_feature_choice],
             FrontRatio = self.front_dial_ratio,
+            use_maximise_threshold = self.use_maximise_threshold,
+            maximise_threshold = self.maximise_threshold
         )
 
     def backward_state(self):

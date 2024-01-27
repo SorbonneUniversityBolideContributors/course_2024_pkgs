@@ -96,7 +96,10 @@ def nav_3_dials(lidar_data:LaserScan, Kspeed:float, Kdir:float, Karg:float, Mode
     return crop_cmd_vel(cmd_vel, speed_lim={"min":0.2, "max":1})
 
 
-def nav_n_dials(lidar_data:LaserScan, Kspeed:float, Kdir:float, Karg:float, Mode:str, n_dials:int=11, is_spaced:bool=True, navigation_feature=np.median, FrontRatio:float = 0.2, **args) -> SpeedDirection:
+def nav_n_dials(lidar_data:LaserScan, Kspeed:float, Kdir:float, Karg:float, Mode:str, n_dials:int=11, 
+                is_spaced:bool=True, navigation_feature=np.median, FrontRatio:float = 0.2,
+                use_maximize_threshold:bool = False,  maximize_threshold:float = 0.5,
+                **args) -> SpeedDirection:
     """Return the speed and direction of the robot based on N dials range data."""
 
     # Get the ranges of the dials
@@ -138,9 +141,16 @@ def nav_n_dials(lidar_data:LaserScan, Kspeed:float, Kdir:float, Karg:float, Mode
     elif Mode == "pondéréNoDivision":
         dir_cmd = (- Kdir * (dist_right - dist_left)  + Karg * arg) / (Kdir + Karg)
 
+    elif Mode == "pondéréRelative":
+        dir_cmd = (- Kdir * (dist_right - dist_left)  + Karg * arg) / (Kdir + Karg)**0.3
+
     else :
         rospy.logwarn("The navigation mode is unknown. Here Mode = {}".format(Mode))
         dir_cmd = 0
+
+    if use_maximize_threshold :
+        if abs(dir_cmd) > maximize_threshold :
+            dir_cmd = -1 if dir_cmd < 0 else 1
 
     cmd_vel = SpeedDirection(speed_cmd, dir_cmd)
 

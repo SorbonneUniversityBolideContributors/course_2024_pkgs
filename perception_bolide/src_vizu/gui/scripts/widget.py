@@ -27,57 +27,61 @@ class MainWindow(QMainWindow):
         self.dir = os.path.realpath(__file__).replace("/scripts/widget.py","")
 
         self.checkbox = {
-            "/temporal_filter_bool"     : {"object" : self.ui.temporalFilterCheckBox,   "default" : False},
-            "/spatial_filter_bool"      : {"object" : self.ui.spatialFilterCheckBox,    "default" : False},
-            "/enable_camera_bool"       : {"object" : self.ui.enableCameraCheckBox,     "default" : True},
-            "/green_is_left"            : {"object" : self.ui.GreenIsLeftCheckBox,      "default" : True},
-            "/use_dials"                : {"object" : self.ui.useDialsCheckBox,         "default" : False},
-            "/spaced_dials"             : {"object" : self.ui.spacedDialsCheckBox,      "default" : True},
-            "/anti_jumping_filter_bool" : {"object" : self.ui.antiJumpingCheckBox,      "default" : False},
+            "/temporal_filter_bool"         : {"object" : self.ui.temporalFilterCheckBox,           "default" : False},
+            "/spatial_filter_bool"          : {"object" : self.ui.spatialFilterCheckBox,            "default" : False},
+            "/enable_camera_bool"           : {"object" : self.ui.enableCameraCheckBox,             "default" : True},
+            "/green_is_left"                : {"object" : self.ui.GreenIsLeftCheckBox,              "default" : True},
+            "/use_dials"                    : {"object" : self.ui.useDialsCheckBox,                 "default" : False},
+            "/spaced_dials"                 : {"object" : self.ui.spacedDialsCheckBox,              "default" : True},
+            "/anti_jumping_filter_bool"     : {"object" : self.ui.antiJumpingCheckBox,              "default" : False},
+            "/use_maximize_threshold"       : {"object" : self.ui.useMaximiseThresholdCheckBox_2,   "default" : False},
         }
 
         self.values={
-            "/temporal_filter_range"    : {"object" : self.ui.temporalFilterSlider,     "default" : 3},
-            "/spatial_filter_range"     : {"object" : self.ui.spatialFilterSlider,      "default" : 5},
-            "/lidar_min_angle_deg"      : {"object" : self.ui.lidarMinAngleSlider,      "default" : -90},
-            "/lidar_max_angle_deg"      : {"object" : self.ui.lidarMaxAngleSlider,      "default" : 90},
-            "/lidar_rmax"               : {"object" : self.ui.lidarDisplayLimSpinBox,   "default" : 10},
-            "/simulation_max_speed"     : {"object" : self.ui.simulationMaxSpeedSlider, "default" : 28},
-            "/simulation_max_angle"     : {"object" : self.ui.simulationMaxAngleSlider, "default" : 25},
-            "/gain_vitesse"             : {"object" : self.ui.gainVitesseSpinBox,       "default" : 0.4},
-            "/gain_direction"           : {"object" : self.ui.gainDirectionSpinBox,     "default" : 1.4},
-            "/gain_direction_arg_max"  : {"object" : self.ui.gainDirectionArgMaxSpinBox,"default" : 1.9},
+            "/temporal_filter_range"        : {"object" : self.ui.temporalFilterSlider,             "default" : 3},
+            "/spatial_filter_range"         : {"object" : self.ui.spatialFilterSlider,              "default" : 5},
+            "/lidar_min_angle_deg"          : {"object" : self.ui.lidarMinAngleSlider,              "default" : -90},
+            "/lidar_max_angle_deg"          : {"object" : self.ui.lidarMaxAngleSlider,              "default" : 90},
+            "/lidar_rmax"                   : {"object" : self.ui.lidarDisplayLimSpinBox,           "default" : 10},
+            "/simulation_max_speed"         : {"object" : self.ui.simulationMaxSpeedSlider,         "default" : 28},
+            "/simulation_max_angle"         : {"object" : self.ui.simulationMaxAngleSlider,         "default" : 25},
+            "/gain_vitesse"                 : {"object" : self.ui.gainVitesseSpinBox,               "default" : 0.4},
+            "/gain_direction"               : {"object" : self.ui.gainDirectionSpinBox,             "default" : 1.4},
+            "/gain_direction_arg_max"       : {"object" : self.ui.gainDirectionArgMaxSpinBox,       "default" : 1.9},
 
-            "/threshold_front_too_close"    : {"object" : self.ui.FrontTooCloseSpinBox,         "default" : 0.35},
-            "/threshold_front_far_enough"   : {"object" : self.ui.FrontFarEnoughSpinBox,        "default" : 0.5},
-            "/threshold_rear_too_close"     : {"object" : self.ui.RearTooCloseSpinBox,          "default" : 0.2},
-            "/navigation_n_dials"           : {"object" : self.ui.numberDialsSlider,            "default" : 11},
-            "/color_detection_tolerance": {"object" : self.ui.colorDetectionToleranceSpinBox,   "default" : 0.25},
-            "/front_dial_ratio"         : {"object" : self.ui.frontRatioSlider,                 "default" : 0.2},
+            "/threshold_front_too_close"    : {"object" : self.ui.FrontTooCloseSpinBox,             "default" : 0.35},
+            "/threshold_front_far_enough"   : {"object" : self.ui.FrontFarEnoughSpinBox,            "default" : 0.5},
+            "/threshold_rear_too_close"     : {"object" : self.ui.RearTooCloseSpinBox,              "default" : 0.2},
+            "/navigation_n_dials"           : {"object" : self.ui.numberDialsSlider,                "default" : 11},
+            "/color_detection_tolerance"    : {"object" : self.ui.colorDetectionToleranceSpinBox,   "default" : 0.25},
+            "/front_dial_ratio"             : {"object" : self.ui.frontRatioSlider,                 "default" : 0.2},
 
-            "/anti_jumping_filter_range": {"object" : self.ui.antiJumpingSlider,      "default" : 5},
+            "/anti_jumping_filter_range"    : {"object" : self.ui.antiJumpingSlider,                "default" : 5},
+
+            "/maximize_threshold"           : {"object" : self.ui.maximizeThresholdSpinBox,         "default" : 5},
 
         }
 
         self.combobox = {
-            "/navigation_mode"          : {"object" : self.ui.navModeComboBox,          
-                                           "default" : "3Dials_spaced",
-                                           "choices" : [
-                                               "NDials_classic",
-                                               "NDials_division",
-                                               "NDials_pondéré",
-                                               "NDials_pondéréNoDivision"
-                                           ]},
+            "/navigation_mode"              :  {"object" : self.ui.navModeComboBox,          
+                                                "default" : "3Dials_spaced",
+                                                "choices" : [
+                                                    "NDials_classic",
+                                                    "NDials_division",
+                                                    "NDials_pondéré",
+                                                    "NDials_pondéréNoDivision",
+                                                    "NDials_pondéréRelative"
+                                                ]},
 
-            "/navigation_feature"       : {"object" : self.ui.featureDialsComboBox,
-                                           "default" : "mean",
-                                           "choices" : [
-                                               "mean",
-                                               "median",
-                                               "min",
-                                               "q1",
-                                               "q3",
-                                            ]},
+            "/navigation_feature"           :  {"object" : self.ui.featureDialsComboBox,
+                                                "default" : "mean",
+                                                "choices" : [
+                                                    "mean",
+                                                    "median",
+                                                    "min",
+                                                    "q1",
+                                                    "q3",
+                                                    ]},
         }
 
         self.calibrate = {
@@ -95,10 +99,12 @@ class MainWindow(QMainWindow):
         self.msg_alert = Bool()
         self.msg_alert.data = True
 
+        self.initialize_checkboxes()
         self.connect_sliders_and_double_spin_boxes()
 
         self.changement_alert = rospy.Publisher('/param_change_alert', Bool, queue_size = 10)
-
+        self.ui.updateParamPushButton.clicked.connect(self.only_publish)
+        
         self.connect()
         self.set_parameters(first_use = True)
         self.get_params_names()
@@ -121,8 +127,6 @@ class MainWindow(QMainWindow):
 
         for name,info in self.combobox.items() :
             info["object"].currentTextChanged.connect(lambda value, key=name: self.change_param(value,key=key))
-            info["object"].clear()
-            info["object"].addItems(info["choices"])  
 
         for color in self.calibrate:
             for name, info in self.calibrate[color].items() :
@@ -184,33 +188,35 @@ class MainWindow(QMainWindow):
     def set_parameters(self, first_use = False):
         for name,info in self.values.items() :
             if first_use : self.values[name]["default"] = rospy.get_param(name, default = info["default"])
-            rospy.set_param(name, self.values[name]["default"])
+            #rospy.set_param(name, self.values[name]["default"])
             info["object"].setValue(self.values[name]["default"])
 
         for name,info in self.checkbox.items() :
             if first_use : self.checkbox[name]["default"] = rospy.get_param(name, default = info["default"])
-            rospy.set_param(name, self.checkbox[name]["default"])
+            #rospy.set_param(name, self.checkbox[name]["default"])
             info["object"].setChecked(self.checkbox[name]["default"])
 
         for name,info in self.combobox.items() :
             if first_use : self.combobox[name]["default"] = rospy.get_param(name, default = info["default"])
-            rospy.set_param(name, self.combobox[name]["default"])
+            #rospy.set_param(name, self.combobox[name]["default"])
             info["object"].setCurrentText(self.combobox[name]["default"])
+
+    def initialize_checkboxes(self) : 
+        for name,info in self.combobox.items() :
+            info["object"].clear()
+            info["object"].addItems(info["choices"])  
 
     def change_param(self, value, key = None):
         if key in self.checkbox :
             self.checkbox[key]["default"] = value
 
         if key in self.values :
-
-            # Début de code pour empêcher d'avoir un seuil inférieur à l'autre
-            # if key in ["/seuil_FD", "/seuil_FDM"] :
-            #     if self.checkbox["/seuil_FD"]["default"] - self.checkbox["/seuil_FDM"] > - 0.05 :
-            #         self.checkbox["/seuil_FD"]["default"] =
-
             self.values[key]["default"] = value
 
         rospy.set_param(key, value)
+        self.changement_alert.publish(self.msg_alert)
+
+    def only_publish(self, value, key = None):
         self.changement_alert.publish(self.msg_alert)
 
     def load_parameters(self) :
@@ -235,7 +241,6 @@ class MainWindow(QMainWindow):
                 # for key in ["R", "G", "B"] :
                 #     self.set_color_calibration(value = False, color = color, key = key)
                 self.update_spinboxes_calibration(value = False)
-
 
         if "combobox" in to_load :
             for p in to_load["combobox"] :
