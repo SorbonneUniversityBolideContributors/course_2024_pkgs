@@ -92,7 +92,7 @@ In this package, you will find the first nodes in the software architecture of t
     ```
 #### `rviz/` contains the rviz configuration files:
 
-- `rviz_config_reel.rviz`: Used to set rviz configuration for the real robot
+- `rviz_config_real.rviz`: Used to set rviz configuration for the real robot
 
 - `rviz_config_simu.rviz`: Usef to set rviz configuration for the robot in simulation
 
