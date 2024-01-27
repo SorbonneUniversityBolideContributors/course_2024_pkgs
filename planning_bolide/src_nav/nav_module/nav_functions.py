@@ -6,6 +6,10 @@ from control_bolide.msg import SpeedDirection
 from perception_bolide.msg import CameraInfo
 
 
+__author__ = "Eliot CHRISTON and Raphael KHORASSANI and Loris OUMBICHE"
+__status__ = "Development"
+__version__ = "3.0.0"
+
 def get_dials_ranges(lidar_data:LaserScan, n_dials:int=3, proportion:list=None) -> np.ndarray:
     if not(proportion is None) and len(proportion) != n_dials:
         rospy.logwarn("The proportion list must have the same length as the number of dials., Here {} != {}".format(len(proportion), n_dials))
