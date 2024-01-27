@@ -2,7 +2,7 @@
 
 __author__ = "Maxime Chalumeau"
 __email__ = "maxime.chalumeau@etu.sorbonne-universite.fr"
-__status__ = "Development"
+__status__ = "Tested"
 __version__ = "1.2.1"
 
 import rospy

@@ -3,8 +3,6 @@
 
 __author__ = "Clément MIZZI and Loris OUMBICHE"
 __status__ = "Tested"
-__version__ = ""
-__annotations__ = ""
 
 
 import numpy as np

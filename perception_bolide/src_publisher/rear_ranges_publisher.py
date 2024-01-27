@@ -2,7 +2,7 @@
 
 __author__ = "Quentin Rolland"
 __email__ = "quentin.rolland@ensea.fr"
-__status__ = "Development"
+__status__ = "Tested"
 __version__ = "1.0.0"
 
 import rospy

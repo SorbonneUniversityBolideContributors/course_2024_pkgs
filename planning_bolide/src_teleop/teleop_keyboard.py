@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 __author__ = "Eliot CHRISTON"
-__status__ = "Development"
+__status__ = "Tested"
 
 #%% IMPORTS
 import rospy

@@ -2,9 +2,7 @@
 # -*- coding: utf-8 -*-
 
 __author__ = "Raphael KHORASSANI"
-__status__ = ""
-__version__ = ""
-__annotations__ = ""
+__status__ = "Development"
 
 import numpy as np
 import cv2

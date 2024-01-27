@@ -2,9 +2,6 @@
 # -*- coding: utf-8 -*-
 
 __author__ = "Raphael KHORASSANI"
-__status__ = ""
-__version__ = ""
-__annotations__ = ""
 
 import numpy as np
 import os

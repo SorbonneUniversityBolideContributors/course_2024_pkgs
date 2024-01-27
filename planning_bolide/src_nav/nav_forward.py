@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 __author__ = "Loris OUMBICHE and Raphael KHORASSANI"
-__status__ = "Development"
+__status__ = "Tested"
 __version__ = "3.0.0"
 
 

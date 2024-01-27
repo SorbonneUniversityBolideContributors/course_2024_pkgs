@@ -6,6 +6,7 @@ __status__ = "Development"
 __version__ = "2.0.0"
 __annotations__ = "Based on Raphael K.'s work"
 
+
 import numpy as np
 import cv2
 import rospy

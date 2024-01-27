@@ -2,8 +2,8 @@
 # -*- coding: utf-8 -*-
 
 __author__ = "Raphael KHORASSANI and Eliot CHRISTON and Loris OUMBICHE"
-__status__ = "Development"
-__version__ = "3.2.1"
+__status__ = "Tested"
+__version__ = "3.2.3"
 __annotations__ = "Based on Maxime C.'s work"
 
 
