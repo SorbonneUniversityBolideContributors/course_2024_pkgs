@@ -234,9 +234,9 @@ class MainWindow(QMainWindow):
                 self.values[p]["default"] = to_load["values"][p]
 
         if "calibration" in to_load :
-            calibration_color = to_load["calibration"]
+            calibrate_color = to_load["calibration"]
             for color in ["red", "green"]:
-                rospy.set_param(f"/{color}_RGB", calibration_color[color])
+                rospy.set_param(f"/{color}_RGB", calibrate_color[color])
                 self.color_to_set = color
                 # for key in ["R", "G", "B"] :
                 #     self.set_color_calibration(value = False, color = color, key = key)

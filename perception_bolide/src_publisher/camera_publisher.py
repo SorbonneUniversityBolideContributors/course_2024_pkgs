@@ -12,7 +12,7 @@ import cv2
 from sensor_msgs.msg import Image as SensorImage
 from std_msgs.msg import Bool
 
-class CamPub :
+class CameraPublisher :
 
 	def __init__(self, w, h, fr) :
 		# Initialize camera parameters
@@ -77,6 +77,6 @@ if __name__ == "__main__" :
 	height = rospy.get_param("image_height", default=128)
 	framerate = rospy.get_param("frame_rate", default=20)
 
-	# Initialize and run CamPub
-	cam_pub = CamPub(width, height, framerate)
+	# Initialize and run CameraPublisher
+	cam_pub = CameraPublisher(width, height, framerate)
 	cam_pub.publish_scan()

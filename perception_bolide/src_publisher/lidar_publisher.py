@@ -12,7 +12,7 @@ import time
 import threading
 from numpy import pi
 
-class LidarController:
+class LidarPublisher:
 
     def __init__(self):
         # Initialize the ROS node
@@ -132,8 +132,8 @@ class LidarController:
 
 if __name__ == '__main__':
     try:
-        # Create a LidarController and start it
-        lidarcontrol = LidarController()
+        # Create a LidarPublisher and start it
+        lidarcontrol = LidarPublisher()
     except rospy.ROSInterruptException:
         # If a ROSInterruptException occurs, exit the program
         exit(0)

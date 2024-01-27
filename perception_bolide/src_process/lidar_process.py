@@ -14,14 +14,14 @@ import rospy
 from sensor_msgs.msg import LaserScan
 from std_msgs.msg import Bool
 
-#%% ProcessLidarData class
-class ProcessLidarData:
+#%% LidarProcess class
+class LidarProcess:
     """Class used to process the lidar data and publish it on a new topic"""
 
     def __init__(self):
         # Initialize the ROS node
         rospy.loginfo("[INFO] -- Initializing the lidar process data node")
-        rospy.init_node('lidar_process_data_node')
+        rospy.init_node('lidar_process')
 
         # Store last arrays containing lidar data
         self.last_values = []
@@ -187,8 +187,8 @@ class ProcessLidarData:
 #%% Main
 if __name__ == '__main__':
     try:
-        # Create a ProcessLidarData and start it
-        lidarprocess = ProcessLidarData()
+        # Create a LidarProcess and start it
+        lidarprocess = LidarProcess()
     except rospy.ROSInterruptException:
         # If a ROSInterruptException occurs, exit the program
         exit(0)

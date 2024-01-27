@@ -22,7 +22,7 @@ This packages is in between the perception and the control. It is responsible fo
 
 #### `src_nav/` contains the source code for the navigation nodes and the teleoperation nodes:
 
-- `nav_lidar.py`: TODO
+- `nav_forward.py`: TODO
 - `nav_3states.py`: TODO. (For architecture details please refer to the [SM_architecture.pdf](documentation/SM_architecture.pdf) file). 
 
 #### `src_teleop/` contains the source code for the teleoperation nodes:

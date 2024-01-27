@@ -17,9 +17,9 @@ from matplotlib.animation import FuncAnimation
 from sensor_msgs.msg import LaserScan 
 from std_msgs.msg import Bool
 
-#%% Plot class
+#%% LidarVizu class
 
-class Plot:
+class LidarVizu:
 	"""Class used to plot the lidar data"""
 
 	def __init__(self, rmax:int=7): 
@@ -83,7 +83,7 @@ class Plot:
 			
 #%% LISTENER FUNCTION
 	
-def listener(plot:Plot, host:str=''):
+def listener(plot:LidarVizu, host:str=''):
 	"""Listen to the lidar data and plot it"""
 	rospy.Subscriber("raw_lidar_data", LaserScan, plot.callback_raw_data)
 	rospy.Subscriber("lidar_data", LaserScan, plot.callback_processed_data)
@@ -97,7 +97,7 @@ if __name__ == '__main__':
 
 	rospy.init_node('lidar_vizu', anonymous = True)
 	
-	my_plot = Plot() 
+	my_plot = LidarVizu() 
 	
 	my_animation = FuncAnimation(my_plot.fig, my_plot.update_plot, init_func = my_plot.initPlot)
 

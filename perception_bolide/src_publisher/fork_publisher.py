@@ -16,7 +16,7 @@ class Optical_Fork:
         rospy.init_node('fork_publisher')
 
         # SUBSCRIBER ========================================
-        rospy.Subscriber("STM32_sensors_topic", Float32MultiArray, self.callback)
+        rospy.Subscriber("stm32_sensors", Float32MultiArray, self.callback)
         # PUBLISHER =========================================
         self.pub = rospy.Publisher('raw_fork_data', ForkSpeed, queue_size=10)
 

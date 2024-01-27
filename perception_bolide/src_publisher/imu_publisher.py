@@ -9,14 +9,14 @@ import rospy
 from std_msgs.msg import Float32MultiArray
 from sensor_msgs.msg import Imu
 
-class IMU_data:
+class ImuPublisher:
 
     def __init__(self):
         # Initialize the ROS node
         rospy.init_node('imu_publisher')
 
         # SUBSCRIBER ========================================
-        rospy.Subscriber("STM32_sensors_topic", Float32MultiArray, self.callback)
+        rospy.Subscriber("stm32_sensors", Float32MultiArray, self.callback)
         # PUBLISHER =========================================
         self.pub = rospy.Publisher('raw_imu_data', Imu, queue_size=10)
 
@@ -43,7 +43,7 @@ class IMU_data:
 if __name__ == '__main__':
     try:
         # Create an Optical_Fork and start it
-        imu_raw = IMU_data()
+        imu_raw = ImuPublisher()
     except rospy.ROSInterruptException:
         # If a ROSInterruptException occurs, exit the program
         exit(0)

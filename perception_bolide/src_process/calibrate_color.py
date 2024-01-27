@@ -58,5 +58,5 @@ class DetectColor:
         
         self.subscriber.unregister()
 
-rospy.init_node("calibration_color", anonymous = False)
+rospy.init_node("calibrate_color", anonymous = False)
 detect_color = DetectColor()

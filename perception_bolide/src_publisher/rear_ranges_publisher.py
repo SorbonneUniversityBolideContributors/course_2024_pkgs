@@ -10,14 +10,14 @@ from sensor_msgs.msg import Range
 from perception_bolide.msg import MultipleRange
 from std_msgs.msg import Float32MultiArray
 
-class RearSensors:
+class RearSensorsPublisher:
 
     def __init__(self):
         # Initialize the ROS node
-        rospy.init_node('rear_sensor_publisher')
+        rospy.init_node('rear_ranges_publisher')
 
         # SUBSCRIBER ========================================
-        rospy.Subscriber("STM32_sensors_topic", Float32MultiArray, self.callback)
+        rospy.Subscriber("stm32_sensors", Float32MultiArray, self.callback)
         # PUBLISHER =========================================
         self.pub = rospy.Publisher('raw_rear_range_data', MultipleRange, queue_size=10)
 
@@ -112,7 +112,7 @@ class RearSensors:
 if __name__ == '__main__':
     try:
         # Create a RearSenors and start it
-        Rear_data = RearSensors()
+        Rear_data = RearSensorsPublisher()
     except rospy.ROSInterruptException:
         # If a ROSInterruptException occurs, exit the program
         exit(0)

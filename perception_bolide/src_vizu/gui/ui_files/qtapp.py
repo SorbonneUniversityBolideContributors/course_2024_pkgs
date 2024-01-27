@@ -849,7 +849,7 @@ class Ui_MainWindow(object):
         self.label_48.setText(QCoreApplication.translate("MainWindow", u"Tolerance", None))
         self.toolBox.setItemText(self.toolBox.indexOf(self.page_2), QCoreApplication.translate("MainWindow", u"Camera", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), QCoreApplication.translate("MainWindow", u"Perception", None))
-        self.label_36.setText(QCoreApplication.translate("MainWindow", u"Mode", None))
+        self.label_36.setText(QCoreApplication.translate("MainWindow", u"mode", None))
         self.spacedDialsCheckBox.setText(QCoreApplication.translate("MainWindow", u"Use spaced left/right dials ?", None))
         self.label_38.setText(QCoreApplication.translate("MainWindow", u"Front Ratio", None))
         self.label_17.setText("")

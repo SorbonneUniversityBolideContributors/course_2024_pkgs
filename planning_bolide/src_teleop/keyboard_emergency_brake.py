@@ -9,7 +9,7 @@ import sys
 from std_msgs.msg import Bool
 from pynput.keyboard import Key, Listener  #used for reading the keyboard
 
-class Keyboard_ctrl():
+class KeyboardControl():
     def __init__(self):
         self.pub = rospy.Publisher("emergency_brake", Bool, queue_size=1)
         self.space_pressed = False
@@ -32,12 +32,12 @@ class Keyboard_ctrl():
             self.last_space_pressed = self.space_pressed
 
 
-def register_keyboard_listener(s: Keyboard_ctrl): 
+def register_keyboard_listener(s: KeyboardControl): 
     listener = Listener(on_press=s.on_press)  # Register the listener to the keyboard
     listener.start()
     return listener
     
-def listener_keyboard(s: Keyboard_ctrl):
+def listener_keyboard(s: KeyboardControl):
     rate = rospy.Rate(10)  # Adjust the rate as needed
     listener = register_keyboard_listener(s)
 
@@ -50,7 +50,7 @@ def listener_keyboard(s: Keyboard_ctrl):
 
 if __name__ == '__main__':
     rospy.init_node('keyboard_emergency_brake')
-    s = Keyboard_ctrl()
+    s = KeyboardControl()
 
     try:
         listener_keyboard(s)
