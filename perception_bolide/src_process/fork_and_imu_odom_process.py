@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__ = "Clément Mizzi and Loris Oumbiche"
+__author__ = "Clément MIZZI and Loris OUMBICHE"
 __status__ = "Tested"
 __version__ = ""
 __annotations__ = ""

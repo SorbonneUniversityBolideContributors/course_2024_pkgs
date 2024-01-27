@@ -31,7 +31,8 @@ class IMU_data:
         imu_data.linear_acceleration.x = data.data[1] # x acceleration
 
         # Process IMU data
-        imu_data.orientation.z = imu_data.orientation.z/900 # conversion in radian
+        #The real angles are given in a clockwise way but in anticlockwise way in the simulation 
+        imu_data.orientation.z = imu_data.orientation.z/900 # conversion in radian 
         imu_data.linear_acceleration.x = imu_data.linear_acceleration.x/100 # conversion en m/s^2
 
 
