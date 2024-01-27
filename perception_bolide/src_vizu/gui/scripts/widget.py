@@ -104,7 +104,7 @@ class MainWindow(QMainWindow):
 
         self.changement_alert = rospy.Publisher('/param_change_alert', Bool, queue_size = 10)
         self.ui.updateParamPushButton.clicked.connect(self.only_publish)
-        
+
         self.connect()
         self.set_parameters(first_use = True)
         self.get_params_names()
@@ -216,7 +216,7 @@ class MainWindow(QMainWindow):
         rospy.set_param(key, value)
         self.changement_alert.publish(self.msg_alert)
 
-    def only_publish(self, value, key = None):
+    def only_publish(self):
         self.changement_alert.publish(self.msg_alert)
 
     def load_parameters(self) :
