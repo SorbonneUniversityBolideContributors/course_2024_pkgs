@@ -171,8 +171,8 @@ class NavSensors():
             is_spaced=self.nav_is_spaced,
             navigation_feature=self.nav_features[self.nav_feature_choice],
             FrontRatio = self.front_dial_ratio,
-            use_maximise_threshold = self.use_maximise_threshold,
-            maximise_threshold = self.maximise_threshold
+            use_maximise_threshold = self.use_maximize_threshold,
+            maximise_threshold = self.maximize_threshold
         )
 
     def backward_state(self):
