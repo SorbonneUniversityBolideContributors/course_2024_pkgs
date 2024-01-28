@@ -231,7 +231,7 @@ class MainWindow(QMainWindow):
         
         if key in self.combobox :
             self.combobox[key]["default"] = value
-            print(self.combobox[key]["default"])
+            print("gig"+self.combobox[key]["default"])
 
         rospy.set_param(key, value)
         self.changement_alert.publish(self.msg_alert)
