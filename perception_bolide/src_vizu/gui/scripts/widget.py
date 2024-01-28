@@ -77,13 +77,13 @@ class MainWindow(QMainWindow):
 
         self.combobox = {
             "/navigation_mode"              :  {"object" : self.ui.navModeComboBox,          
-                                                "default" : "NDials_classic",
+                                                "default" : "NDials_Classic",
                                                 "choices" : [
-                                                    "NDials_classic",
-                                                    "NDials_division",
-                                                    "NDials_pondéré",
-                                                    "NDials_pondéréNoDivision",
-                                                    "NDials_pondéréRelative"
+                                                    "NDials_Classic",
+                                                    "NDials_LeftRightDivision",
+                                                    "NDials_Ponderated",
+                                                    "NDials_PonderatedWithoutDistanceDivision",
+                                                    "NDials_PonderatedRelative"
                                                 ]},
 
             "/navigation_feature"           :  {"object" : self.ui.featureDialsComboBox,
@@ -259,7 +259,6 @@ class MainWindow(QMainWindow):
                 self.update_spinboxes_calibration(value = False)
 
         if "combobox" in to_load :
-            print(to_load["combobox"])
             for p in to_load["combobox"] :
                 self.combobox[p]["default"] = to_load["combobox"][p]
 

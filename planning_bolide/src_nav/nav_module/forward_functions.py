@@ -75,20 +75,20 @@ def forward_n_dials(lidar_data:LaserScan, Kspeed:float, Kdir:float, Karg:float, 
 
     # Compute the direction command
 
-    if mode == "classic" :
+    if mode == "Classic" :
         dir_cmd = - Kdir * (dist_right - dist_left) / dist_center + Karg * arg
 
-    elif mode == "pondéré" :
+    elif mode == "Ponderated" :
         dir_cmd = (- Kdir * (dist_right - dist_left) / dist_center + Karg * arg) / (Kdir + Karg)
 
-    elif mode == "division" : 
+    elif mode == "LeftRightDivision" : 
         dir_cmd = - dist_right/dist_left - 1 if dist_right > dist_left else dist_left/dist_right - 1
         dir_cmd = (Kdir * dir_cmd / dist_center + Karg * arg) / (Kdir + Karg)
 
-    elif mode == "pondéréNoDivision":
+    elif mode == "PonderatedWithoutDistanceDivision":
         dir_cmd = (- Kdir * (dist_right - dist_left)  + Karg * arg) / (Kdir + Karg)
 
-    elif mode == "pondéréRelative":
+    elif mode == "PonderatedRelative":
         dir_cmd = (- Kdir * (dist_right - dist_left)  + Karg * arg) / (Kdir + Karg)**0.3
 
     else :
