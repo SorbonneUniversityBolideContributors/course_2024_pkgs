@@ -283,7 +283,8 @@ class MainWindow(QMainWindow):
         red_calibration = rospy.get_param("/red_RGB", default = [0]*3)
         green_calibration = rospy.get_param("/green_RGB", default = [0]*3)
         comboboxes_default = {key: value["default"] for key, value in self.combobox.items()}
-
+        print(comboboxes_default)
+        
         to_save = {
             "checkbox"      : checkbox_defaults,
             "values"        : values_defaults,
