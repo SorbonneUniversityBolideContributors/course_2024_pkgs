@@ -204,17 +204,16 @@ class MainWindow(QMainWindow):
 
     def set_parameters(self, first_use = False):
         for name,info in self.values.items() :
-            self.values[name]["default"] = rospy.get_param(name, default = info["default"])
+            if first_use : self.values[name]["default"] = rospy.get_param(name, default = info["default"])
             info["object"].setValue(self.values[name]["default"])
 
         for name,info in self.checkbox.items() :
-            self.checkbox[name]["default"] = rospy.get_param(name, default = info["default"])
+            if first_use : self.checkbox[name]["default"] = rospy.get_param(name, default = info["default"])
             info["object"].setChecked(self.checkbox[name]["default"])
 
         for name,info in self.combobox.items() :
-            self.combobox[name]["default"] = rospy.get_param(name, default = info["default"])
+            if first_use : self.combobox[name]["default"] = rospy.get_param(name, default = info["default"])
             info["object"].setCurrentText(self.combobox[name]["default"])
-            print(self.combobox[name]["default"])
 
     def initialize_comboboxes(self) : 
         for name,info in self.combobox.items() :
@@ -263,9 +262,7 @@ class MainWindow(QMainWindow):
         if "combobox" in to_load :
             for p in to_load["combobox"] :
                 self.combobox[p]["default"] = to_load["combobox"][p]
-                print("p" + self.combobox[p]["default"])
-                print("a" + to_load["combobox"][p])
-
+                # self.combobox[p]["object"].setCurrentText(self.combobox[p]["default"])
 
         self.set_parameters()
 
