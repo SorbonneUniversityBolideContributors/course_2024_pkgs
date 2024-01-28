@@ -221,11 +221,15 @@ class MainWindow(QMainWindow):
             info["object"].addItems(info["choices"])  
 
     def change_param(self, value, key = None):
+
         if key in self.checkbox :
             self.checkbox[key]["default"] = value
 
         if key in self.values :
             self.values[key]["default"] = value
+        
+        if key in self.combobox :
+            self.combobox[key]["default"] = value
 
         rospy.set_param(key, value)
         self.changement_alert.publish(self.msg_alert)
@@ -252,8 +256,6 @@ class MainWindow(QMainWindow):
             for color in ["red", "green"]:
                 rospy.set_param(f"/{color}_RGB", calibrate_color[color])
                 self.color_to_set = color
-                # for key in ["R", "G", "B"] :
-                #     self.set_color_calibration(value = False, color = color, key = key)
                 self.update_spinboxes_calibration(value = False)
 
         if "combobox" in to_load :
