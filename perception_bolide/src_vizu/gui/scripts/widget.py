@@ -180,32 +180,53 @@ class MainWindow(QMainWindow):
 
 
     def connect_sliders_and_double_spin_boxes(self) :
-        self.ui.lidarDisplayLimSlider.valueChanged.connect(lambda value: self.ui.lidarDisplayLimSpinBox.setValue(value /1000))
-        self.ui.lidarDisplayLimSpinBox.valueChanged.connect(lambda value: self.ui.lidarDisplayLimSlider.setValue(int(value *1000)))
+        pairs = {
+            1000 : [
+                [self.ui.lidarDisplayLimSlider, self.ui.lidarDisplayLimSpinBox]
+            ],
+            100 : [
+                [self.ui.gainVitesseSlider, self.ui.gainVitesseSpinBox],
+                [self.ui.gainDirectionSlider, self.ui.gainDirectionSpinBox],
+                [self.ui.gainDirectionArgMaxSlider, self.ui.gainDirectionArgMaxSpinBox],
+                [self.ui.FrontFarEnoughSlider, self.ui.FrontFarEnoughSpinBox],
+                [self.ui.FrontTooCloseSlider, self.ui.FrontTooCloseSpinBox],
+                [self.ui.RearTooCloseSlider, self.ui.RearTooCloseSpinBox],
+                [self.ui.frontRatioSlider, self.ui.frontRatioSpinBox],
+                [self.ui.colorDetectionToleranceSlider, self.ui.colorDetectionToleranceSpinBox]
+            ],
+        }
 
-        self.ui.gainVitesseSlider.valueChanged.connect(lambda value: self.ui.gainVitesseSpinBox.setValue(value /100))
-        self.ui.gainVitesseSpinBox.valueChanged.connect(lambda value: self.ui.gainVitesseSlider.setValue(int(value *100)))
+        for factor, widgets in pairs.items():
+            for slider, spinbox in widgets:
+                slider.valueChanged.connect(lambda value, spinbox=spinbox: spinbox.setValue(value / factor))
+                spinbox.valueChanged.connect(lambda value, slider=slider: slider.setValue(int(value * factor)))
+
+        # self.ui.lidarDisplayLimSlider.valueChanged.connect(lambda value: self.ui.lidarDisplayLimSpinBox.setValue(value /1000))
+        # self.ui.lidarDisplayLimSpinBox.valueChanged.connect(lambda value: self.ui.lidarDisplayLimSlider.setValue(int(value *1000)))
+
+        # self.ui.gainVitesseSlider.valueChanged.connect(lambda value: self.ui.gainVitesseSpinBox.setValue(value /100))
+        # self.ui.gainVitesseSpinBox.valueChanged.connect(lambda value: self.ui.gainVitesseSlider.setValue(int(value *100)))
         
-        self.ui.gainDirectionSlider.valueChanged.connect(lambda value: self.ui.gainDirectionSpinBox.setValue(value /100))
-        self.ui.gainDirectionSpinBox.valueChanged.connect(lambda value: self.ui.gainDirectionSlider.setValue(int(value *100)))
+        # self.ui.gainDirectionSlider.valueChanged.connect(lambda value: self.ui.gainDirectionSpinBox.setValue(value /100))
+        # self.ui.gainDirectionSpinBox.valueChanged.connect(lambda value: self.ui.gainDirectionSlider.setValue(int(value *100)))
 
-        self.ui.gainDirectionArgMaxSlider.valueChanged.connect(lambda value: self.ui.gainDirectionArgMaxSpinBox.setValue(value /100))
-        self.ui.gainDirectionArgMaxSpinBox.valueChanged.connect(lambda value: self.ui.gainDirectionArgMaxSlider.setValue(int(value *100)))
+        # self.ui.gainDirectionArgMaxSlider.valueChanged.connect(lambda value: self.ui.gainDirectionArgMaxSpinBox.setValue(value /100))
+        # self.ui.gainDirectionArgMaxSpinBox.valueChanged.connect(lambda value: self.ui.gainDirectionArgMaxSlider.setValue(int(value *100)))
 
-        self.ui.FrontFarEnoughSlider.valueChanged.connect(lambda value: self.ui.FrontFarEnoughSpinBox.setValue(value /100))
-        self.ui.FrontFarEnoughSpinBox.valueChanged.connect(lambda value: self.ui.FrontFarEnoughSlider.setValue(int(value *100)))
+        # self.ui.FrontFarEnoughSlider.valueChanged.connect(lambda value: self.ui.FrontFarEnoughSpinBox.setValue(value /100))
+        # self.ui.FrontFarEnoughSpinBox.valueChanged.connect(lambda value: self.ui.FrontFarEnoughSlider.setValue(int(value *100)))
 
-        self.ui.FrontTooCloseSlider.valueChanged.connect(lambda value: self.ui.FrontTooCloseSpinBox.setValue(value /100))
-        self.ui.FrontTooCloseSpinBox.valueChanged.connect(lambda value: self.ui.FrontTooCloseSlider.setValue(int(value *100)))
+        # self.ui.FrontTooCloseSlider.valueChanged.connect(lambda value: self.ui.FrontTooCloseSpinBox.setValue(value /100))
+        # self.ui.FrontTooCloseSpinBox.valueChanged.connect(lambda value: self.ui.FrontTooCloseSlider.setValue(int(value *100)))
 
-        self.ui.RearTooCloseSlider.valueChanged.connect(lambda value: self.ui.RearTooCloseSpinBox.setValue(value /100))
-        self.ui.RearTooCloseSpinBox.valueChanged.connect(lambda value: self.ui.RearTooCloseSlider.setValue(int(value *100)))
+        # self.ui.RearTooCloseSlider.valueChanged.connect(lambda value: self.ui.RearTooCloseSpinBox.setValue(value /100))
+        # self.ui.RearTooCloseSpinBox.valueChanged.connect(lambda value: self.ui.RearTooCloseSlider.setValue(int(value *100)))
 
-        self.ui.frontRatioSlider.valueChanged.connect(lambda value: self.ui.frontRatioSpinBox.setValue(value /100))
-        self.ui.frontRatioSpinBox.valueChanged.connect(lambda value: self.ui.frontRatioSlider.setValue(int(value *100)))
+        # self.ui.frontRatioSlider.valueChanged.connect(lambda value: self.ui.frontRatioSpinBox.setValue(value /100))
+        # self.ui.frontRatioSpinBox.valueChanged.connect(lambda value: self.ui.frontRatioSlider.setValue(int(value *100)))
 
-        self.ui.colorDetectionToleranceSlider.valueChanged.connect(lambda value: self.ui.colorDetectionToleranceSpinBox.setValue(value /100))
-        self.ui.colorDetectionToleranceSpinBox.valueChanged.connect(lambda value: self.ui.colorDetectionToleranceSlider.setValue(int(value *100)))
+        # self.ui.colorDetectionToleranceSlider.valueChanged.connect(lambda value: self.ui.colorDetectionToleranceSpinBox.setValue(value /100))
+        # self.ui.colorDetectionToleranceSpinBox.valueChanged.connect(lambda value: self.ui.colorDetectionToleranceSlider.setValue(int(value *100)))
 
     def set_parameters(self, first_use = False):
         for name,info in self.values.items() :
