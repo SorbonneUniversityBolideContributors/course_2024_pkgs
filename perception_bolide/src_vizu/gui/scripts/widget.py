@@ -9,14 +9,13 @@ import numpy as np
 import rospy
 import subprocess
 
-from ui_files.qtapp import Ui_MainWindow    # Correspond à la fenêtre principale du GUI
+from ui_files.qtapp import Ui_MainWindow  
 from std_msgs.msg import Bool
-# from scripts.calibrate_color import DetectColor
-import pickle   # Permet de sauvegarder les paramètres et les charger
+import pickle   # Module used to save parameters and to load them
 
 from PySide6.QtWidgets import QMainWindow, QInputDialog, QMessageBox
 
-import sys
+# MainWindow is the main class, that we'll be imported and run in the main_gui.py node.
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -24,7 +23,21 @@ class MainWindow(QMainWindow):
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
 
+        # The directory will be used to load and save the parameters.
         self.dir = os.path.realpath(__file__).replace("/scripts/widget.py","")
+
+        # We define one dictionary for each type of object : 
+        #   - self.checkbox groups all check boxes, which returns a bool value (is ticked or not)
+        #   - self.values groups all objects that have a numeric value (int and float)
+        #   - self.combobox groups all combo boxes
+        #   - self.calibrate groups all objects used for calibration. Note that their type is int, but we decided to not place them in self.values dict.
+        
+        # Here is how it works : 
+        #   - We define a rosparam and choose whatever name we want
+        #   - For each param, we define two things : 
+        #       - What is the corresponding QObject in the key "object"
+        #       - What is the default value in the key "default"
+        #   - For comboboxes, we also define what are the different options in the key "choices"
 
         self.checkbox = {
             "/temporal_filter_bool"         : {"object" : self.ui.temporalFilterCheckBox,           "default" : False},
@@ -96,23 +109,32 @@ class MainWindow(QMainWindow):
                 "B"  : {"object" : self.ui.BgreenCalibrationSpinBox, "default" : 0},
             }
         }
+
+        # We create a publisher on the topic /param_change_alert.
+        # As we don't want nodes to check everytime if the params are changed, we decided to create this topic so that the nodes do a rospy.get_param 
+        # only when a parameter is changed in the GUI. We chose arbitrarely a Bool message, we just want to publish the simplest message, it's value doesn't matter
         self.msg_alert = Bool()
         self.msg_alert.data = True
-
-        self.initialize_checkboxes()
-        self.connect_sliders_and_double_spin_boxes()
-
         self.changement_alert = rospy.Publisher('/param_change_alert', Bool, queue_size = 10)
+
+
+        self.initialize_comboboxes()                    # This function fills the comboboxes with the different choices
+        self.connect_sliders_and_double_spin_boxes()    # As sliders are integers, if we want to connect a slider with a double spin box which type is float, we have to do a conversion between integers and floats (integers represents percentages for instance)
+
+        # This push button allows to publish a msg on the topic /param_change_alert so that if we change a rosparam in the terminal, we can send a request for all nodes to check the parameters.
         self.ui.updateParamPushButton.clicked.connect(self.only_publish)
 
-        self.connect()
-        self.set_parameters(first_use = True)
+        self.connect()                                  # This is the main method that changes a rosparam to the value selected on it's corresponding QObject
+        self.set_parameters(first_use = True)           # This method set all the parameters to the default values defined in the dictionnaries
         self.get_params_names()
 
-        self.ui.loadParamPushButton.clicked.connect(self.load_parameters)
+        # We connect the Load and Save buttons to the corresponding methods.
+        self.ui.loadParamPushButton.clicked.connect(self.load_parameters)   
         self.ui.saveParamPushButton.clicked.connect(self.save_parameters)
 
+        # We create a publisher that sends a request for an auto calibration.
         self.init_calibration = rospy.Publisher("/do_an_auto_calibration", Bool, queue_size = 10)
+        # We connect the buttons to do an auto calibration for red walls and green walls
         self.ui.redAutoCalibrationPushButton.clicked.connect(lambda : self.auto_calibration(color = "red"))
         self.ui.greenAutoCalibrationPushButton.clicked.connect(lambda : self.auto_calibration(color = "green"))
 
@@ -201,7 +223,7 @@ class MainWindow(QMainWindow):
             #rospy.set_param(name, self.combobox[name]["default"])
             info["object"].setCurrentText(self.combobox[name]["default"])
 
-    def initialize_checkboxes(self) : 
+    def initialize_comboboxes(self) : 
         for name,info in self.combobox.items() :
             info["object"].clear()
             info["object"].addItems(info["choices"])  
