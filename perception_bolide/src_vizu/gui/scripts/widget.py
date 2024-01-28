@@ -230,8 +230,8 @@ class MainWindow(QMainWindow):
             self.values[key]["default"] = value
         
         if key in self.combobox :
-            print(key)
             self.combobox[key]["default"] = value
+            print(self.combobox[key]["default"])
 
         rospy.set_param(key, value)
         self.changement_alert.publish(self.msg_alert)
@@ -263,7 +263,7 @@ class MainWindow(QMainWindow):
         if "combobox" in to_load :
             for p in to_load["combobox"] :
                 self.combobox[p]["default"] = to_load["combobox"][p]
-                print("p" + p)
+                print("p" + self.combobox[p]["default"])
 
 
         self.set_parameters()
