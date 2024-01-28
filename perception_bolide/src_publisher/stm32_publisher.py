@@ -2,7 +2,7 @@
 
 __author__ = "Quentin Rolland"
 __email__ = "quentin.rolland@ensea.fr"
-__status__ = "Development"
+__status__ = "Tested"
 __version__ = "1.0.0"
 
 import rospy
@@ -10,11 +10,11 @@ import spidev
 from std_msgs.msg import Float32MultiArray
 
 
-class STM32_data_receiver:
+class STM32DataReceiver:
 
     def __init__(self):
         # Initialize the ROS node
-        rospy.init_node('STM32_sensors_pub')
+        rospy.init_node('stm32_publisher')
 
         # variables
         self.sensor_data = Float32MultiArray() # table for the sensors data
@@ -27,7 +27,7 @@ class STM32_data_receiver:
         self.spi.mode = 0
         self.spi.max_speed_hz = 500000  # Définir la vitesse maximale du bus SPI à 500 kHz
 
-        self.pub = rospy.Publisher('STM32_sensors_topic', Float32MultiArray, queue_size=10)
+        self.pub = rospy.Publisher('stm32_sensors', Float32MultiArray, queue_size=10)
         self.watchdog_timer = rospy.Timer(rospy.Duration(0.3), self.receiveSensorData)
         rospy.spin()
 
@@ -48,8 +48,8 @@ class STM32_data_receiver:
         
 if __name__ == '__main__':
     try:
-        # Create a STM32_data_receiver and start it
-        STM32_data = STM32_data_receiver()
+        # Create a STM32DataReceiver and start it
+        STM32_data = STM32DataReceiver()
     except rospy.ROSInterruptException:
         # If a ROSInterruptException occurs, exit the program
         exit(0)

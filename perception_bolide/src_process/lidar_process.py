@@ -14,14 +14,14 @@ import rospy
 from sensor_msgs.msg import LaserScan
 from std_msgs.msg import Bool
 
-#%% ProcessLidarData class
-class ProcessLidarData:
+#%% LidarProcess class
+class LidarProcess:
     """Class used to process the lidar data and publish it on a new topic"""
 
     def __init__(self):
         # Initialize the ROS node
         rospy.loginfo("[INFO] -- Initializing the lidar process data node")
-        rospy.init_node('lidar_process_data_node')
+        rospy.init_node('lidar_process')
 
         # Store last arrays containing lidar data
         self.last_values = []
@@ -42,10 +42,12 @@ class ProcessLidarData:
     def get_parameters(self):
 
         # Set the filter parameters
-        self.temporal_filter        = rospy.get_param('/temporal_filter_bool', default = True)
-        self.spatial_filter         = rospy.get_param('/spatial_filter_bool', default = False)
-        self.spatial_filter_range   = rospy.get_param('/spatial_filter_range', default = 1)
-        self.temporal_filter_range  = rospy.get_param('/temporal_filter_range', default = 5)
+        self.temporal_filter           = rospy.get_param('/temporal_filter_bool'    , default = False)
+        self.spatial_filter            = rospy.get_param('/spatial_filter_bool'     , default = False)
+        self.anti_jumping_filter       = rospy.get_param('/anti_jumping_filter_bool', default = False)
+        self.spatial_filter_range      = rospy.get_param('/spatial_filter_range'    , default = 1)
+        self.temporal_filter_range     = rospy.get_param('/temporal_filter_range'   , default = 5)
+        self.anti_jumping_filter_range = rospy.get_param('/anti_jumping_filter_range', default = 5)
 
         # all the following parameters could be set in the launch file
         self.min_angle_deg          = rospy.get_param("/lidar_min_angle_deg", -90) # in degrees
@@ -161,6 +163,21 @@ class ProcessLidarData:
 
             # Replace the original data array with the median of the last values
             data_array = np.median(data_array, axis = 0)
+        
+        if self.anti_jumping_filter :
+            # Anti-jumping filter to prevent unexpected jumps in the lidar data:
+            # For each null value in the data array, replace it with the median of the values around it (non-null values) (around in a temporal sense)
+            
+            # Add the current data array to the list of last values
+            self.last_values += [data_array]
+
+            # If the list of last values is longer than the temporal filter range, remove the oldest values
+            while len(self.last_values) > self.temporal_filter_range : self.last_values.pop(0)
+
+            # where the data array is null, replace it with the previous non-null value (t-1)
+            if len(self.last_values) > 1 :
+                data_array[data_array == 0] = self.last_values[-2][data_array == 0]
+                
 
         # Return the filtered data array as a list
         return list(data_array)
@@ -170,8 +187,8 @@ class ProcessLidarData:
 #%% Main
 if __name__ == '__main__':
     try:
-        # Create a ProcessLidarData and start it
-        lidarprocess = ProcessLidarData()
+        # Create a LidarProcess and start it
+        lidarprocess = LidarProcess()
     except rospy.ROSInterruptException:
         # If a ROSInterruptException occurs, exit the program
         exit(0)

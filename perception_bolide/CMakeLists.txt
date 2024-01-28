@@ -170,15 +170,17 @@ include_directories(
 ## Mark executable scripts (Python etc.) for installation
 ## in contrast to setup.py, you can choose the destination
 catkin_install_python(PROGRAMS
-  src_publisher/lidar_publisher.py
-  src_publisher/cam_publisher.py
-  src_vizu/lidar_vizu.py
-  src_process/lidar_process.py
+  src_process/calibrate_color.py
   src_process/camera_info.py
-  src_publisher/STM32_sensors_pub.py
+  src_process/lidar_process.py
+  src_process/odom_fork_imu.py
+  src_publisher/camera_publisher.py
+  src_publisher/fork_publisher.py
   src_publisher/imu_publisher.py
-  src_publisher/fork_data_publisher.py
-  src_publisher/rear_sensor_publisher.py
+  src_publisher/lidar_publisher.py
+  src_publisher/rear_ranges_publisher.py
+  src_publisher/stm32_publisher.py
+  src_vizu/lidar_vizu.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 

@@ -22,13 +22,12 @@ This packages is in between the perception and the control. It is responsible fo
 
 #### `src_nav/` contains the source code for the navigation nodes and the teleoperation nodes:
 
-- `nav_lidar_argmax.py`: TODO
-- `nav_lidar.py`: TODO
+- `nav_forward.py`: TODO
 - `nav_3states.py`: TODO. (For architecture details please refer to the [SM_architecture.pdf](documentation/SM_architecture.pdf) file). 
 
 #### `src_teleop/` contains the source code for the teleoperation nodes:
 
-- `keyboard_emergency_brake.py`: Node to launch on your computer (due to the pynput dependency). It allows to stop the car by pressing the `space` key. It overrides all navigation/teleoperation nodes.
+- `keyboard_emergency_brake.py`: Node to launch on your computer (due to the pynput dependency). It allows to stop the car by pressing the `space` key. You can then press `space` key again to resume the navigation. It overrides all navigation/teleoperation nodes.
 - `teleop_keyboard.py`: Node to launch on your computer (due to the pynput dependency). It allows to teleoperate the car by pressing the `z`, `q`, `s` and `d` keys (Arrows keys also work).
 - `teleop_PS4controller.py`: Node to launch on the robot (because the controller is connected to the robot). It allows to teleoperate the car with a PS4 controller. The controller must be connected to the robot via bluetooth (please refer to the [robot_setup.md](https://github.com/SorbonneUniversityBolideContributors/Course_2024/blob/main/documentation/Robot_setup.md) file). To teleoperate the car, press the `R2` trigger (accelerate), the `L2` trigger (first brake, then reverse) and use the left joystick to steer the car. `Options` is used to stop the teleoperation.
 

@@ -2,7 +2,7 @@
 
 __author__ = "Quentin Rolland"
 __email__ = "quentin.rolland@ensea.fr"
-__status__ = "Development"
+__status__ = "Tested"
 __version__ = "1.0.0"
 
 import rospy
@@ -16,7 +16,7 @@ class Optical_Fork:
         rospy.init_node('fork_publisher')
 
         # SUBSCRIBER ========================================
-        rospy.Subscriber("STM32_sensors_topic", Float32MultiArray, self.callback)
+        rospy.Subscriber("stm32_sensors", Float32MultiArray, self.callback)
         # PUBLISHER =========================================
         self.pub = rospy.Publisher('raw_fork_data', ForkSpeed, queue_size=10)
 

@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <launch> 
   <arg name="scan_topic" default="lidar_data" /> 
-  <node pkg="perception_bolide" type="fork_and_imu_odom_process.py" name="fork_and_imu_odom_process"/>
+  <node pkg="perception_bolide" type="odom_fork_imu.py" name="odom_fork_imu"/>
 <!-- Defining parameters for slam_gmapping node --> 
  
   <node pkg="gmapping" type="slam_gmapping" name="slam_gmapping" output="screen"> 
@@ -41,6 +41,8 @@
     <param name="lasamplestep" value="0.005"/> 
     <remap from="scan" to="$(arg scan_topic)"/> 
   </node> 
+
+  <!-- publish a static tf between base link and lidar frame (needed for the mapping to work) --> 
   <node pkg="tf" type="static_transform_publisher" name="gmapping_broadcaster" args="0 0 0 0 0 0 base_link lidar_frame 100"/>
   
 </launch>
