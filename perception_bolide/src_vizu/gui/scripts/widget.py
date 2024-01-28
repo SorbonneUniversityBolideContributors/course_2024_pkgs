@@ -77,7 +77,7 @@ class MainWindow(QMainWindow):
 
         self.combobox = {
             "/navigation_mode"              :  {"object" : self.ui.navModeComboBox,          
-                                                "default" : "3Dials_spaced",
+                                                "default" : "NDials_classic",
                                                 "choices" : [
                                                     "NDials_classic",
                                                     "NDials_division",
@@ -201,47 +201,18 @@ class MainWindow(QMainWindow):
                 slider.valueChanged.connect(lambda value, spinbox=spinbox: spinbox.setValue(value / factor))
                 spinbox.valueChanged.connect(lambda value, slider=slider: slider.setValue(int(value * factor)))
 
-        # self.ui.lidarDisplayLimSlider.valueChanged.connect(lambda value: self.ui.lidarDisplayLimSpinBox.setValue(value /1000))
-        # self.ui.lidarDisplayLimSpinBox.valueChanged.connect(lambda value: self.ui.lidarDisplayLimSlider.setValue(int(value *1000)))
-
-        # self.ui.gainVitesseSlider.valueChanged.connect(lambda value: self.ui.gainVitesseSpinBox.setValue(value /100))
-        # self.ui.gainVitesseSpinBox.valueChanged.connect(lambda value: self.ui.gainVitesseSlider.setValue(int(value *100)))
-        
-        # self.ui.gainDirectionSlider.valueChanged.connect(lambda value: self.ui.gainDirectionSpinBox.setValue(value /100))
-        # self.ui.gainDirectionSpinBox.valueChanged.connect(lambda value: self.ui.gainDirectionSlider.setValue(int(value *100)))
-
-        # self.ui.gainDirectionArgMaxSlider.valueChanged.connect(lambda value: self.ui.gainDirectionArgMaxSpinBox.setValue(value /100))
-        # self.ui.gainDirectionArgMaxSpinBox.valueChanged.connect(lambda value: self.ui.gainDirectionArgMaxSlider.setValue(int(value *100)))
-
-        # self.ui.FrontFarEnoughSlider.valueChanged.connect(lambda value: self.ui.FrontFarEnoughSpinBox.setValue(value /100))
-        # self.ui.FrontFarEnoughSpinBox.valueChanged.connect(lambda value: self.ui.FrontFarEnoughSlider.setValue(int(value *100)))
-
-        # self.ui.FrontTooCloseSlider.valueChanged.connect(lambda value: self.ui.FrontTooCloseSpinBox.setValue(value /100))
-        # self.ui.FrontTooCloseSpinBox.valueChanged.connect(lambda value: self.ui.FrontTooCloseSlider.setValue(int(value *100)))
-
-        # self.ui.RearTooCloseSlider.valueChanged.connect(lambda value: self.ui.RearTooCloseSpinBox.setValue(value /100))
-        # self.ui.RearTooCloseSpinBox.valueChanged.connect(lambda value: self.ui.RearTooCloseSlider.setValue(int(value *100)))
-
-        # self.ui.frontRatioSlider.valueChanged.connect(lambda value: self.ui.frontRatioSpinBox.setValue(value /100))
-        # self.ui.frontRatioSpinBox.valueChanged.connect(lambda value: self.ui.frontRatioSlider.setValue(int(value *100)))
-
-        # self.ui.colorDetectionToleranceSlider.valueChanged.connect(lambda value: self.ui.colorDetectionToleranceSpinBox.setValue(value /100))
-        # self.ui.colorDetectionToleranceSpinBox.valueChanged.connect(lambda value: self.ui.colorDetectionToleranceSlider.setValue(int(value *100)))
 
     def set_parameters(self, first_use = False):
         for name,info in self.values.items() :
-            if first_use : self.values[name]["default"] = rospy.get_param(name, default = info["default"])
-            #rospy.set_param(name, self.values[name]["default"])
+            self.values[name]["default"] = rospy.get_param(name, default = info["default"])
             info["object"].setValue(self.values[name]["default"])
 
         for name,info in self.checkbox.items() :
-            if first_use : self.checkbox[name]["default"] = rospy.get_param(name, default = info["default"])
-            #rospy.set_param(name, self.checkbox[name]["default"])
+            self.checkbox[name]["default"] = rospy.get_param(name, default = info["default"])
             info["object"].setChecked(self.checkbox[name]["default"])
 
         for name,info in self.combobox.items() :
-            if first_use : self.combobox[name]["default"] = rospy.get_param(name, default = info["default"])
-            #rospy.set_param(name, self.combobox[name]["default"])
+            self.combobox[name]["default"] = rospy.get_param(name, default = info["default"])
             info["object"].setCurrentText(self.combobox[name]["default"])
 
     def initialize_comboboxes(self) : 
