@@ -230,7 +230,6 @@ class MainWindow(QMainWindow):
         
         if key in self.combobox :
             self.combobox[key]["default"] = value
-            print("gig"+self.combobox[key]["default"])
 
         rospy.set_param(key, value)
         self.changement_alert.publish(self.msg_alert)
@@ -281,7 +280,6 @@ class MainWindow(QMainWindow):
         red_calibration = rospy.get_param("/red_RGB", default = [0]*3)
         green_calibration = rospy.get_param("/green_RGB", default = [0]*3)
         comboboxes_default = {key: value["default"] for key, value in self.combobox.items()}
-        print(comboboxes_default)
 
         to_save = {
             "checkbox"      : checkbox_defaults,
