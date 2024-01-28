@@ -214,6 +214,7 @@ class MainWindow(QMainWindow):
         for name,info in self.combobox.items() :
             self.combobox[name]["default"] = rospy.get_param(name, default = info["default"])
             info["object"].setCurrentText(self.combobox[name]["default"])
+            print(self.combobox[name]["default"])
 
     def initialize_comboboxes(self) : 
         for name,info in self.combobox.items() :
