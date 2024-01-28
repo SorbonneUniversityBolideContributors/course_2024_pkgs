@@ -257,6 +257,7 @@ class MainWindow(QMainWindow):
                 self.update_spinboxes_calibration(value = False)
 
         if "combobox" in to_load :
+            print(to_load["combobox"])
             for p in to_load["combobox"] :
                 self.combobox[p]["default"] = to_load["combobox"][p]
 
