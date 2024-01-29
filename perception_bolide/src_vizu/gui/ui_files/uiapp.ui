@@ -315,7 +315,7 @@
               <x>0</x>
               <y>0</y>
               <width>336</width>
-              <height>409</height>
+              <height>236</height>
              </rect>
             </property>
             <attribute name="label">
@@ -526,7 +526,7 @@
               <x>0</x>
               <y>0</y>
               <width>336</width>
-              <height>429</height>
+              <height>452</height>
              </rect>
             </property>
             <attribute name="label">
@@ -540,7 +540,7 @@
                </property>
                <widget class="QLabel" name="label_36">
                 <property name="text">
-                 <string>mode</string>
+                 <string>Mode</string>
                 </property>
                </widget>
                <widget class="QComboBox" name="navModeComboBox"/>
@@ -719,6 +719,13 @@
               </widget>
              </item>
              <item>
+              <widget class="QCheckBox" name="useKvAsConstantCheckBox">
+               <property name="text">
+                <string>Use Kv as constant speed</string>
+               </property>
+              </widget>
+             </item>
+             <item>
               <widget class="QLabel" name="label_16">
                <property name="font">
                 <font>
@@ -814,8 +821,8 @@
              <rect>
               <x>0</x>
               <y>0</y>
-              <width>336</width>
-              <height>409</height>
+              <width>182</width>
+              <height>198</height>
              </rect>
             </property>
             <attribute name="label">

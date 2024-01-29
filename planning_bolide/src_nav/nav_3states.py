@@ -94,7 +94,7 @@ class NavSensors():
         self.nav_feature_choice = rospy.get_param("/navigation_feature", default = "median")
         self.nav_is_spaced = rospy.get_param("/spaced_dials", default = True)
         self.front_dial_ratio = rospy.get_param("/front_dial_ratio", default = 0.2)
-
+        self.use_Kv_as_constant = rospy.get_param("/use_Kv_as_constant", default = False)
         # Maximize threshold
         self.use_maximize_threshold = rospy.get_param("/use_maximize_threshold", default = False)
         self.maximize_threshold = rospy.get_param("/maximize_threshold", default = 0.5)
@@ -177,7 +177,8 @@ class NavSensors():
             navigation_feature=self.nav_features[self.nav_feature_choice],
             FrontRatio = self.front_dial_ratio,
             use_maximise_threshold = self.use_maximize_threshold,
-            maximise_threshold = self.maximize_threshold
+            maximise_threshold = self.maximize_threshold,
+            use_Kv_as_constant = self.use_Kv_as_constant,
         )
 
     def backward_state(self):
