@@ -72,7 +72,7 @@ def forward_n_dials(lidar_data:LaserScan, Kspeed:float, Kdir:float, Karg:float, 
     arg = -(np.argmax(dial_values) - mid_i)/mid_i
 
     # Compute the speed command
-    speed_cmd = Kspeed * dist_center
+    speed_cmd = Kspeed * dist_center if not use_Kv_as_constant else Kspeed
 
     # Compute the direction command
 
