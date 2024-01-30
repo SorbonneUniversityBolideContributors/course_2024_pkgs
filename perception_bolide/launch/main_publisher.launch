@@ -1,13 +1,12 @@
 <launch>
     <!-- Node for lidar data publication -->
-    <node pkg="perception_bolide" type="stm32_publisher.py" name="stm32_publisher" output="screen" />
     <node pkg="perception_bolide" type="lidar_publisher.py" name="lidar_publisher" output="screen" />
 
     <!-- Node for cam data publication -->
-    <!--<node pkg="perception_bolide" type="camera_publisher.py" name="camera_publisher" output="screen" />-->
+    <node pkg="perception_bolide" type="camera_publisher.py" name="camera_publisher" output="screen" />
 
     <!-- Node for stm32_publisher.py -->
-    
+    <node pkg="perception_bolide" type="stm32_publisher.py" name="stm32_publisher" output="screen" />
 
     <!-- Node for imu data publication -->
     <node pkg="perception_bolide" type="imu_publisher.py" name="imu_publisher" output="screen" />
