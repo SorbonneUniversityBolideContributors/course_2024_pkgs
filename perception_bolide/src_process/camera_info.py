@@ -35,7 +35,7 @@ def hsv_dist(hsv1:tuple, hsv2:tuple) -> float:
     return coef_H*loss_H + coef_S*loss_S + coef_V*loss_V
 
 
-class CameraInfo:
+class CameraInfoClass:
     def __init__(self) :
         
         # Initialize the node
@@ -147,4 +147,4 @@ class CameraInfo:
 
 
 if __name__ == "__main__" :
-    camera_process = CameraInfo()
+    camera_process = CameraInfoClass()
