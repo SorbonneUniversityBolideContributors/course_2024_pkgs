@@ -1,4 +1,4 @@
-# Planning_bolide ROS Package
+# planning_bolide ROS Package
 
 This repository contains the planning ROS package for the COVAPSY Autonomous RC Car Race project, developed by the Sorbonne University team.
 
