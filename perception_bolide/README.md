@@ -10,9 +10,9 @@ This repository contains the perception ROS package for the COVAPSY Autonomous R
 
 This control package is one of the three main packages in the project:
 
-1. **Perception (current):** [perception_bolide](https://github.com/SorbonneUniversityBolideContributors/course_2024_pkgs/tree/main/perception_bolide)
-2. **Planning:** [planning_bolide](https://github.com/SorbonneUniversityBolideContributors/course_2024_pkgs/tree/main/planning_bolide)
-3. **Control:** [control_bolide](https://github.com/SorbonneUniversityBolideContributors/course_2024_pkgs/tree/main/control_bolide)
+1. **Perception (current):** [perception_bolide](../perception_bolide/README.md)
+2. **Planning:** [planning_bolide](../planning_bolide/README.md)
+3. **Control:** [control_bolide](../control_bolide/README.md)
 
 ## Package Content
 
@@ -59,7 +59,10 @@ In this package, you will find the first nodes in the software architecture of t
     - topic published: `lidar_data`
     - msg type: `sensor_msgs.msg.LaserScan`
 
-- `camera_info.py`: TODO
+- `camera_info.py`: Used to process the camera data. Publishes the camera info; the color of the front, left and right and if the robot is going the wrong way.
+    - topic subscribed: `raw_image_data`
+    - topic published: `camera_info`
+    - msg type: `perception_bolide.msg.CameraInfo`
 
 - `calibrate_color.py`: TODO
 

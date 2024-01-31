@@ -10,9 +10,9 @@ This repository contains the planning ROS package for the COVAPSY Autonomous RC 
 
 This control package is one of the three main packages in the project:
 
-1. **Perception:** [perception_bolide](https://github.com/SorbonneUniversityBolideContributors/course_2024_pkgs/tree/main/perception_bolide)
-2. **Planning (current):** [planning_bolide](https://github.com/SorbonneUniversityBolideContributors/course_2024_pkgs/tree/main/planning_bolide)
-3. **Control:** [control_bolide](https://github.com/SorbonneUniversityBolideContributors/course_2024_pkgs/tree/main/control_bolide)
+1. **Perception:** [perception_bolide](../perception_bolide/README.md)
+2. **Planning (current):** [planning_bolide](../planning_bolide/README.md)
+3. **Control:** [control_bolide](../control_bolide/README.md)
 
 ## Package Content
 
@@ -22,8 +22,14 @@ This packages is in between the perception and the control. It is responsible fo
 
 #### `src_nav/` contains the source code for the navigation nodes and the teleoperation nodes:
 
-- `nav_forward.py`: TODO
-- `nav_3states.py`: TODO. (For architecture details please refer to the [SM_architecture.pdf](documentation/SM_architecture.pdf) file). 
+- `nav_forward.py`: The first basic navigation node. It allows to drive the car forward. It is used to test the forward functions.
+    - topic subscribed: `lidar_data` (could be adapted for other sensors)
+    - topic published: `cmd_vel`
+    - msg type: `control_bolide.msg.SpeedDirection`
+- `nav_3states.py`: The second basic navigation node. It allows to drive the car forward, backward and to brake. It is used to test the forward and backward functions. (For architecture details please refer to the [SM_architecture.pdf](documentation/SM_architecture.pdf) file). 
+    - topic subscribed: `all sensors topics`
+    - topic published: `cmd_vel`
+    - msg type: `control_bolide.msg.SpeedDirection`
 
 #### `src_teleop/` contains the source code for the teleoperation nodes:
 
