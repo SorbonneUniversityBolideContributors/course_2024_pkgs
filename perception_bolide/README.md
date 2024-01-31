@@ -1,4 +1,4 @@
-# Control ROS Package
+# perception_bolide ROS Package
 
 This repository contains the perception ROS package for the COVAPSY Autonomous RC Car Race project, developed by the Sorbonne University team.
 
