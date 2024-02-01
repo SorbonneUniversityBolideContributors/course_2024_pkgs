@@ -8,6 +8,8 @@ The project is divided into three main packages:
 2. **Planning:** [planning_bolide](planning_bolide/README.md)
 3. **Control:** [control_bolide](control_bolide/README.md)
 
+<img src="ROS graph nodes and topics V2.png"/>
+
 ## Getting Started
 
 To integrate this packages into your development environment, clone the repository in your `~/catkin_ws/src/` folder using the following command:
