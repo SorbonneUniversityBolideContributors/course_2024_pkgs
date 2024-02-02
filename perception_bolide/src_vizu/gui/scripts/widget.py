@@ -20,10 +20,10 @@ from PySide6.QtWidgets import QMainWindow, QInputDialog, QMessageBox
 class MainWindow(QMainWindow):
     def __init__(self):
         super(MainWindow, self).__init__()
-        self.ui = Ui_MainWindow()
-        self.ui.setupUi(self)
+        self.ui = Ui_MainWindow()  # Initialize the user interface
+        self.ui.setupUi(self)      # Set up the user interface
 
-        # The directory will be used to load and save the parameters.
+        # Directory used for loading and saving parameters
         self.dir = os.path.realpath(__file__).replace("/scripts/widget.py","")
 
         # We define one dictionary for each type of object : 
@@ -48,6 +48,7 @@ class MainWindow(QMainWindow):
             "/spaced_dials"                 : {"object" : self.ui.spacedDialsCheckBox,              "default" : True},
             "/anti_jumping_filter_bool"     : {"object" : self.ui.antiJumpingCheckBox,              "default" : False},
             "/use_maximize_threshold"       : {"object" : self.ui.useMaximiseThresholdCheckBox_2,   "default" : False},
+            "/use_Kv_as_constant"           : {"object" : self.ui.useKvAsConstantCheckBox,          "default" : False}
         }
 
         self.values={
@@ -138,7 +139,7 @@ class MainWindow(QMainWindow):
         self.ui.redAutoCalibrationPushButton.clicked.connect(lambda : self.auto_calibration(color = "red"))
         self.ui.greenAutoCalibrationPushButton.clicked.connect(lambda : self.auto_calibration(color = "green"))
 
-
+    # This method centralize most of the connections between QObject and their corresponding function
     def connect(self):
 
         for name,info in self.values.items() :
@@ -150,33 +151,10 @@ class MainWindow(QMainWindow):
         for name,info in self.combobox.items() :
             info["object"].currentTextChanged.connect(lambda value, key=name: self.change_param(value,key=key))
 
+        # For the calibration RGB values, we use a different function
         for color in self.calibrate:
             for name, info in self.calibrate[color].items() :
                 info["object"].valueChanged.connect(lambda value, color=color, key=name: self.set_color_calibration(value,color,key=key))
-
-    def auto_calibration(self, color = "no_one", ) :
-        rospy.set_param("/color_to_calibrate", color)
-        self.color_to_set = color
-        self.subscriber_calibration = rospy.Subscriber("/is_auto_calibration_done", Bool, self.update_spinboxes_calibration)
-        self.init_calibration.publish(self.msg_alert)
-        
-    def update_spinboxes_calibration(self, value = True) :
-        color = self.color_to_set
-        thresholds = rospy.get_param(f"/{color}_RGB")
-
-        self.calibrate[color]["R"]["default"], self.calibrate[color]["G"]["default"], self.calibrate[color]["B"]["default"] = thresholds
-        
-        for name, info in self.calibrate[color].items() :
-            self.calibrate[color][name]["object"].setValue(info["default"])
-
-        if value == True : 
-            self.subscriber_calibration.unregister()
-
-    def set_color_calibration(self, value, color, key = "no key"):
-        self.calibrate[color][key]["default"] = value
-        c = self.calibrate[color]
-        rospy.set_param(f"/{color}_RGB",[c["R"]["default"],c["G"]["default"],c["B"]["default"]])
-        self.changement_alert.publish(self.msg_alert)
 
 
     def connect_sliders_and_double_spin_boxes(self) :
@@ -201,27 +179,31 @@ class MainWindow(QMainWindow):
                 slider.valueChanged.connect(lambda value, spinbox=spinbox: spinbox.setValue(value / factor))
                 spinbox.valueChanged.connect(lambda value, slider=slider: slider.setValue(int(value * factor)))
 
-
+    # Set parameters to default values
     def set_parameters(self, first_use = False):
+        # Set checkbox, numeric, and combobox parameters
         for name,info in self.values.items() :
-            if first_use : self.values[name]["default"] = rospy.get_param(name, default = info["default"])
+            self.values[name]["default"] = rospy.get_param(name, default = info["default"])
             info["object"].setValue(self.values[name]["default"])
 
         for name,info in self.checkbox.items() :
-            if first_use : self.checkbox[name]["default"] = rospy.get_param(name, default = info["default"])
+            self.checkbox[name]["default"] = rospy.get_param(name, default = info["default"])
             info["object"].setChecked(self.checkbox[name]["default"])
 
         for name,info in self.combobox.items() :
-            if first_use : self.combobox[name]["default"] = rospy.get_param(name, default = info["default"])
+            self.combobox[name]["default"] = rospy.get_param(name, default = info["default"])
             info["object"].setCurrentText(self.combobox[name]["default"])
+            print(self.combobox[name]["default"])
 
+    # Initialize comboboxes with choices
     def initialize_comboboxes(self) : 
         for name,info in self.combobox.items() :
             info["object"].clear()
             info["object"].addItems(info["choices"])  
 
+    # Function to change parameters based on GUI element interaction
     def change_param(self, value, key = None):
-
+        # Change parameter values
         if key in self.checkbox :
             self.checkbox[key]["default"] = value
 
@@ -234,15 +216,95 @@ class MainWindow(QMainWindow):
         rospy.set_param(key, value)
         self.changement_alert.publish(self.msg_alert)
 
+    # Publish alert for parameter changes when you change a parameter on the terminal
     def only_publish(self):
         self.changement_alert.publish(self.msg_alert)
 
+### CALIBRATION
+    
+    # This method runs an autocalibration
+    def auto_calibration(self, color = "no_one", ) :
+        rospy.set_param("/color_to_calibrate", color)
+        self.color_to_set = color
+        self.subscriber_calibration = rospy.Subscriber("/is_auto_calibration_done", Bool, self.update_spinboxes_calibration)
+        self.init_calibration.publish(self.msg_alert)
+    
+    # Update spin boxes after auto-calibration
+    def update_spinboxes_calibration(self, value = True) :
+        # Update RGB calibration values
+        color = self.color_to_set
+        thresholds = rospy.get_param(f"/{color}_RGB")
+
+        # Update default values in the calibrate dictionnary
+        self.calibrate[color]["R"]["default"], self.calibrate[color]["G"]["default"], self.calibrate[color]["B"]["default"] = thresholds
+        
+        # Update the values in the GUI
+        for name, info in self.calibrate[color].items() :
+            self.calibrate[color][name]["object"].setValue(info["default"])
+
+        # value == True only if we did an autocalibration
+        # When we load parameters, including calibration parameters, their is no subscriber to unregister to.
+        if value == True : 
+            self.subscriber_calibration.unregister()
+
+    # Method to update the red or green calibration
+    def set_color_calibration(self, value, color, key = "no key"):
+        self.calibrate[color][key]["default"] = value
+        c = self.calibrate[color]
+        rospy.set_param(f"/{color}_RGB",[c["R"]["default"],c["G"]["default"],c["B"]["default"]])
+        self.changement_alert.publish(self.msg_alert)
+
+### SAVE/LOAD PARAMETERS
+        
+    # Save current parameters to file
+    def save_parameters(self):
+        # Get default values for parameters
+        checkbox_defaults = {key: value["default"] for key, value in self.checkbox.items()}
+        values_defaults = {key: value["default"] for key, value in self.values.items()}
+        red_calibration = rospy.get_param("/red_RGB", default = [0]*3)
+        green_calibration = rospy.get_param("/green_RGB", default = [0]*3)
+        comboboxes_default = {key: value["default"] for key, value in self.combobox.items()}
+
+        # Create dictionary of parameters to save
+        to_save = {
+            "checkbox"      : checkbox_defaults,
+            "values"        : values_defaults,
+            "calibration"   : {"red" : red_calibration, "green" : green_calibration},
+            "combobox"      : comboboxes_default,
+        }
+
+        # Get file name from user input
+        new_file_name, ok_pressed = QInputDialog.getText(self, "Sauvegarder", "Nom du fichier:")
+
+        # If user presses "OK", proceed with saving parameters
+        if ok_pressed:
+            # Check if file already exists and confirm overwrite if necessary
+            complete_file_name = f"{new_file_name}.pkl" if not new_file_name.endswith(".pkl") else new_file_name
+            file_path = os.path.join(self.dir + "/params", complete_file_name)
+
+            if os.path.exists(file_path):
+                reply = QMessageBox.question(self, "Attention", f"Le fichier '{complete_file_name}' existe déjà. Voulez-vous l'écraser?", QMessageBox.Yes | QMessageBox.No)
+                if reply == QMessageBox.No:
+                    return  
+
+            # Save parameters to pickle file
+            with open(file_path, 'wb') as file:
+                pickle.dump(to_save, file)
+
+            # Update parameter file list
+            self.get_params_names()
+
+
+    # Load parameters from file
     def load_parameters(self) :
+        # Get selected file name
         set_name = self.ui.loadParamComboBox.currentText()
 
+        # Load parameters from pickle file
         with open(self.dir + f"/params/{set_name}", 'rb') as file:
             to_load = pickle.load(file)
 
+        # Update parameters based on loaded values
         if "checkbox" in to_load :
             for p in to_load["checkbox"] :
                 self.checkbox[p]["default"] = to_load["checkbox"][p]
@@ -261,54 +323,14 @@ class MainWindow(QMainWindow):
         if "combobox" in to_load :
             for p in to_load["combobox"] :
                 self.combobox[p]["default"] = to_load["combobox"][p]
-                # self.combobox[p]["object"].setCurrentText(self.combobox[p]["default"])
 
+        # Set parameters with loaded values
         self.set_parameters()
 
-
+    # Get parameter file names
     def get_params_names(self) :
-
+        # Clear and update parameter file list
         self.ui.loadParamComboBox.clear()
         param_folder = self.dir + "/params"
         param_files = [f for f in os.listdir(param_folder) if os.path.isfile(os.path.join(param_folder, f))]
         self.ui.loadParamComboBox.addItems(param_files)
-
-    def save_parameters(self):
-
-        checkbox_defaults = {key: value["default"] for key, value in self.checkbox.items()}
-        values_defaults = {key: value["default"] for key, value in self.values.items()}
-        red_calibration = rospy.get_param("/red_RGB", default = [0]*3)
-        green_calibration = rospy.get_param("/green_RGB", default = [0]*3)
-        comboboxes_default = {key: value["default"] for key, value in self.combobox.items()}
-
-        to_save = {
-            "checkbox"      : checkbox_defaults,
-            "values"        : values_defaults,
-            "calibration"   : {"red" : red_calibration, "green" : green_calibration},
-            "combobox"      : comboboxes_default,
-        }
-    #"thresholds": self.thresholds_color,
-
-
-
-        # Demander à l'utilisateur le nom du fichier
-        new_file_name, ok_pressed = QInputDialog.getText(self, "Sauvegarder", "Nom du fichier:")
-
-        # Si l'utilisateur appuie sur "OK" dans la fenêtre de dialogue
-        if ok_pressed:
-            # Vérifier si le nom du fichier existe déjà
-            complete_file_name = f"{new_file_name}.pkl" if not new_file_name.endswith(".pkl") else new_file_name
-            file_path = os.path.join(self.dir + "/params", complete_file_name)
-
-            if os.path.exists(file_path):
-                # Afficher un message d'information et demander confirmation pour écraser le fichier existant
-                reply = QMessageBox.question(self, "Attention", f"Le fichier '{complete_file_name}' existe déjà. Voulez-vous l'écraser?", QMessageBox.Yes | QMessageBox.No)
-                if reply == QMessageBox.No:
-                    return  # L'utilisateur a choisi de ne pas écraser le fichier existant
-
-            # Sauvegarder les données au format pickle
-            with open(file_path, 'wb') as file:
-                pickle.dump(to_save, file)
-
-            # Facultatif : Mettez à jour le ComboBox avec le nouveau fichier
-            self.get_params_names()
