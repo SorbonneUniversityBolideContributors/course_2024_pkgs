@@ -89,7 +89,7 @@ class NavSensors():
         self.threshold_front_far_enough = rospy.get_param("/threshold_front_far_enough", default = 0.5)
 
         # Forward navigation mode
-        navigation_mode = rospy.get_param("/navigation_mode", default = "3Dials_classic")
+        navigation_mode = rospy.get_param("/navigation_mode", default = "3Dials_Classic")
         self.nav_func, self.nav_mode = navigation_mode.split("_")
         self.nav_feature_choice = rospy.get_param("/navigation_feature", default = "median")
         self.nav_is_spaced = rospy.get_param("/spaced_dials", default = True)

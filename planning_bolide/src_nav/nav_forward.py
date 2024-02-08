@@ -64,7 +64,7 @@ class NavForward():
         self.Kv = rospy.get_param("/gain_vitesse", default = 0.33)
         self.Ka = rospy.get_param("/gain_direction_arg_max", default = 0.2)
 
-        navigation_mode = rospy.get_param("/navigation_mode", default = "3Dials_classic")
+        navigation_mode = rospy.get_param("/navigation_mode", default = "3Dials_Classic")
 
         self.navigation_choice, self.mode = navigation_mode.split("_")
 
