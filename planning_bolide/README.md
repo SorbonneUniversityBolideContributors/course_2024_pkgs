@@ -1,4 +1,4 @@
-# Planning_bolide ROS Package
+# planning_bolide ROS Package
 
 This repository contains the planning ROS package for the COVAPSY Autonomous RC Car Race project, developed by the Sorbonne University team.
 
@@ -10,9 +10,9 @@ This repository contains the planning ROS package for the COVAPSY Autonomous RC 
 
 This control package is one of the three main packages in the project:
 
-1. **Perception:** [perception_bolide](https://github.com/SorbonneUniversityBolideContributors/course_2024_pkgs/tree/main/perception_bolide)
-2. **Planning (current):** [planning_bolide](https://github.com/SorbonneUniversityBolideContributors/course_2024_pkgs/tree/main/planning_bolide)
-3. **Control:** [control_bolide](https://github.com/SorbonneUniversityBolideContributors/course_2024_pkgs/tree/main/control_bolide)
+1. **Perception:** [perception_bolide](../perception_bolide/README.md)
+2. **Planning (current):** [planning_bolide](../planning_bolide/README.md)
+3. **Control:** [control_bolide](../control_bolide/README.md)
 
 ## Package Content
 
@@ -22,13 +22,18 @@ This packages is in between the perception and the control. It is responsible fo
 
 #### `src_nav/` contains the source code for the navigation nodes and the teleoperation nodes:
 
-- `nav_lidar_argmax.py`: TODO
-- `nav_lidar.py`: TODO
-- `nav_3states.py`: TODO. (For architecture details please refer to the [SM_architecture.pdf](documentation/SM_architecture.pdf) file). 
+- `nav_forward.py`: The first basic navigation node. It allows to drive the car forward. It is used to test the forward functions.
+    - topic subscribed: `lidar_data` (could be adapted for other sensors)
+    - topic published: `cmd_vel`
+    - msg type: `control_bolide.msg.SpeedDirection`
+- `nav_3states.py`: The second basic navigation node. It allows to drive the car forward, backward and to brake. It is used to test the forward and backward functions. (For architecture details please refer to the [SM_architecture.pdf](documentation/SM_architecture.pdf) file). 
+    - topic subscribed: `all sensors topics`
+    - topic published: `cmd_vel`
+    - msg type: `control_bolide.msg.SpeedDirection`
 
 #### `src_teleop/` contains the source code for the teleoperation nodes:
 
-- `keyboard_emergency_brake.py`: Node to launch on your computer (due to the pynput dependency). It allows to stop the car by pressing the `space` key. It overrides all navigation/teleoperation nodes.
+- `keyboard_emergency_brake.py`: Node to launch on your computer (due to the pynput dependency). It allows to stop the car by pressing the `space` key. You can then press `space` key again to resume the navigation. It overrides all navigation/teleoperation nodes.
 - `teleop_keyboard.py`: Node to launch on your computer (due to the pynput dependency). It allows to teleoperate the car by pressing the `z`, `q`, `s` and `d` keys (Arrows keys also work).
 - `teleop_PS4controller.py`: Node to launch on the robot (because the controller is connected to the robot). It allows to teleoperate the car with a PS4 controller. The controller must be connected to the robot via bluetooth (please refer to the [robot_setup.md](https://github.com/SorbonneUniversityBolideContributors/Course_2024/blob/main/documentation/Robot_setup.md) file). To teleoperate the car, press the `R2` trigger (accelerate), the `L2` trigger (first brake, then reverse) and use the left joystick to steer the car. `Options` is used to stop the teleoperation.
 

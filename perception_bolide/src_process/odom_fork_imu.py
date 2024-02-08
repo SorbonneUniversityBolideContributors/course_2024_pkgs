@@ -1,4 +1,9 @@
 #!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+__author__ = "Clément MIZZI and Loris OUMBICHE"
+__status__ = "Tested"
+
 
 import numpy as np
 import rospy
@@ -9,7 +14,7 @@ from perception_bolide.msg import ForkSpeed
 from nav_msgs.msg import Odometry
 from geometry_msgs.msg import Point, Pose, Quaternion, Twist, Vector3
 
-class odom_optical_fork:
+class OdomForkImu:
     def __init__(self):
         self.pub = rospy.Publisher('Odom',Odometry,queue_size=10)
         self.Odom = Odometry()
@@ -57,22 +62,23 @@ class odom_optical_fork:
         self.pub.publish(self.Odom)
         
     def get_fork(self,msg:ForkSpeed):
-        self.fork = msg.speed/4 # the /4 is used to scale the speed of the fork so that the odometry and the map are matching
+        self.fork = msg.speed# the /4 is used to scale the speed of the fork so that the odometry and the map are matching
 
     def get_dir(self,msg:Imu):
-        self.theta_pos = msg.orientation.z
+        self.theta_pos = - msg.orientation.z  # If you want to use the real robot 
+        #self.theta_pos = msg.orientation.z #If you want to use the simulation
         s.compute_position()
         s.update()
 
 
-def listener(s:odom_optical_fork):
+def listener(s:OdomForkImu):
     rospy.Subscriber('raw_fork_data',ForkSpeed,s.get_fork)
     rospy.Subscriber('raw_imu_data',Imu,s.get_dir)
     rospy.spin()   
 
 if __name__ == '__main__' :
-    rospy.init_node('fork_and_imu_odom_process')
-    s = odom_optical_fork()
+    rospy.init_node('odom_fork_imu')
+    s = OdomForkImu()
     try : 
         listener(s)
     except (rospy.ROSInterruptException, KeyboardInterrupt) : sys.quit()

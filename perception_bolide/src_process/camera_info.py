@@ -6,6 +6,7 @@ __status__ = "Development"
 __version__ = "2.0.0"
 __annotations__ = "Based on Raphael K.'s work"
 
+
 import numpy as np
 import cv2
 import rospy
@@ -34,7 +35,7 @@ def hsv_dist(hsv1:tuple, hsv2:tuple) -> float:
     return coef_H*loss_H + coef_S*loss_S + coef_V*loss_V
 
 
-class CameraProcess:
+class CameraInfoClass:
     def __init__(self) :
         
         # Initialize the node
@@ -146,4 +147,4 @@ class CameraProcess:
 
 
 if __name__ == "__main__" :
-    camera_process = CameraProcess()
+    camera_process = CameraInfoClass()

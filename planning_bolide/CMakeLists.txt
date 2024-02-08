@@ -161,10 +161,11 @@ include_directories(
 ## Mark executable scripts (Python etc.) for installation
 ## in contrast to setup.py, you can choose the destination
 catkin_install_python(PROGRAMS
-  src_teleop/teleop_PS4controller.py
-  src_teleop/teleop_keyboard.py
-  src_nav/nav_lidar.py
+  src_nav/nav_forward.py
   src_nav/nav_3states.py
+  src_teleop/keyboard_emergency_brake.py
+  src_teleop/teleop_keyboard.py
+  src_teleop/teleop_PS4controller.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
-__author__ = "Loris OUMBICHE"
-__status__ = "Development"
+__author__ = "Loris OUMBICHE and Raphael KHORASSANI"
+__status__ = "Tested"
 __version__ = "3.0.0"
 
 
@@ -10,17 +10,17 @@ import rospy
 from control_bolide.msg import SpeedDirection
 from sensor_msgs.msg import LaserScan
 from std_msgs.msg import Bool
-from nav_module.nav_functions import nav_3_dials, nav_n_dials
+from nav_module.forward_functions import forward_3_dials, forward_n_dials
 
 #%% CLASS
-class NavLidar():
+class NavForward():
     def __init__(self):
         
         # Initialize the node
-        rospy.init_node("nav_lidar", anonymous = True)
+        rospy.init_node("nav_forward", anonymous = True)
 
         # log info
-        rospy.loginfo("Initializing the nav_lidar node")
+        rospy.loginfo("Initializing the nav_forward node")
 
         # publisher
         self.pub = rospy.Publisher("cmd_vel",SpeedDirection,queue_size=10)
@@ -33,8 +33,8 @@ class NavLidar():
 
         self.cmd = SpeedDirection()
         self.navigation_dict = {
-            "3Dials":nav_3_dials,
-            "NDials":nav_n_dials
+            "3Dials":forward_3_dials,
+            "NDials":forward_n_dials
         }
         self.navigation_choice = "3Dials_spaced"
 
@@ -50,7 +50,7 @@ class NavLidar():
             Kspeed=self.Kv,
             Kdir=self.Kd,
             Karg=self.Ka,
-            Mode=self.mode,
+            mode=self.mode,
             n_dials=self.n_dials,
             FrontRatio = self.front_dial_ratio
         )
@@ -64,7 +64,7 @@ class NavLidar():
         self.Kv = rospy.get_param("/gain_vitesse", default = 0.33)
         self.Ka = rospy.get_param("/gain_direction_arg_max", default = 0.2)
 
-        navigation_mode = rospy.get_param("/navigation_mode", default = "3Dials_classic")
+        navigation_mode = rospy.get_param("/navigation_mode", default = "3Dials_Classic")
 
         self.navigation_choice, self.mode = navigation_mode.split("_")
 
@@ -77,7 +77,7 @@ class NavLidar():
 
 
 if __name__ == '__main__' :
-    my_nav_lidar = NavLidar()
+    my_nav_lidar = NavForward()
     rospy.spin()
  
 

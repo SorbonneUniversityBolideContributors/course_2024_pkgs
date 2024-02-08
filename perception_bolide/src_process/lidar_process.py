@@ -14,14 +14,14 @@ import rospy
 from sensor_msgs.msg import LaserScan
 from std_msgs.msg import Bool
 
-#%% ProcessLidarData class
-class ProcessLidarData:
+#%% LidarProcess class
+class LidarProcess:
     """Class used to process the lidar data and publish it on a new topic"""
 
     def __init__(self):
         # Initialize the ROS node
         rospy.loginfo("[INFO] -- Initializing the lidar process data node")
-        rospy.init_node('lidar_process_data_node')
+        rospy.init_node('lidar_process')
 
         # Store last arrays containing lidar data
         self.last_values = []
@@ -167,16 +167,17 @@ class ProcessLidarData:
         if self.anti_jumping_filter :
             # Anti-jumping filter to prevent unexpected jumps in the lidar data:
             # For each null value in the data array, replace it with the median of the values around it (non-null values) (around in a temporal sense)
+            
+            # Add the current data array to the list of last values
             self.last_values += [data_array]
 
-            # If the list of last values is longer than the anti-jumping filter range, remove the oldest values
-            while len(self.last_values) > self.anti_jumping_filter_range : self.last_values.pop(0)
+            # If the list of last values is longer than the temporal filter range, remove the oldest values
+            while len(self.last_values) > self.temporal_filter_range : self.last_values.pop(0)
 
-            # Convert the list of last values to a numpy array
-            data_array = np.array(self.last_values)
-
-            # Replace the null values with the median of the last values at the same index
-            data_array = np.where(data_array == 0, np.median(data_array, axis = 0), data_array)
+            # where the data array is null, replace it with the previous non-null value (t-1)
+            if len(self.last_values) > 1 :
+                data_array[data_array == 0] = self.last_values[-2][data_array == 0]
+                
 
         # Return the filtered data array as a list
         return list(data_array)
@@ -186,8 +187,8 @@ class ProcessLidarData:
 #%% Main
 if __name__ == '__main__':
     try:
-        # Create a ProcessLidarData and start it
-        lidarprocess = ProcessLidarData()
+        # Create a LidarProcess and start it
+        lidarprocess = LidarProcess()
     except rospy.ROSInterruptException:
         # If a ROSInterruptException occurs, exit the program
         exit(0)

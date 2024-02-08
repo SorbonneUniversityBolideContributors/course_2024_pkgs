@@ -10,9 +10,9 @@ This repository contains the control ROS package for the COVAPSY Autonomous RC C
 
 This control package is one of the three main packages in the project:
 
-1. **Perception:** [perception_bolide](https://github.com/SorbonneUniversityBolideContributors/course_2024_pkgs/tree/main/perception_bolide)
-2. **Planning:** [planning_bolide](https://github.com/SorbonneUniversityBolideContributors/course_2024_pkgs/tree/main/planning_bolide)
-3. **Control (current):** [control_bolide](https://github.com/SorbonneUniversityBolideContributors/course_2024_pkgs/tree/main/control_bolide)
+1. **Perception:** [perception_bolide](../perception_bolide/README.md)
+2. **Planning:** [planning_bolide](../planning_bolide/README.md)
+3. **Control (current):** [control_bolide](../control_bolide/README.md)
 
 ## Package content
 
