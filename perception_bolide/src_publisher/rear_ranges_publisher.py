@@ -25,9 +25,9 @@ class RearSensorsPublisher:
         self.ir_min_range = 0.06
         self.ir_max_range = 0.3
 
-        # defining ranges of the US
-        self.sonar_min_range = 0.07
-        self.sonar_max_range = 0.5
+        # # defining ranges of the US
+        # self.sonar_min_range = 0.07
+        # self.sonar_max_range = 0.5
 
         # init the static data of the sensors
         self.sensors_init()
@@ -52,22 +52,22 @@ class RearSensorsPublisher:
         self.multiRangeFrame.IR_rear_right.max_range = self.ir_max_range
         
         # Rear sonar sensor =============================================================
-        self.multiRangeFrame.Sonar_rear = Range()
-        self.multiRangeFrame.Sonar_rear.header.frame_id = "rear_sonar_range_frame"
-        self.multiRangeFrame.Sonar_rear.radiation_type = Range.ULTRASOUND
-        self.multiRangeFrame.Sonar_rear.min_range = self.sonar_min_range
-        self.multiRangeFrame.Sonar_rear.max_range = self.sonar_max_range
+        # self.multiRangeFrame.Sonar_rear = Range()
+        # self.multiRangeFrame.Sonar_rear.header.frame_id = "rear_sonar_range_frame"
+        # self.multiRangeFrame.Sonar_rear.radiation_type = Range.ULTRASOUND
+        # self.multiRangeFrame.Sonar_rear.min_range = self.sonar_min_range
+        # self.multiRangeFrame.Sonar_rear.max_range = self.sonar_max_range
 
     def callback(self, data:Float32MultiArray) :
         """ Callback function called when a message is received on the subscribed topic"""
         
         # retrieving Rear data (2xIR + sonar) from the STM32_sensors msg
-        Sonar_rear = data.data[3] #sonar
-        IR_rear_left = data.data[4] #IR left
-        IR_rear_right = data.data[5] #IR right
+        # Sonar_rear = data.data[3] #sonar
+        IR_rear_left = data.data[2] #IR left
+        IR_rear_right = data.data[3] #IR right
 
         # Process sonar data
-        Sonar_rear = Sonar_rear/100 # passage de cm à m
+        # Sonar_rear = Sonar_rear/100 # passage de cm à m
 
         # Process IR's data
         # ========== conversion mV --> m ==========
@@ -99,8 +99,8 @@ class RearSensorsPublisher:
         elif(IR_rear_right > self.ir_max_range):
             IR_rear_right = self.ir_max_range
 
-        self.multiRangeFrame.Sonar_rear.range = Sonar_rear
-        self.multiRangeFrame.Sonar_rear.header.stamp = rospy.Time.now()
+        # self.multiRangeFrame.Sonar_rear.range = Sonar_rear
+        # self.multiRangeFrame.Sonar_rear.header.stamp = rospy.Time.now()
         self.multiRangeFrame.IR_rear_left.range = IR_rear_left
         self.multiRangeFrame.IR_rear_left.header.stamp = rospy.Time.now()
         self.multiRangeFrame.IR_rear_right.range = IR_rear_right

@@ -13,17 +13,20 @@ from sensor_msgs.msg import Imu
 from perception_bolide.msg import ForkSpeed
 from nav_msgs.msg import Odometry
 from geometry_msgs.msg import Point, Pose, Quaternion, Twist, Vector3
+from control_bolide.msg import SpeedDirection
 
 class OdomForkImu:
     def __init__(self):
-        self.pub = rospy.Publisher('Odom',Odometry,queue_size=10)
+        self.pub = rospy.Publisher('odom',Odometry,queue_size=10)
         self.Odom = Odometry()
         self.Odom_broadcaster = tf.TransformBroadcaster() # TransformBroadcaster is used to send a transformation between odom and base_link
         self.L = 0.257 # Distance between location point and wheel point (back and front wheels) (m)
         self.fork = 0 # speed from the fork (m/s)
+        self.forksign = 1.0
+        self.lastdir = 1.0
 
         self.current_time = rospy.Time.now() # current_time and last_time are used to compute dt
-        self.last_time =rospy.Time.now()
+        self.last_time = rospy.Time.now()
 
         self.x_pos = 0
         self.y_pos = 0
@@ -37,8 +40,8 @@ class OdomForkImu:
         dt = (self.current_time - self.last_time).to_sec()
 
         # Linear update
-        self.dx = self.fork*np.cos(self.theta_pos)
-        self.dy = self.fork*np.sin(self.theta_pos)
+        self.dx = self.fork*self.lastdir*np.cos(self.theta_pos)*2.0
+        self.dy = self.fork*self.lastdir*np.sin(self.theta_pos)*2.0
         self.x_pos += dt*self.dx
         self.y_pos += dt*self.dy
 
@@ -62,17 +65,26 @@ class OdomForkImu:
         self.pub.publish(self.Odom)
         
     def get_fork(self,msg:ForkSpeed):
-        self.fork = msg.speed# the /4 is used to scale the speed of the fork so that the odometry and the map are matching
+        self.fork = msg.speed
+
+
+    def get_speedsign(self,msg:SpeedDirection):
+        sign = int(round((msg.speed / (abs(msg.speed)+1e-6))))
+        if abs(sign) != 1:
+            pass
+        else:
+            self.lastdir = sign
+
 
     def get_dir(self,msg:Imu):
         self.theta_pos = - msg.orientation.z  # If you want to use the real robot 
-        #self.theta_pos = msg.orientation.z #If you want to use the simulation
         s.compute_position()
         s.update()
 
 
 def listener(s:OdomForkImu):
     rospy.Subscriber('raw_fork_data',ForkSpeed,s.get_fork)
+    rospy.Subscriber('cmd_vel',SpeedDirection,s.get_speedsign)
     rospy.Subscriber('raw_imu_data',Imu,s.get_dir)
     rospy.spin()   
 
@@ -81,4 +93,5 @@ if __name__ == '__main__' :
     s = OdomForkImu()
     try : 
         listener(s)
-    except (rospy.ROSInterruptException, KeyboardInterrupt) : sys.quit()
+    except rospy.ROSInterruptException:
+        exit(0)

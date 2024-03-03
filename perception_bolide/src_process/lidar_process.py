@@ -73,8 +73,9 @@ class LidarProcess:
         """ Callback function called when a message is received on the subscribed topic"""
 
         # Check that the data array has a length of 360
-        if not (len(data.ranges) == 360):
-            rospy.logdebug("the lidar array is not composed of 360 values")
+        if not (len(data.ranges) == 1153):
+            rospy.logdebug("the lidar array is not composed of 1153 values")
+            rospy.logdebug(len(data.ranges))
             return
 
         # Check that the min angle is less than the max angle
@@ -88,7 +89,7 @@ class LidarProcess:
             return
 
         # crop the data
-        cropped_data = self.crop_data(data.ranges)
+        cropped_data = self.crop_data(data.ranges, data.angle_increment)
 
         # apply filters to data
         data_filtered = self.filter_lidar(cropped_data)
@@ -109,25 +110,34 @@ class LidarProcess:
 
         self.pub.publish(lidar_data)
 
-    def crop_data(self, data:list) :
-        """ Crop the data array to keep only the data between min_angle and max_angle """
+    def crop_data(self, data:list, angle_increment) :
 
-        # Convert the data list to a numpy array
-        data_array = np.array(data)
+        angle_min_crop = self.min_angle_rad
+        angle_max_crop = self.max_angle_rad
 
-        # Rotate the data array so that the min angle is at the start
-        data_array = np.roll(data_array, -self.min_angle_deg)
 
-        # Crop the data array to keep only the data between min_angle and max_angle
-        data_array = data_array[:self.max_angle_deg - self.min_angle_deg]
+        angle_min = -3.1415926535
+        angle_max = 3.1415926535
+        ranges = np.roll(np.array(data), int(len(data)/2)) #-pi/2 is first
 
-        # Check that the cropped data array has the correct length
-        if not (len(data_array) == self.max_angle_deg - self.min_angle_deg):
-            rospy.logwarn("The cropped data array must have a length of max_angle - min_angle")
-            return
+        # end_index = int(round((angle_max_crop*2) / angle_increment))
 
-        # Return the cropped data array as a list
-        return list(data_array)
+        # cropped_ranges = ranges[:end_index]
+
+        # Calculate start and end indices for cropping
+        start_index = int((angle_min_crop - angle_min) / angle_increment)
+        end_index = int((angle_max_crop - angle_min) / angle_increment)
+
+        # Ensure indices are within the range of available data
+        start_index = max(0, min(start_index, len(ranges)))
+        end_index = max(0, min(end_index, len(ranges)))
+
+        # Crop the range data
+        cropped_ranges = ranges[start_index:end_index+1]
+
+        return list(cropped_ranges)
+
+
 
 
     def filter_lidar(self, data:list):

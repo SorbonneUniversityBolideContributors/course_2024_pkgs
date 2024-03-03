@@ -1,9 +1,17 @@
 <launch>
     <!-- Node for lidar data publication -->
-    <node pkg="perception_bolide" type="lidar_publisher.py" name="lidar_publisher" output="screen" />
+    <!-- <node pkg="perception_bolide" type="lidar_publisher.py" name="lidar_publisher" output="screen" /> -->
+    <node name="rplidarNode"          pkg="rplidar_ros"  type="rplidarNode" output="screen">
+        <param name="serial_port"         type="string" value="/dev/ttyUSB0"/>
+        <param name="serial_baudrate"     type="int"    value="256000"/>
+        <param name="frame_id"            type="string" value="lidar_frame"/>
+        <param name="inverted"            type="bool"   value="false"/>
+        <param name="angle_compensate"    type="bool"   value="true"/>
+        <param name="scan_mode"           type="string" value="Express"/>
+    </node>
 
     <!-- Node for cam data publication -->
-    <node pkg="perception_bolide" type="camera_publisher.py" name="camera_publisher" output="screen" />
+    <!-- <node pkg="perception_bolide" type="camera_publisher.py" name="camera_publisher" output="screen" /> -->
 
     <!-- Node for stm32_publisher.py -->
     <node pkg="perception_bolide" type="stm32_publisher.py" name="stm32_publisher" output="screen" />

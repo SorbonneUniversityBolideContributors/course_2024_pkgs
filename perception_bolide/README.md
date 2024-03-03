@@ -31,7 +31,7 @@ In this package, you will find the first nodes in the software architecture of t
     - msg type: `sensor_msgs.msg.LaserScan`
 
 - `stm32_publisher.py`: Retrieves the IMU, IR, US and optical fork raw data from the STM32 and publish them. The data is then preprocessed by the `imu_publisher.py`, `rear_ranges_publisher.py` and `fork_publisher.py` nodes.
-    - topic: `stm32_sensors`
+    - topic: ``
     - msg type: `std_msgs.msg.Float32MultiArray`
 
 - `imu_publisher.py`: Retrieves the IMU data from the `stm32_sensors` convert it to SI units and publish it.

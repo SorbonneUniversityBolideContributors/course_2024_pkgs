@@ -8,7 +8,10 @@ __annotations__ = "Based on Maxime C.'s work"
 
 
 #%% IMPORTS
+import matplotlib
+matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
+
 import numpy as np
 import rospy
 import sys 

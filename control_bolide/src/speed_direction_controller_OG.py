@@ -21,9 +21,9 @@ class ControllerListener:
         self.BRAKE = 5
 
         # Values for the direction
-        self.CENTER = 7.43
-        self.LEFT = 6.2
-        self.RIGHT = 8.6
+        self.CENTER = 7.45
+        self.LEFT = 5.7
+        self.RIGHT = 9.2
         self.left_range = abs(self.CENTER - self.LEFT)
         self.right_range = abs(self.CENTER - self.RIGHT)
 
@@ -144,35 +144,29 @@ class StateMachine:
         self.state = "Neutral_After_Forward"
 
     def forward(self, speed):
-        if self.state not in ["Neutral_After_Forward", "Brake", "Neutral_After_Brake", "Forward"]:
-            self.controller.pwm_prop.change_duty_cycle(self.controller.NEUTRAL)
-            time.sleep(0.15)
+        if self.state in ["Neutral_After_Forward", "Brake", "Neutral_After_Brake", "Forward"]:
+            if self.state != "Forward": rospy.loginfo("Moving forward"); self.state = "Forward"
+            self.controller.pwm_prop.change_duty_cycle(self.controller.MINSPEED + speed*(self.controller.MAXSPEED-self.controller.MINSPEED))
+        else:
+            rospy.logwarn(f"Can't transition to Forward from {self.state}")
 
-        if self.state != "Forward": self.state = "Forward"
-        self.controller.pwm_prop.change_duty_cycle(self.controller.MINSPEED + speed*(self.controller.MAXSPEED-self.controller.MINSPEED))
-       
-
-    def backward(self, speed): 
-        if self.state not in ["Neutral_After_Backward","Backward"]:
-            self.controller.pwm_prop.change_duty_cycle(self.controller.REVERSEMINSPEED + speed*(self.controller.REVERSEMINSPEED - self.controller.REVERSEMAXSPEED))
-            time.sleep(0.15)
-            self.controller.pwm_prop.change_duty_cycle(self.controller.NEUTRAL)
-            time.sleep(0.15)
-
-        if self.state != "Backward": self.state = "Backward"
-        self.controller.pwm_prop.change_duty_cycle(self.controller.REVERSEMINSPEED + speed*(self.controller.REVERSEMINSPEED-self.controller.REVERSEMAXSPEED))
-    
+    def backward(self, speed):
+        if self.state in ["Neutral_After_Brake","Backward"]:
+            if self.state != "Backward": rospy.loginfo("Moving backward"); self.state = "Backward"
+            self.controller.pwm_prop.change_duty_cycle(self.controller.REVERSEMINSPEED + speed*(self.controller.REVERSEMINSPEED-self.controller.REVERSEMAXSPEED))
+        else:
+            rospy.logwarn(f"Can't transition to Backward from {self.state}")
 
     def neutral_after_forward(self):
         if self.state in ["Forward", "Neutral_After_Forward"]:
-            if self.state != "Neutral_After_Forward": self.state = "Neutral_After_Forward"
+            if self.state != "Neutral_After_Forward": rospy.loginfo("Stopped moving after moving forward"); self.state = "Neutral_After_Forward"
             self.controller.pwm_prop.change_duty_cycle(self.controller.NEUTRAL)
         else:
             rospy.logwarn(f"Can't transition to Neutral_After_Forward from {self.state}")
 
     def neutral_after_brake(self):
         if self.state in ["Backward", "Brake", "Neutral_After_Brake"]:
-            if self.state != "Neutral_After_Brake": self.state = "Neutral_After_Brake"
+            if self.state != "Neutral_After_Brake": rospy.loginfo("Stopped moving after braking or moving backward"); self.state = "Neutral_After_Brake"
             self.controller.pwm_prop.change_duty_cycle(self.controller.NEUTRAL)  
         else:
             rospy.logwarn(f"Can't transition to Neutral_After_Brake from {self.state}")
@@ -182,7 +176,7 @@ class StateMachine:
             if self.state != "Brake": rospy.loginfo("Brake applied"); self.state = "Brake"
             self.controller.pwm_prop.change_duty_cycle(self.controller.BRAKE)
         else:
-            self.controller.pwm_prop.change_duty_cycle(self.controller.NEUTRAL)
+            rospy.logwarn(f"Can't transition to Brake from {self.state}")
 
 if __name__ == '__main__':
     try:
