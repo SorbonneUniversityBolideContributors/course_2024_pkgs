@@ -44,6 +44,10 @@ class NavSensors():
         self.camera_info = CameraInfo()
         self.rear_range_data = MultipleRange()
 
+        self.threshold_front_too_close = 0.9
+        self.threshold_rear_too_close = 0.2
+        self.threshold_front_far_enough = 1.4
+
         # conditions
         self.wrong_way = False              # True if the robot is going the wrong way
         self.front_too_close = False        # True if the front of the robot is too close
@@ -77,16 +81,16 @@ class NavSensors():
 
         # Gains
         self.Kd = rospy.get_param("/gain_direction", default = 0.3)
-        self.Kv = rospy.get_param("/gain_vitesse", default = 0.33)
+        self.Kv = rospy.get_param("/gain_vitesse", default = 0.05)
         self.Ka = rospy.get_param("/gain_direction_arg_max", default = 0.2)
 
         # Race direction
         self.green_is_left = rospy.get_param("/green_is_left", default = True)
 
         # Thresholds for changing state
-        self.threshold_front_too_close = rospy.get_param("/threshold_front_too_close", default = 0.2)
+        self.threshold_front_too_close = rospy.get_param("/threshold_front_too_close", default = 0.9)
         self.threshold_rear_too_close = rospy.get_param("/threshold_rear_too_close", default = 0.2)
-        self.threshold_front_far_enough = rospy.get_param("/threshold_front_far_enough", default = 0.5)
+        self.threshold_front_far_enough = rospy.get_param("/threshold_front_far_enough", default = 1.4)
 
         # Forward navigation mode
         navigation_mode = rospy.get_param("/navigation_mode", default = "3Dials_Classic")
@@ -183,7 +187,7 @@ class NavSensors():
 
     def backward_state(self):
         """Update the speed and direction when the robot is going backward."""
-        self.cmd_vel = backward_with_color_turn(self.camera_info, self.green_is_left, backward_speed=-0.7)
+        self.cmd_vel = backward_with_color_turn(self.camera_info, self.green_is_left, backward_speed=-0.3)
 
     def stop_state(self):
         """Update the speed and direction when the robot is stopped."""

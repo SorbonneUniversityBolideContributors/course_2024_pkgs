@@ -20,7 +20,7 @@ class LidarPublisher:
 
         # variables
         self.publish_rate = 12 # in Hz
-        self.min_range = 0.17 # in m
+        self.min_range = 0.2 # in m
         self.max_range = 12 # in m
         self.scan_time = 1/self.publish_rate # in s
         self.time_increment = self.scan_time/360 # in s (because there are 360 points)

@@ -6,9 +6,9 @@ import time
 #paramètres de départ, avec des butées très proche du centre
 
 direction = 1 #1 pour angle_pwm_min a gauche, -1 pour angle_pwm_min à droite
-angle_pwm_min = 6.7 #min
-angle_pwm_max = 8.3 #max
-angle_pwm_centre= 7.5
+angle_pwm_min = 6.2 #min
+angle_pwm_max = 8.6 #max
+angle_pwm_centre= 7.43
 angle_degre_max = +18 #vers la gauche
 angle_degre=0
 pwm_dir = HardwarePWM(pwm_channel=1,hz=50)

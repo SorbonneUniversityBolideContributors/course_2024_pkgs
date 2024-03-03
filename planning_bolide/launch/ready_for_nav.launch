@@ -4,4 +4,9 @@
 
     <!-- Launch the speed_direction_control node -->
     <node pkg="control_bolide" type="speed_direction_controller.py" name="speed_direction_controller" output="screen" />
+
+
+
+    <node pkg="perception_bolide" type="odom_fork_imu.py" name="odom_fork_imu"/>
+    <node pkg="tf" type="static_transform_publisher" name="gmapping_broadcaster" args="0.165 0 0 0 0 0 base_link lidar_frame 100"/>
 </launch>

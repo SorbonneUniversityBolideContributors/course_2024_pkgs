@@ -10,47 +10,59 @@ import spidev
 from std_msgs.msg import Float32MultiArray
 
 
-class STM32DataReceiver:
 
-    def __init__(self):
-        # Initialize the ROS node
-        rospy.init_node('stm32_publisher')
 
-        # variables
-        self.sensor_data = Float32MultiArray() # table for the sensors data
+# Definitely not the most efficient way of doing this, but we're transmitting 16 bytes so it's OK.
+# Ideally we'd do all this in Cpp, but I don't think there is a spidev equivalent in Cpp, and it's 
+# not like we're being limited by this script. 
+def crc32mpeg2(buf, crc=0xffffffff):
+    for val in buf:
+        crc ^= val << 24
+        for _ in range(8):
+            crc = crc << 1 if (crc & 0x80000000) == 0 else (crc << 1) ^ 0x104c11db7
+    return crc
 
-        self.bus=0 
-        self.device=1
+    
 
-        self.spi = spidev.SpiDev()
-        self.spi.open(self.bus,self.device)
-        self.spi.mode = 0
-        self.spi.max_speed_hz = 500000  # Définir la vitesse maximale du bus SPI à 500 kHz
+def receiveSensorData():
+    data = spi.xfer2([0x45]*16)  # Envoyer 16 bytes de données nulles et recevoir 16 bytes de données en retour
 
-        self.pub = rospy.Publisher('stm32_sensors', Float32MultiArray, queue_size=10)
-        self.watchdog_timer = rospy.Timer(rospy.Duration(0.3), self.receiveSensorData)
-        rospy.spin()
+    vbat = 0
+    yaw = 0
+    ir_gauche = 0
+    ir_droit = 0
+    speed = 0
+    distance_US = 0
 
-    def receiveSensorData(self, _):
-        data = self.spi.xfer2([0]*16)  # Envoyer 16 bytes de données nulles et recevoir 16 bytes de données en retour
 
-        #roll = (data[1] << 8) | data[0]  # Concatener les octets de poids fort et faible pour reconstituer la valeur
-        yaw = (data[1] << 8) | data[0]
-        #pitch = (data[5] << 8) | data[4]
-        acceleration_x = (data[3] << 8) | data[2]
-        speed_mm_s = (data[5] << 8) | data[4]
-        distance_US = (data[7] << 8) | data[6]
-        IR_Left = (data[9] << 8) | data[8]
-        IR_Right = (data[11] << 8) | data[10]
+    if (not crc32mpeg2(data)):
+        vbat = (data[0] << 8) | data[1]
+        yaw = (data[2] << 8) | data[3]
+        ir_gauche = (data[4] << 8) | data[5]
+        ir_droit = (data[6] << 8) | data[7]
+        speed = (data[8] << 8) | data[9]
+        distance_US = (data[10] << 8) | data[11]
+    
 
-        self.sensor_data.data = [yaw, acceleration_x, speed_mm_s, distance_US, IR_Left, IR_Right]
-        self.pub.publish(self.sensor_data)
+    sensor_data.data = [yaw, speed, ir_gauche, ir_droit, distance_US]
+    pub.publish(sensor_data)
         
 if __name__ == '__main__':
-    try:
-        # Create a STM32DataReceiver and start it
-        STM32_data = STM32DataReceiver()
-    except rospy.ROSInterruptException:
-        # If a ROSInterruptException occurs, exit the program
-        exit(0)
-     
+    # variables
+    sensor_data = Float32MultiArray() # table for the sensors data
+
+    bus=0 
+    device=1
+
+    spi = spidev.SpiDev()
+    spi.open(bus,device)
+    spi.mode = 0
+    spi.max_speed_hz = 100000  # Définir la vitesse maximale du bus SPI à 100 kHz
+
+    # Create a STM32DataReceiver and start it
+    rospy.init_node('stm32_publisher')
+    pub = rospy.Publisher('stm32_sensors', Float32MultiArray, queue_size=10)
+    rate = rospy.Rate(150)
+    while(not rospy.is_shutdown()):
+        receiveSensorData()
+        rate.sleep()

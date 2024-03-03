@@ -39,7 +39,7 @@ def get_dials_ranges(lidar_data:LaserScan, n_dials:int=3, proportion:list=None) 
     for i in range(n_dials):
         dials.append(lidar_data.ranges[dials_indices[i]:dials_indices[i+1]])
 
-    return np.array(dials)
+    return np.array(dials, dtype=object)
 
 
 def crop_cmd_vel(

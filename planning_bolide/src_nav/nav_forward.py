@@ -25,10 +25,7 @@ class NavForward():
         # publisher
         self.pub = rospy.Publisher("cmd_vel",SpeedDirection,queue_size=10)
 
-        # subscribers
-        rospy.Subscriber('lidar_data',LaserScan,self.lidar_data_callback)
-        rospy.Subscriber("/param_change_alert", Bool, self.get_all_params)
-
+        self.n_dials = 11
 
 
         self.cmd = SpeedDirection()
@@ -39,6 +36,12 @@ class NavForward():
         self.navigation_choice = "3Dials_spaced"
 
         self.get_all_params()
+
+        # subscribers
+        rospy.Subscriber('lidar_data',LaserScan,self.lidar_data_callback)
+        rospy.Subscriber("/param_change_alert", Bool, self.get_all_params)
+
+
     
     def lidar_data_callback(self, msg:LaserScan):
         # Get the navigation function
@@ -47,7 +50,7 @@ class NavForward():
         # Get the command
         self.cmd = navigation_function(
             lidar_data=msg,
-            Kspeed=self.Kv,
+            Kspeed=0.005,
             Kdir=self.Kd,
             Karg=self.Ka,
             mode=self.mode,
@@ -61,8 +64,11 @@ class NavForward():
     def get_all_params(self, value = True):
         # Gains
         self.Kd = rospy.get_param("/gain_direction", default = 0.8)
-        self.Kv = rospy.get_param("/gain_vitesse", default = 0.33)
-        self.Ka = rospy.get_param("/gain_direction_arg_max", default = 0.2)
+
+
+        # self.Kv = rospy.get_param("/gain_vitesse", default = 0.05)
+        self.Kv = 0.005
+        self.Ka = rospy.get_param("/gain_direction_arg_max", default = 0.5)
 
         navigation_mode = rospy.get_param("/navigation_mode", default = "3Dials_Classic")
 

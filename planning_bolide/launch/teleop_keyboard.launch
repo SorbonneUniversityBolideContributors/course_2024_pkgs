@@ -1,0 +1,4 @@
+<launch>
+    <!-- Launch the teleop_keyboard node -->
+    <node pkg="planning_bolide" type="teleop_keyboard.py" name="teleop" output="screen" launch-prefix="sudo -E" />
+</launch>

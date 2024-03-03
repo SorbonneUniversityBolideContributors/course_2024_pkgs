@@ -27,7 +27,7 @@ class Optical_Fork:
         
         # retrieving Fork data from the STM32_sensors msg
         fork_data = ForkSpeed()
-        fork_data.speed = data.data[2] # speed of the car in mm/s
+        fork_data.speed = data.data[1] # speed of the car in mm/s
 
         # Process fork data
         fork_data.speed = fork_data.speed/1000 # passage de mm/s à m/s

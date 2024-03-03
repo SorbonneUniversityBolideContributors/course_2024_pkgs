@@ -46,7 +46,7 @@ def forward_3_dials(lidar_data:LaserScan, Kspeed:float, Kdir:float, Karg:float, 
 def forward_n_dials(lidar_data:LaserScan, Kspeed:float, Kdir:float, Karg:float, mode:str, n_dials:int=11, 
                 is_spaced:bool=True, navigation_feature=np.median, FrontRatio:float = 0.2,
                 use_maximize_threshold:bool = False,  maximize_threshold:float = 0.5,
-                use_Kv_as_constant:bool = False,
+                use_Kv_as_constant:bool = True,
                 **args) -> SpeedDirection:
     """Return the speed and direction of the robot based on N dials range data."""
 
@@ -103,4 +103,4 @@ def forward_n_dials(lidar_data:LaserScan, Kspeed:float, Kdir:float, Karg:float, 
     cmd_vel = SpeedDirection(speed_cmd, dir_cmd)
 
     # Crop the commands
-    return crop_cmd_vel(cmd_vel, speed_lim={"min":0.2, "max":1})
+    return crop_cmd_vel(cmd_vel, speed_lim={"min":0.005, "max":1})
