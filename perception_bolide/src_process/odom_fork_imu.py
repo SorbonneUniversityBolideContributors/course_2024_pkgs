@@ -40,8 +40,8 @@ class OdomForkImu:
         dt = (self.current_time - self.last_time).to_sec()
 
         # Linear update
-        self.dx = self.fork*self.lastdir*np.cos(self.theta_pos)*2.0
-        self.dy = self.fork*self.lastdir*np.sin(self.theta_pos)*2.0
+        self.dx = self.fork*self.lastdir*np.cos(self.theta_pos)*2.
+        self.dy = self.fork*self.lastdir*np.sin(self.theta_pos)*2.
         self.x_pos += dt*self.dx
         self.y_pos += dt*self.dy
 

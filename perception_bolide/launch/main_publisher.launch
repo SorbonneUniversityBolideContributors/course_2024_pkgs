@@ -10,19 +10,19 @@
         <param name="scan_mode"           type="string" value="Express"/>
     </node>
 
-    <!-- Node for cam data publication -->
-    <!-- <node pkg="perception_bolide" type="camera_publisher.py" name="camera_publisher" output="screen" /> -->
-
     <!-- Node for stm32_publisher.py -->
     <node pkg="perception_bolide" type="stm32_publisher.py" name="stm32_publisher" output="screen" />
 
+    <!-- Node for cam data publication -->
+    <!-- <node pkg="perception_bolide" type="camera_publisher.py" name="camera_publisher" output="screen" /> -->
+
     <!-- Node for imu data publication -->
-    <node pkg="perception_bolide" type="imu_publisher.py" name="imu_publisher" output="screen" />
+    <!-- <node pkg="perception_bolide" type="imu_publisher.py" name="imu_publisher" output="screen" /> -->
 
     <!-- Node for rear sensors data publication (IR*2, US)-->
-    <node pkg="perception_bolide" type="rear_ranges_publisher.py" name="rear_ranges_publisher" output="screen" />
+    <!-- <node pkg="perception_bolide" type="rear_ranges_publisher.py" name="rear_ranges_publisher" output="screen" /> -->
 
     <!-- Node for optical fork publication -->
-    <node pkg="perception_bolide" type="fork_publisher.py" name="optical_fork_publisher" output="screen" />
+    <!-- <node pkg="perception_bolide" type="fork_publisher.py" name="optical_fork_publisher" output="screen" /> -->
 
 </launch>
