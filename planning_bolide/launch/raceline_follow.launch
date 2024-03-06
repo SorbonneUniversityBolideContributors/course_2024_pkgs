@@ -1,0 +1,18 @@
+<launch>
+    <!-- Include main_publisher.launch -->
+    <include file="$(find perception_bolide)/launch/perception.launch"/>
+    <include file="$(find particle_filter)/launch/localize.launch"/>
+    <include file="$(find control_bolide)/launch/stanley_launch.launch"/>
+
+
+    <!-- Launch the speed_direction_control node -->
+    <node pkg="control_bolide" type="speed_direction_controller.py" name="speed_direction_controller" output="screen" />
+
+    <node pkg="perception_bolide" type="odom_fork_imu.py" name="odom_fork_imu"/>
+    <node pkg="tf" type="static_transform_publisher" name="gmapping_broadcaster" args="0.165 0 0 0 0 0 base_link lidar_frame 100"/>
+    
+
+
+
+
+</launch>
